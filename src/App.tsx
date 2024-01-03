@@ -18,13 +18,17 @@ import User from './Components/User/User'
 import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
+import Navbar from './Components/Navbar/Navbar'
 
 function App() {
+ 
+
 const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
       {index:true,element:<LandingPage/>},
+      {path:"nav",element:<Navbar/>},
       {path:"signin",element:<SignIn/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
@@ -55,7 +59,7 @@ const routes =createBrowserRouter([
 
   return (
     <>
- <RouterProvider router={routes}/>
+<RouterProvider router={routes}/>
     </>
   )
 }
