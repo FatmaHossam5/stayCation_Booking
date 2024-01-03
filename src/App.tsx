@@ -19,10 +19,12 @@ import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
 import Navbar from './Components/Navbar/Navbar'
+import { AuthContext } from './Context/AuthContext'
+import { useContext } from 'react'
 
 function App() {
  
-
+  let {userData,saveUserData,role}:any=useContext(AuthContext)
 const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
