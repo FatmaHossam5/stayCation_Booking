@@ -1,2 +1,11 @@
 *{margin: 0;
-padding: 0;}
+padding: 0;
+}
+ {/*SideBar Styles*/} 
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+    background-color: #203FC7!important;
+    color: white!important;
+}
+.css-cveggr-MuiListItemIcon-root{
+    color: white !important;
+}
