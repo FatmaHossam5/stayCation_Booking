@@ -6,7 +6,7 @@ import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import Avatar from '../../assets/avatar.png'
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -36,17 +36,19 @@ const handleChange = (event: SelectChangeEvent) => {
   setAge(event.target.value);
 };
 const[rooms,setRooms]=useState([])
-let reqHeadersEncoded='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
-let reqHeaders=jwtDecode(reqHeadersEncoded)
+let reqHeaders='Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
+let Headers ={Authorization:reqHeaders}
 const getAllRooms = () =>{
-  axios.get('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=10',{Authorization:reqHeaders}).then((response)=>{
+  axios.get('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=10',{headers:Headers}).then((response)=>{
     console.log(response);
-    setRooms(response?.data)
+    setRooms(response?.data?.data?.rooms)
   }).catch((error)=>{
     console.log(error);
     
   })
 }
+console.log(rooms);
+
 useEffect(()=>{getAllRooms()},[])
   return (<>
     <Box sx={{display:"flex",justifyContent:"space-between",mb:4}}>
@@ -103,7 +105,7 @@ useEffect(()=>{getAllRooms()},[])
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>room number</StyledTableCell>
+            <StyledTableCell align="center">room number</StyledTableCell>
             <StyledTableCell align="right">image</StyledTableCell>
             <StyledTableCell align="right">Price</StyledTableCell>
             <StyledTableCell align="right">Discount</StyledTableCell>
@@ -113,14 +115,16 @@ useEffect(()=>{getAllRooms()},[])
         </TableHead>
         <TableBody>
           {rooms.map((room) => (
-            <StyledTableRow key={room?.roomNumber}>
-              <StyledTableCell component="th" scope="row">
-              <img src={'http://upskilling-egypt.com:3000/'+room?.images[0]} alt="" />
+            <StyledTableRow  key={room?.id}>
+              <StyledTableCell align="center">{room?.roomNumber}</StyledTableCell>
+
+              <StyledTableCell component="th" scope="row">{room?.images[0]===''?<img src={Avatar}/>:<img src={'http://upskilling-egypt.com:3000/uploads/'+room?.images[0]} alt="" />}
+          
               </StyledTableCell>
               <StyledTableCell align="right">{room?.price}</StyledTableCell>
               <StyledTableCell align="right">{room?.discount}</StyledTableCell>
-              {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
+              <StyledTableCell align="right">{room?.capacity}</StyledTableCell>
+
             </StyledTableRow>
           ))}
         </TableBody>
