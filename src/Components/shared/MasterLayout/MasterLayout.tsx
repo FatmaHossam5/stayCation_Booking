@@ -18,6 +18,16 @@ export default function MasterLayout() {
       <Box>
         <Outlet />
       </Box>
-    </>
+     <Box>
+    <NavBar/>
+    </Box>
+    <Box>
+    <SideBar/>
+    </Box>
+    <Box>
+    <Outlet/>
+    </Box>
+    
+        </>
   );
 }
