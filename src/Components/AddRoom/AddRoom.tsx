@@ -55,8 +55,10 @@ const[imgs,setImgs]=React.useState(''),
 const {register,handleSubmit,formState:{errors}}=useForm()
 let reqHeaders='Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDUzNjEyMCwiZXhwIjoxNzA1NzQ1NzIwfQ.p15lXfscJSFl8OJ4drIUj0vPPS3nO4L_U6iTbtwBdf8'
 let Headers ={Authorization:reqHeaders}
-const [val,setVal]=React.useState([])
-const[facilities,setFacilities]=React.useState([{"name":"",'_id':""}])
+
+const[facilities,setFacilities]=React.useState([{"name":'','_id':''}])
+const [value,setValue]=React.useState([])
+console.log(facilities);
 
 {/*Add Room Function */}
 
@@ -71,6 +73,7 @@ const AddNewRoom =(data)=>{
   console.log(data['facilities']);
   axios.post('http://154.41.228.234:3000/api/v0/admin/rooms',addFormData,{headers:Headers}).then((response)=>{
    
+
     console.log(response);
   
   }).catch((error)=>{
@@ -88,7 +91,10 @@ const AddNewRoom =(data)=>{
 {/*Get All Facilities */}
 const getAllFacilities=()=>{
   axios.get('http://154.41.228.234:3000/api/v0/admin/room-facilities',{headers:Headers}).then((response)=>{console.log(response?.data?.data?.facilities);
-  setFacilities(response?.data?.rooms?.facilities)
+  setFacilities(response?.data?.data?.facilities)
+  const newFacilities=response?.data?.data?.facilities
+const facilities=newFacilities.map(({_id:value,name:label})=>({value,label}))
+setFacilities(facilities)
   }).catch((error)=>{console.log(error);
   })
 }
@@ -143,9 +149,17 @@ React.useEffect(()=>{getAllFacilities()},[])
       </FormControl> */}
   
   <Select
-  name='select'options={facilities}>
+  
+   options={facilities}
+  //  labelField='name'
+  //  valueField='_id'
+   multi
+  
+   {...register("facilities")}
+  >
 
   </Select>
+
   
     
     
