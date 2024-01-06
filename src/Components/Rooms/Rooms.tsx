@@ -4,9 +4,10 @@ import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow
   ,Paper,tableCellClasses, Box, Typography, Button
 ,TextField,InputLabel,MenuItem,FormControl  } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useContext, useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import axios from 'axios';
 import Avatar from '../../assets/avatar.png'
+import { useNavigate } from 'react-router';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -38,6 +39,7 @@ const handleChange = (event: SelectChangeEvent) => {
 const[rooms,setRooms]=useState([])
 let reqHeaders='Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
 let Headers ={Authorization:reqHeaders}
+const navigate=useNavigate()
 const getAllRooms = () =>{
   axios.get('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=10',{headers:Headers}).then((response)=>{
     console.log(response);
@@ -56,7 +58,7 @@ useEffect(()=>{getAllRooms()},[])
       <Typography variant='h5'>Rooms Table Details</Typography>
       <Typography variant='subtitle1'>You can check all details</Typography>
       </Box>
-    <Button variant="contained"onClick={() => {alert('clicked');}}>Add New Room</Button>
+    <Button variant="contained"onClick={() => {navigate('/dashboard/add-room');}}>Add New Room</Button>
     </Box>
     <Box sx={{display:"flex",justifyContent:"space-between"}}>
       <Box

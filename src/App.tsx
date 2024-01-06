@@ -18,6 +18,7 @@ import User from './Components/User/User'
 import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
+import AddRoom from './Components/AddRoom/AddRoom'
 
 function App() {
 const routes =createBrowserRouter([
@@ -43,6 +44,8 @@ const routes =createBrowserRouter([
       {path:"ads",element:<Ads/>},
       {path:"book",element:<Bookings/>},
       {path:"room",element:<Rooms/>},
+      {path:"add-room",element:<AddRoom/>},
+
 
 
 
