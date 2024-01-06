@@ -70,6 +70,7 @@ const AddNewRoom =(data)=>{
   addFormData.append("facilities",data['facilities'])
   console.log(data['facilities']);
   axios.post('http://154.41.228.234:3000/api/v0/admin/rooms',addFormData,{headers:Headers}).then((response)=>{
+   
     console.log(response);
   
   }).catch((error)=>{
@@ -87,7 +88,7 @@ const AddNewRoom =(data)=>{
 {/*Get All Facilities */}
 const getAllFacilities=()=>{
   axios.get('http://154.41.228.234:3000/api/v0/admin/room-facilities',{headers:Headers}).then((response)=>{console.log(response?.data?.data?.facilities);
-  setFacilities(response?.data?.data?.facilities)
+  setFacilities(response?.data?.rooms?.facilities)
   }).catch((error)=>{console.log(error);
   })
 }
