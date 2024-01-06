@@ -17,12 +17,15 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Container,
+  Grid,
 } from "@mui/material";
 import axios from "axios";
 import { AuthContext } from "../../Context/AuthContext";
 import { TextField, Button } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterIcon from '@mui/icons-material/Filter';
+import { FeaturedPlayListRounded } from "@mui/icons-material";
 
 
 
@@ -31,19 +34,21 @@ import FilterIcon from '@mui/icons-material/Filter';
 function User() {
   const { baseUrl, reqHeaders }: any = React.useContext(AuthContext)
   
-  const [usersList, setUsersList] = React.useState()
-  // const [modalState, setModalState] = React.useState("close")
+  const [usersList, setUsersList] = React.useState({})
+  const [modalState, setModalState] = React.useState("close")
   const [searchTerm, setSearchTerm] = React.useState('');
   const [selectedRowsPerPage, setSelectedRowsPerPage] = React.useState(10);
-  // const handleClose = () => setModalState("close");
-  // const [userItem, setUserItem] = React.useState()
+  const handleClose = () => setModalState("close");
+  const [userItem, setUserItem] = React.useState()
 
 
 
 
   const showAllUsers = () => {
     axios.get(`${baseUrl}/admin/users?page=1&size=10`, { headers: reqHeaders }).then((response) => {
-      setUsersList(response.data.data);
+      setUsersList(response.data);
+      // console.log(response.data);
+      
     }).catch((error) => {
       console.log(error);
       
@@ -71,7 +76,7 @@ function User() {
   }, [])
   return (
     <>
-       {/* <Modal
+       <Modal
         open={modalState === 'show-user'}
         onClose={handleClose}
         aria-labelledby="modal-title"
@@ -86,7 +91,7 @@ function User() {
           <p><b>email:</b> {userItem?.email}</p>
           <p><b>Status:</b> {userItem?.isActivated ? 'Active' : 'Not Active'}</p>
         </Box>
-      </Modal> */}
+      </Modal>
       {/* Filteration */}
       <Box sx={{ pb: 3 }}>
         <Typography variant="h5" component="h2" gutterBottom>
@@ -115,7 +120,7 @@ function User() {
           </Button>
         </Box>
 
-<TableContainer component={Paper} sx={{color:'aqua'}}>
+ <TableContainer component={Paper} sx={{color:'aqua'}}>
       <Table sx={{ minWidth: 650 }} size="small">
         <TableHead>
           <TableRow sx={{bgcolor:'aqua'}}>
@@ -128,38 +133,52 @@ function User() {
           </TableRow>
         </TableHead>
         <TableBody>
-              {usersList.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.userName}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant={user.isActivated ? 'success' : 'error'}
-                      size="small"
-                    >
-                      {user.isActivated ? 'Active' : 'Not Active'}
-                    </Button>
-                  </TableCell>
-                  <TableCell>{user.phoneNumber}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.creationDate}</TableCell>
-                  <TableCell align="right">
-                    <Tooltip title={user.isActivated ? 'Block' : 'Unblock'}>
-                      {/* <IconButton onClick={() => handleBlock(user.id)}>
-                        <ImBlocked />
-                      </IconButton> */}
-                    </Tooltip>
-                    <Tooltip title="View">
-                      {/* <IconButton onClick={() => handleView(user)}>
-                        <FaEye />
-
-                      </IconButton> */}
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+                {usersList?.length > 0
+                  ? usersList.map((user) => (
+                      <>
+                        <TableRow key={usersList?._id}>
+                          <TableCell>{usersList?.userName}</TableCell>
+                          <TableCell>{usersList?.email}</TableCell>
+                          <TableCell>{usersList?.email}</TableCell>
+                        </TableRow>
+                      </>
+                    ))
+                  : ""}
+              </TableBody>
       </Table>
-    </TableContainer>
+    </TableContainer> 
+
+ {/* <Container>
+        <Grid item>
+          <Typography component="h2" variant="h5">
+            Users
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>user name</TableCell>
+                  <TableCell>email</TableCell>
+                  <TableCell>email</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {usersList?.length > 0
+                  ? usersList.map((user) => (
+                      <>
+                        <TableRow key={user?._id}>
+                          <TableCell>{user?.userName}</TableCell>
+                          <TableCell>{user?.email}</TableCell>
+                          <TableCell>{user?.email}</TableCell>
+                        </TableRow>
+                      </>
+                    ))
+                  : ""}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </Container> */}
     <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 3 }}>
           <Typography variant="body2">Showing</Typography>
           <FormControl sx={{ minWidth: 50, marginLeft: 'auto' }}>
