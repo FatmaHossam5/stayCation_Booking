@@ -18,6 +18,7 @@ import User from './Components/User/User'
 import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
+import ChangePassword from './Components/ChangePassword/ChangePassword'
 
 function App() {
 const routes =createBrowserRouter([
@@ -29,6 +30,7 @@ const routes =createBrowserRouter([
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
+      {path:"change-pass",element:<ChangePassword/>}
 
     ]
   },
