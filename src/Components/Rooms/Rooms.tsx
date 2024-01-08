@@ -2,12 +2,14 @@
 import { styled } from '@mui/material/styles';
 import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow
   ,Paper,tableCellClasses, Box, Typography, Button
-,TextField,InputLabel,MenuItem,FormControl  } from '@mui/material';
+,TextField,InputLabel,MenuItem,FormControl,IconButton   } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {  useEffect, useState } from 'react';
 import axios from 'axios';
 import Avatar from '../../assets/avatar.png'
 import { useNavigate } from 'react-router';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -112,7 +114,7 @@ useEffect(()=>{getAllRooms()},[])
             <StyledTableCell align="right">Price</StyledTableCell>
             <StyledTableCell align="right">Discount</StyledTableCell>
             <StyledTableCell align="right">Capacity</StyledTableCell>
-            <StyledTableCell align="right">Category</StyledTableCell>
+            <StyledTableCell align="right">Actions</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -126,9 +128,16 @@ useEffect(()=>{getAllRooms()},[])
               <StyledTableCell align="right">{room?.price}</StyledTableCell>
               <StyledTableCell align="right">{room?.discount}</StyledTableCell>
               <StyledTableCell align="right">{room?.capacity}</StyledTableCell>
+              <StyledTableCell align="right">
+              <IconButton aria-label="delete">
+<EditIcon />
+</IconButton> 
+              </StyledTableCell>
+
 
             </StyledTableRow>
           ))}
+          
         </TableBody>
       </Table>
     </TableContainer>

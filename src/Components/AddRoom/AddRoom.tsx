@@ -19,30 +19,6 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-// const addRecipe =(data)=>{
-
-//   const addFormData =new FormData();
-//   addFormData.append("name",data['name'])
-//   addFormData.append("price",data['price'])
-//   addFormData.append("description",data['description'])
-//   addFormData.append("tagId",data['tagId'])
-//   addFormData.append("categoriesIds",data['categoriesIds'])
-//   addFormData.append("recipeImage",data['recipeImage'][0])
-//   axios.post("https://upskilling-egypt.com:443/api/v1/Recipe/",addFormData,{
-//     headers:{
-//       Authorization:`Bearer ${localStorage.getItem("adminToken")}`,
-//       'Content-Type': 'multipart/form-data',
-//     }
-//   }).then((response)=>{console.log(response);
-//     handleClose()
-//     getAllRecipes()
-//   }).catch((error)=>{
-//     console.log(error);
-//   })
-  
-      
-//     }
-    
 export default function AddRoom() {
   const [age, setAge] =React.useState('');
   const handleChange = (event: SelectChangeEvent) => {
@@ -56,22 +32,29 @@ const {register,handleSubmit,formState:{errors}}=useForm()
 let reqHeaders='Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDUzNjEyMCwiZXhwIjoxNzA1NzQ1NzIwfQ.p15lXfscJSFl8OJ4drIUj0vPPS3nO4L_U6iTbtwBdf8'
 let Headers ={Authorization:reqHeaders}
 
-const[facilities,setFacilities]=React.useState([{"name":'','_id':''}])
+const[facilities,setFacilities]=React.useState([{"value":'','label':''}])
+const[selectedValue,setSelectedValue]=React.useState([])
 const [value,setValue]=React.useState([])
+
 console.log(facilities);
 
 {/*Add Room Function */}
 
 const AddNewRoom =(data)=>{
-  const addFormData = new FormData()
-  addFormData.append("roomNumber",data['roomNumber'])
-  addFormData.append("imgs",data['imgs'])
-  addFormData.append("price",data['price'])
-  addFormData.append("capacity",data['capacity'])
-  addFormData.append("discount",data['discount'])
-  addFormData.append("facilities",data['facilities'])
-  console.log(data['facilities']);
-  axios.post('http://154.41.228.234:3000/api/v0/admin/rooms',addFormData,{headers:Headers}).then((response)=>{
+  const formattedSelected=selectedValue.map(({value})=>value)
+  console.log(formattedSelected);
+  
+  // const addFormData = new FormData()
+  // addFormData.append("roomNumber",data['roomNumber'])
+  // addFormData.append("imgs",data['imgs'])
+  // addFormData.append("price",data['price'])
+  // addFormData.append("capacity",data['capacity'])
+  // addFormData.append("discount",data['discount'])
+  // addFormData.append("facilities",formattedSelected)
+
+
+
+  axios.post('http://154.41.228.234:3000/api/v0/admin/rooms',{...data,imgs:data.imgs[0],facilities},{headers:{...Headers,"Content-Type":"multipart/form-data"}}).then((response)=>{
    
 
     console.log(response);
@@ -131,31 +114,19 @@ React.useEffect(()=>{getAllFacilities()},[])
   label="Discount"
   {...register("discount")}
 />
-{/* <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <Select
-          value={age}
-          onChange={handleChange}
-          displayEmpty
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-          <MenuItem value="">
-            <em>Facilities</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
- 
-      </FormControl> */}
+
   
   <Select
-  
+
    options={facilities}
-  //  labelField='name'
-  //  valueField='_id'
+values={facilities.filter((data)=>selectedValue.includes(data.value))}
+ onChange={(selectedValue)=>setSelectedValue(selectedValue)}
+
+  
+
    multi
   
-   {...register("facilities")}
+
   >
 
   </Select>
