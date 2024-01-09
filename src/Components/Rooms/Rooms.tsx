@@ -82,8 +82,6 @@ export default function Rooms() {
   {/*Get All Facilities */ }
   const getAllFacilities = () => {
     axios.get('http://154.41.228.234:3000/api/v0/admin/room-facilities', { headers: Headers }).then((response) => {
-      console.log(response?.data?.data?.facilities);
-      setFacilities(response?.data?.data?.facilities)
       const newFacilities = response?.data?.data?.facilities
       const facilities = newFacilities.map(({ _id: value, name: label }) => ({ value, label }))
       setFacilities(facilities)
@@ -199,7 +197,7 @@ export default function Rooms() {
                 </Grid>
               </Grid>
             </Box>
-          </FormControl>
+       
           <Box sx={{ width: '100%' }}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }}>
               <Grid item xs={6} >
@@ -254,11 +252,14 @@ export default function Rooms() {
                 ></Select>
               </Grid>
             </Grid>
-          </Box>
-          <Grid sx={{ textAlign: 'right', mt: 3 }}>
-            <Button variant="contained" color="primary" onClick={UpdateRoom} >  Update  </Button>
+            <Grid sx={{ textAlign: 'right', mt: 3 }}>
+            <Button type='submit' variant="contained" color="primary"  >  Update  </Button>
           </Grid>
+          </Box>
+         
+          </FormControl>
         </Box>
+       
       </Modal>
       <Box>
         <Typography variant='h5'>Rooms Table Details</Typography>
