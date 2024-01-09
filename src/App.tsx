@@ -19,7 +19,7 @@ import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
 import AddRoom from './Components/AddRoom/AddRoom'
-import AddAds from './Components/AddAds/AddAds'
+
 
 function App() {
 const routes =createBrowserRouter([
@@ -46,7 +46,11 @@ const routes =createBrowserRouter([
       {path:"book",element:<Bookings/>},
       {path:"room",element:<Rooms/>},
       {path:"add-room",element:<AddRoom/>},
+<<<<<<< Updated upstream
      
+=======
+      
+>>>>>>> Stashed changes
 
 
 

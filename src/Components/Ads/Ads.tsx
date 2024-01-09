@@ -57,7 +57,7 @@ export default function Ads() {
   const[ads,setAds]=useState([])
   let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
   let Headers = { Authorization: reqHeaders }
-  const navigate =useNavigate()
+ 
 const getAllAds =()=>{
   axios.get('http://154.41.228.234:3000/api/v0/admin/ads',{headers:Headers}).then((response)=>{
     console.log(response.data.data.ads);
@@ -70,10 +70,42 @@ const getAllAds =()=>{
 useEffect(()=>{
   getAllAds()
 },[])
+const showAddModel=()=>{
+  setModalState("add-modal")
+  alert('hrhrhhr')
+}
   return (
     <>
     
     <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
+    <Modal
+        open={modalState === "add-modal"}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={style}>
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h4" color="initial">Ads</Typography>
+            <IconButton onClick={handleClose} sx={{ color: "red" }} >
+              < CancelOutlinedIcon />
+            </IconButton>
+          </Grid>
+          <Grid sx={{ textAlign: "center" }}>
+           
+          </Grid>
+
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
+            Delete This Room?
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2, textAlign: "center" }}>
+            are you sure you want to delete this item ? if you are sure just click on delete it
+          </Typography>
+          <Grid sx={{ textAlign: 'right', mt: 3 }}>
+            <Button variant="contained" color="error"  >  Delete  </Button>
+          </Grid>
+        </Box>
+      </Modal>
       <Modal
         open={modalState === "delete-modal"}
         onClose={handleClose}
@@ -196,7 +228,7 @@ useEffect(()=>{
         <Typography variant='h5'>Ads Table Details</Typography>
         <Typography variant='subtitle1'>You can check all details</Typography>
       </Box>
-      <Button sx={{px:5}} variant="contained">Add New Ads</Button>
+      <Button sx={{px:5}} variant="contained" onClick={()=>navigate('/dashboard/add-ads')}>Add New Ads</Button>
     </Box>
    
     <TableContainer component={Paper}>
