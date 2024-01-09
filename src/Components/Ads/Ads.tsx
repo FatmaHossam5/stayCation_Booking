@@ -196,7 +196,7 @@ useEffect(()=>{
         <Typography variant='h5'>Ads Table Details</Typography>
         <Typography variant='subtitle1'>You can check all details</Typography>
       </Box>
-      <Button sx={{px:5}} variant="contained" onClick={()=>navigate('/dashboard/add-ads')}>Add New Ads</Button>
+      <Button sx={{px:5}} variant="contained">Add New Ads</Button>
     </Box>
    
     <TableContainer component={Paper}>

@@ -46,7 +46,7 @@ const routes =createBrowserRouter([
       {path:"book",element:<Bookings/>},
       {path:"room",element:<Rooms/>},
       {path:"add-room",element:<AddRoom/>},
-      {path:"add-ads",element:<AddAds/>},
+     
 
 
 
