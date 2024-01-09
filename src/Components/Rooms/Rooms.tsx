@@ -321,7 +321,7 @@ export default function Rooms() {
           {rooms.map((room) => (
             <StyledTableRow key={room?.id}>
               <StyledTableCell align="center">{room?.roomNumber}</StyledTableCell>
-              <StyledTableCell component="th" scope="row" crossorigin='anonymous'>{room?.images[0] === '' ? <img src={Avatar} /> : <img src={'http://upskilling-egypt.com:3000/uploads/' + room?.images[0]} alt="" />}
+              <StyledTableCell component="th" scope="row">{room?.images[0] === '' ? <img  crossorigin='anonymous' src={Avatar} /> : <img src={'http://upskilling-egypt.com:3000/uploads/' + room?.images[0]} alt="" />}
               </StyledTableCell>
               <StyledTableCell align="right">{room?.price}</StyledTableCell>
               <StyledTableCell align="right">{room?.discount}</StyledTableCell>
