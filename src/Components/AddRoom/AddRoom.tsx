@@ -53,7 +53,8 @@ export default function AddRoom() {
 
   const AddNewRoom = (data) => {
     const formattedSelected = selectedValue.map(({ value }) => value)
-    axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
+    axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected },
+     { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
       console.log(response);
     }).catch((error) => {
       console.log(error);
