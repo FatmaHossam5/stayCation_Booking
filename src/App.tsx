@@ -46,11 +46,6 @@ const routes =createBrowserRouter([
       {path:"book",element:<Bookings/>},
       {path:"room",element:<Rooms/>},
       {path:"add-room",element:<AddRoom/>},
-<<<<<<< Updated upstream
-     
-=======
-      
->>>>>>> Stashed changes
 
 
 
