@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,11 +10,12 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Avatar } from '@mui/material';
 import avatar from '../../../assets/avatar.png'
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import { useAppStore } from '../../../appStore';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -60,6 +59,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+const AppBar = styled(MuiAppBar, {
+
+})(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+
+ 
+}));
+
 
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -68,6 +75,8 @@ export default function NavBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const updateOpen=useAppStore((state)=>state.updateOpen)
+  const dopen=useAppStore((state)=>state.dopen)
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -155,9 +164,18 @@ export default function NavBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{bgcolor:"#E2E5EB"}}>
+      <AppBar position="fixed" sx={{bgcolor:"#E2E5EB"}}>
         <Toolbar>
-       
+        <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            sx={{ mr: 2 }}
+            onClick={()=>updateOpen(!dopen)}
+          >
+            <MenuIcon />
+          </IconButton>
         
           <Search sx={{width:"100%"}} >
             <SearchIconWrapper>
@@ -170,17 +188,7 @@ export default function NavBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          {/* <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton> */}
+         
            <Avatar alt="Rahma Fatma" src={avatar} />
             <IconButton
               size="large"
