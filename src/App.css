@@ -1,3 +1,21 @@
 .body{
     font-family: 'Poppins', sans-serif;
 }
+*{margin: 0;
+padding: 0;
+}
+ {/*SideBar Styles*/} 
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+    background-color: #203FC7!important;
+    color: white!important;
+}
+.css-cveggr-MuiListItemIcon-root{
+    color: white !important;
+}
+.css-1p823my-MuiListItem-root{
+    cursor: pointer;
+}
+.css-1p823my-MuiListItem-root:hover{
+background-color:  #1A1B1E2B;
+
+}
