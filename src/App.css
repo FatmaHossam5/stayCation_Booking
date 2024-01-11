@@ -23,3 +23,23 @@ padding: 0;
     padding-top: 0px!important;
 }
 .Select::placeholder{color: black!important;}
+<<<<<<< Updated upstream
+=======
+
+
+.roomNumber{
+    height: 40px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    border: none;
+    background-color: #F7F7F7;
+    /* color: #8391a1 !important;; */
+    text-align: center;
+}
+.span-error{
+    color: red;
+}
+.isActive{
+    width: 165px!important;
+}
+>>>>>>> Stashed changes

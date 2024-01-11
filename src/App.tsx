@@ -19,6 +19,7 @@ import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
 import AddRoom from './Components/AddRoom/AddRoom'
+import { ToastContainer } from 'react-toastify'
 
 
 function App() {
@@ -44,8 +45,8 @@ const routes =createBrowserRouter([
       {path:"user",element:<User/>},
       {path:"ads",element:<Ads/>},
       {path:"book",element:<Bookings/>},
-      {path:"room",element:<Rooms/>},
-      {path:"add-room",element:<AddRoom/>},
+      {path:"rooms",element:<Rooms/>},
+      {path:"rooms/add-room",element:<AddRoom/>},
 
 
 
@@ -61,6 +62,7 @@ const routes =createBrowserRouter([
   return (
     <>
  <RouterProvider router={routes}/>
+ <ToastContainer/>
     </>
   )
 }

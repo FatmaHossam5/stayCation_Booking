@@ -1,5 +1,5 @@
 
-import { Box, Button, Container, FormControl, Grid, Paper, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, FormControl, Grid, InputLabel, Paper, TextField, Typography } from '@mui/material'
 import * as React from 'react'
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import Select from 'react-dropdown-select';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import { useNavigate } from 'react-router';
+import { ToastContext } from '../../Context/ToastContext';
 
 
 export default function AddRoom() {
@@ -15,11 +16,12 @@ export default function AddRoom() {
   let Headers = { Authorization: reqHeaders }
   const [facilities, setFacilities] = React.useState([{ "value": '', 'label': '' }])
   const [selectedValue, setSelectedValue] = React.useState([])
-  const [imgs, setImgs] = React.useState(''),
-    handleImage = (e) => {
-      setImgs(e.target.files[0])
-    }
-    const navigate=useNavigate()
+  const [imgs, setImgs] = React.useState('')
+  const { getToastValue } = React.useContext(ToastContext)
+  const handleImage = (e) => {
+    setImgs(e.target.files[0])
+  }
+  const navigate = useNavigate()
   const theme = createTheme({
     components: {
       MuiFilledInput: {
@@ -53,12 +55,18 @@ export default function AddRoom() {
 
   const AddNewRoom = (data) => {
     const formattedSelected = selectedValue.map(({ value }) => value)
+<<<<<<< Updated upstream
     axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected },
      { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
       console.log(response);
+=======
+    axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
+      getToastValue('success', 'Added Successfully')
+      navigate('/dashboard/rooms')
+>>>>>>> Stashed changes
     }).catch((error) => {
-      console.log(error);
 
+      getToastValue('error', error.response.data)
     })
 
 
@@ -67,13 +75,12 @@ export default function AddRoom() {
   {/*Get All Facilities */ }
   const getAllFacilities = () => {
     axios.get('http://154.41.228.234:3000/api/v0/admin/room-facilities', { headers: Headers }).then((response) => {
-      console.log(response?.data?.data?.facilities);
       setFacilities(response?.data?.data?.facilities)
       const newFacilities = response?.data?.data?.facilities
       const facilities = newFacilities.map(({ _id: value, name: label }) => ({ value, label }))
       setFacilities(facilities)
     }).catch((error) => {
-      console.log(error);
+      getToastValue('error', error.response.data)
     })
   }
 
@@ -100,9 +107,9 @@ export default function AddRoom() {
                       variant='filled'
                       label="Room Number"
                       fullWidth
-                      {...register("roomNumber",{required:true})}
+                      {...register("roomNumber", { required: true })}
                     />
-                    {errors.roomNumber&&errors.roomNumber.type==="required"&& <Typography sx={{color:"red"}}>Room Number is required</Typography>}
+                    {errors.roomNumber && errors.roomNumber.type === "required" && <Typography sx={{ color: "red" }}>Room Number is required</Typography>}
 
                   </Grid>
                 </Grid>
@@ -122,8 +129,8 @@ export default function AddRoom() {
                         justifyContent: "flex-start"
                       }}
                       label="Price"
-                      {...register("price",{required:true})} />
-                    {errors.price&&errors.price.type==="required"&& <Typography sx={{color:"red"}}>price is required</Typography>}
+                      {...register("price", { required: true, valueAsNumber: true, })} />
+                    {errors.price && errors.price.type === "required" && <Typography sx={{ color: "red" }}>price is required</Typography>}
 
                   </Grid>
                   <Grid item xs={6}>
@@ -137,9 +144,9 @@ export default function AddRoom() {
                       }}
                       variant='filled'
                       label="Capacity"
-                      {...register("capacity",{required:true})}
+                      {...register("capacity", { required: true })}
                     />
-                    {errors.capacity&&errors.capacity.type==="required"&& <Typography sx={{color:"red"}}>capacity is required</Typography>}
+                    {errors.capacity && errors.capacity.type === "required" && <Typography sx={{ color: "red" }}>capacity is required</Typography>}
 
                   </Grid>
                   <Grid item xs={6}>
@@ -153,59 +160,64 @@ export default function AddRoom() {
                       }}
                       variant='filled'
                       label="Discount"
-                      {...register("discount",{required:true})}
+                      {...register("discount", { required: true })}
                     />
-                    {errors.discount&&errors.discount.type==="required"&& <Typography sx={{color:"red"}}>discount is required</Typography>}
+                    {errors.discount && errors.discount.type === "required" && <Typography sx={{ color: "red" }}>discount is required</Typography>}
 
 
                   </Grid>
                   <Grid item xs={6}>
 
                     <Select
+
                       options={facilities}
                       onChange={(selectedValue) => setSelectedValue(selectedValue)}
+                      placeholder="Select Facilities"
+
                       multi
-                    
-                    ></Select>
+
+                    >
+
+                    </Select>
                   </Grid>
                 </Grid>
               </Box>
               <Grid item xs={12} >
                 <Box
                   sx={{
-                    textAlign:"center",
+                    textAlign: "center",
                     border: "1px #009247 dashed",
                     borderColor: "#009247",
-                    bgcolor:"#EAFAF1",
+                    bgcolor: "#EAFAF1",
                     borderRadius: 4,
-                    width:"100%",
+                    width: "100%",
                     padding: "10px",
                   }}
                 >
-                     <Button component="label"  startIcon={<FileUploadOutlinedIcon color='action' />}  onChange={handleImage} {...register('imgs')}>
-                     <VisuallyHiddenInput type="file" />
-                     </Button>
-                  <Typography sx={{color:'black'}}>Drag & Drop or <Box component="span" sx={{color:"#009247"}}> Choose a Room Images</Box>  to Upload</Typography>
-               
+                  <Button component="label" startIcon={<FileUploadOutlinedIcon color='action' />} onChange={handleImage} {...register('imgs')}>
+                    <VisuallyHiddenInput type="file" />
+                  </Button>
+                  <Typography sx={{ color: 'black' }}>Drag & Drop or <Box component="span" sx={{ color: "#009247" }}> Choose a Room Images</Box>  to Upload</Typography>
+
                 </Box>
               </Grid>
-              <Grid item xs={12}   sx={{
-       marginLeft:"auto",
-       marginTop:3
-        
-        
-         
-        }}>
-    
-        <Button onClick={()=>navigate(-1)} type='button' variant="outlined" sx={{ color:'#203FC7',mr:5}}>
-          Cancel
-        </Button>
-        <Button onClick={()=>navigate(-1)} type='submit' variant="contained" sx={{ color:'white',bgcolor:'#203FC7'}}>
-          Save
-        </Button>
-    
-    </Grid>
-          
+              <Grid item xs={12} sx={{
+                marginLeft: "auto",
+                marginTop: 3
+
+
+
+              }}>
+
+                <Button onClick={() => navigate(-1)} type='button' variant="outlined" sx={{ color: '#203FC7', mr: 5 }}>
+                  Cancel
+                </Button>
+                <Button type='submit' variant="contained" sx={{ color: 'white', bgcolor: '#203FC7' }}>
+                  Save
+                </Button>
+
+              </Grid>
+
             </ThemeProvider>
           </FormControl>
 
