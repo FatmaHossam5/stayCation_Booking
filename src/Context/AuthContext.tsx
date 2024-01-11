@@ -13,7 +13,7 @@ export default function AuthContextProvider(props:any){
   
 
   let reqHeaders={
-    Authorization:`Bearer ${localStorage.getItem("userToken")}`
+    Authorization:`${localStorage.getItem("userToken")}`
   }
   const baseUrl = "http://upskilling-egypt.com:3000/api/v0";
 
