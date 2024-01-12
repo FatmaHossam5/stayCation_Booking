@@ -5,17 +5,11 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { useEffect, useState } from 'react';
 import trash from '../../assets/Email (1).png';
-import { useForm ,Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
-import Select from 'react-dropdown-select';
-
-
-
-
-
-
-
+import { useNavigate } from 'react-router';
+import { textAlign } from '@mui/system';
 
 {/*MUI Table Style */ }
 const style = {
@@ -49,18 +43,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-
-
 export default function Ads() {
   const [modalState, setModalState] = useState('close')
-  const { register, handleSubmit, formState: { errors }, setValue,control } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue} = useForm();
   const handleClose = () => setModalState("close");
   const [ads, setAds] = useState([])
   let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
   let Headers = { Authorization: reqHeaders }
-  const [active, setActive] = useState('')
-  const[selectedRoomNo,setSelectedRoomNo]=useState()
-  const[selectedActivated,setSelectedActivated]=useState()
+  const [adId, setAdId] = useState(0)
+  const navigate =useNavigate()
 
 
   {/*Get All Ads */ }
@@ -68,124 +59,64 @@ export default function Ads() {
     axios.get('http://154.41.228.234:3000/api/v0/admin/ads', { headers: Headers }).then((response) => {
       console.log(response.data.data.ads);
       setAds(response.data.data.ads)
-
-
     }).catch((error) => {
       console.log(error.response.message);
-
     })
   }
 
-   {/*Selected value of Active*/ }
-   const handleChangeActive = (event: SelectChangeEvent) => {
-    setActive(event.target.value as boolean);
-  };
-  {/*create Ads */ }
-  const createAds =(data)=>{
-
-    axios.post('http://154.41.228.234:3000/api/v0/admin/ads',{ headers: Headers },data).then((response)=>{
-      console.log(response);
-      
-    }).catch((error)=>{
-      console.log(error);
-      
-    })
+  const showDeleteModal = (id) => {
+    setModalState('delete-modal')
+    setAdId(id)
   }
+  const showUpdateModal = (ad) => {
+    setModalState('update-modal')
+    setAdId(ad._id)
+    setValue("discount", ad?.room?.discount);
+    setValue("isActive", ad?.isActive);
+    
+ 
+  }
+
+  {/* Delete Room */ }
+  const deleteAD = () => {
+    axios.delete(`http://154.41.228.234:3000/api/v0/admin/ads/${adId}`, { headers: Headers })
+      .then((response) => {
+        console.log(response);
+        setAdId(adId);
+        handleClose();
+        getAllAds()
+
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
+    {/* Update Room */ }
+    const UpdateAd = (data) => {
+   
+      axios.put(`http://154.41.228.234:3000/api/v0/admin/ads/${adId}`, data, { headers: Headers } ).then((response) => {
+        console.log(response);
+        handleClose();
+        getAllAds();
+      }).catch((error) => {
+        console.log(error);
+  
+      })
+    }
+
+    const NavigateAddAds =()=>{
+      navigate('/dashboard/ads/add-ads')
+    }
   useEffect(() => {
     getAllAds()
   }, [])
 
-  {/*Show Modals */ }
-  const showAddModel = () => {
-    setModalState("add-modal")
-
-  }
-    ;
-
+ 
 
   return (
     <>
 
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
-        {/*Add Modal */}
-        <Modal
-          open={modalState === "add-modal"}
-          onClose={handleClose}
-          aria-labelledby="modal-title"
-          aria-describedby="modal-description"
-        >
-          <Box sx={style}>
-            <Grid item xs={12} sx={{ display: "flex", justifyContent: "space-between", mb:3 }}>
-              <Typography variant="h4" color="initial">Ads</Typography>
-              <IconButton onClick={handleClose} sx={{ color: "red" }} >
-                < CancelOutlinedIcon />
-              </IconButton>
-            </Grid>
-
-              <FormControl component='form' fullWidth onSubmit={handleSubmit(createAds)}>
-         
-
-              <Select
-              {...register("roomNumber",{required:true})}
-              options={ads.map((ad)=>({
-                value:ad?.room?.roomNumber,
-                label:ad?.room?.roomNumber
-              }))}
-              onChange={(selectedRoomNo)=>{setSelectedRoomNo(selectedRoomNo)
-              
-   console.log(selectedRoomNo);
-              
-              }
-              
-           
-              
-              }>
-              </Select>
-           
-                <TextField
-                 {...register('discount',{required:true})}
-                  id="discount"
-                  label="Discount"
-                  
-                  
-                />
-          
-                    {/* <InputLabel id="demo-simple-select-label">Active</InputLabel> */}
-
-                    <Select
-              {...register("isActive",{required:true})}
-              options={ads}
-              labelField='isActive'
-              valueField='true'
-             
-            
-             
-
-          
-        
-          
-              onChange={(selectedActivated)=>{setSelectedActivated(selectedActivated)
-              
-   console.log(selectedActivated);
-              
-              }
-              
-           
-              
-              }>
       
-              </Select> 
-       
-              </FormControl>
-           
-
-          
-           
-            <Grid sx={{ textAlign: 'right', mt: 3 }}>
-              <Button variant="contained" color="error"  >  Delete  </Button>
-            </Grid>
-          </Box>
-        </Modal>
         {/*delete Modal */}
         <Modal
           open={modalState === "delete-modal"}
@@ -210,7 +141,7 @@ export default function Ads() {
               are you sure you want to delete this item ? if you are sure just click on delete it
             </Typography>
             <Grid sx={{ textAlign: 'right', mt: 3 }}>
-              <Button variant="contained" color="error"  >  Delete  </Button>
+              <Button variant="contained" color="error" onClick={deleteAD} >  Delete  </Button>
             </Grid>
           </Box>
         </Modal>
@@ -227,81 +158,25 @@ export default function Ads() {
                 < CancelOutlinedIcon />
               </IconButton>
             </Grid>
-            <FormControl component='form' >
-              <Box sx={{ width: '100%', display: "flex", justifyContent: "center" }}>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }} >
-                  <Grid item xs={12} sx={{ color: "#17202A" }} >
-                    <TextField
-                      InputLabelProps={{
-                        style: { color: 'black' },
-                      }}
-                      sx={{ bgcolor: "#F7F7F7", mb: 5, }}
-                      variant='filled'
-                      label="Room Number"
-                      fullWidth
-                      {...register("roomNumber", { required: true })}
-                    />
-                  </Grid>
-                </Grid>
+            <FormControl component='form' fullWidth onSubmit={handleSubmit(UpdateAd)} >
+
+             <Box sx={{textAlign:"center"}}>
+              <label htmlFor=""> Discount:</label>
+              <input type="number" {...register("discount", { required: true })} placeholder='Discount' className='selectStyle' />
+              {errors.discount && errors.discount.type === 'required' && <span className='span-error'> Discount is required </span>}
+              <label htmlFor=""> Active:</label>
+
+              <select {...register("isActive", { required: true })} className='selectStyle'>
+                <option value={true}>Yes</option>
+                <option value={false}>No</option>
+              </select>
+              {errors.isActive && errors.isActive.type === 'required' && <span className='span-error'> Thid Field is required </span>}
+
+              <Grid sx={{ textAlign: 'right', mt: 3 }}>
+                <Button type='submit' variant="contained" color="primary"  >  update  </Button>
+
+              </Grid>
               </Box>
-
-              <Box sx={{ width: '100%' }}>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }}>
-                  <Grid item xs={6} >
-                    <TextField
-                      InputLabelProps={{
-                        style: { color: 'black' },
-                      }}
-                      variant='filled'
-                      sx={{
-                        bgcolor: "#F7F7F7", display: "flex",
-                        justifyContent: "flex-start"
-                      }}
-                      label="Price"
-                      {...register("price", { required: true })} />
-                    {errors.price && errors.price.type === "required" && <Typography sx={{ color: "red" }}>price is required</Typography>}
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      InputLabelProps={{
-                        style: { color: 'black' },
-                      }}
-                      sx={{
-                        bgcolor: "#F7F7F7", mb: 5, display: "flex",
-                        justifyContent: "flex-end",
-                      }}
-                      variant='filled'
-                      label="Capacity"
-                      {...register("capacity", { required: true })}
-                    />
-                    {errors.capacity && errors.capacity.type === "required" && <Typography sx={{ color: "red" }}>capacity is required</Typography>}
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      InputLabelProps={{
-                        style: { color: 'black' },
-                      }}
-                      sx={{
-                        bgcolor: "#F7F7F7", mb: 5, display: "flex",
-                        justifyContent: "flex-start",
-                      }}
-                      variant='filled'
-                      label="Discount"
-                      {...register("discount", { required: true })}
-                    />
-                    {errors.discount && errors.discount.type === "required" && <Typography sx={{ color: "red" }}>discount is required</Typography>}
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Select
-
-                    ></Select>
-                  </Grid>
-                </Grid>
-                <Grid sx={{ textAlign: 'right', mt: 3 }}>
-                  <Button type='submit' variant="contained" color="primary"  >  Update  </Button>
-                </Grid>
-              </Box>
-
             </FormControl>
           </Box>
 
@@ -311,7 +186,7 @@ export default function Ads() {
           <Typography variant='h5'>Ads Table Details</Typography>
           <Typography variant='subtitle1'>You can check all details</Typography>
         </Box>
-        <Button sx={{ px: 5 }} variant="contained" onClick={showAddModel}>Add New Ads</Button>
+        <Button sx={{ px: 5 }} variant="contained" onClick={NavigateAddAds}>Add New Ads</Button>
       </Box>
 
       <TableContainer component={Paper}>
@@ -348,15 +223,13 @@ export default function Ads() {
                   }
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <IconButton >
+                  <IconButton onClick={() => showUpdateModal(ad)}  >
                     <EditIcon />
                   </IconButton>
-                  <IconButton aria-label="delete" >
+                  <IconButton aria-label="delete" onClick={() => showDeleteModal(ad?._id)} >
                     < DeleteOutlineOutlinedIcon />
                   </IconButton>
-                  <IconButton >
-                    < RemoveRedEyeIcon />
-                  </IconButton>
+                
                 </StyledTableCell>
               </StyledTableRow>
             ))}
@@ -366,7 +239,6 @@ export default function Ads() {
     </>
   )
 }
-
 
 
 

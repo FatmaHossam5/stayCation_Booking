@@ -20,7 +20,7 @@ import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
 import AddRoom from './Components/AddRoom/AddRoom'
 import { ToastContainer } from 'react-toastify'
-
+import AddAds from './Components/AddAds/AddAds'
 
 function App() {
 const routes =createBrowserRouter([
@@ -44,10 +44,11 @@ const routes =createBrowserRouter([
       {path:"status",element:<StatusInfo/>},
       {path:"user",element:<User/>},
       {path:"ads",element:<Ads/>},
+      {path:"ads/add-ads",element:<AddAds/>},
+
       {path:"book",element:<Bookings/>},
       {path:"rooms",element:<Rooms/>},
-      {path:"rooms/add-room",element:<AddRoom/>},
-
+      {path:"add-room",element:<AddRoom/>},
 
 
 

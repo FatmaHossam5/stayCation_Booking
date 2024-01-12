@@ -55,15 +55,12 @@ export default function AddRoom() {
 
   const AddNewRoom = (data) => {
     const formattedSelected = selectedValue.map(({ value }) => value)
-<<<<<<< Updated upstream
-    axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected },
-     { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
-      console.log(response);
-=======
+
+ 
     axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
       getToastValue('success', 'Added Successfully')
       navigate('/dashboard/rooms')
->>>>>>> Stashed changes
+
     }).catch((error) => {
 
       getToastValue('error', error.response.data)

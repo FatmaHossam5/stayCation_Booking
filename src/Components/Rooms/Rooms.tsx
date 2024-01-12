@@ -265,11 +265,11 @@ export default function Rooms() {
         <Typography variant='h5'>Rooms Table Details</Typography>
         <Typography variant='subtitle1'>You can check all details</Typography>
       </Box>
-<<<<<<< Updated upstream
+
       <Button variant="contained" onClick={() => { navigate('/dashboard/add-room'); }}>Add New Room</Button>
-=======
-    <Button variant="contained"onClick={() => {navigate('/dashboard/rooms/add-room');}}>Add New Room</Button>
->>>>>>> Stashed changes
+
+  
+
     </Box>
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <Box
