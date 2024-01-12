@@ -21,6 +21,8 @@ import Rooms from './Components/Rooms/Rooms'
 // import Navbar from './Components/Navbar/Navbar'
 import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
+import ChangePassword from './Components/ChangePassword/ChangePassword'
+
 
 function App() {
  
@@ -35,6 +37,7 @@ const routes =createBrowserRouter([
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
+      {path:"change-pass",element:<ChangePassword/>}
 
     ]
   },
