@@ -18,9 +18,6 @@ import User from './Components/User/User'
 import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
-import AddRoom from './Components/AddRoom/AddRoom'
-import { ToastContainer } from 'react-toastify'
-import AddAds from './Components/AddAds/AddAds'
 
 function App() {
 const routes =createBrowserRouter([
@@ -32,6 +29,7 @@ const routes =createBrowserRouter([
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
+      {path:"change-pass",element:<ChangePassword/>}
 
     ]
   },
