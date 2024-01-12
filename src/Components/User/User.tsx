@@ -10,30 +10,22 @@ import {
   Modal,
   Box,
   Typography,
-  Tooltip,
-  IconButton,
-  InputAdornment,
-  InputBase,
-  FormControl,
-  Select,
-  MenuItem,
-  Container,
-  Grid,
+
 } from "@mui/material";
 import axios from "axios";
 import { AuthContext } from "../../Context/AuthContext";
-import { TextField, Button } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import FilterIcon from "@mui/icons-material/Filter";
-import { FeaturedPlayListRounded, FilterList } from "@mui/icons-material";
+// import { TextField, Button } from "@mui/material";
+// import SearchIcon from "@mui/icons-material/Search";
+// import FilterIcon from "@mui/icons-material/Filter";
+// import { FeaturedPlayListRounded, FilterList } from "@mui/icons-material";
 
 function User() {
   const { baseUrl, reqHeaders }: any = React.useContext(AuthContext);
 
   const [usersList, setUsersList] = React.useState({});
-  const [modalState, setModalState] = React.useState("close");
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [selectedRowsPerPage, setSelectedRowsPerPage] = React.useState(10);
+  // const [modalState, setModalState] = React.useState("close");
+  // const [searchTerm, setSearchTerm] = React.useState("");
+  // const [selectedRowsPerPage, setSelectedRowsPerPage] = React.useState(10);
   const handleClose = () => setModalState("close");
   const [userItem, setUserItem] = React.useState();
 
@@ -49,28 +41,28 @@ function User() {
       });
   };
 
-  const handleBlock = (user: any) => {
-    axios
-      .put(`${baseUrl}/Users/${user}`, user, { headers: reqHeaders })
-      .then((response) => {
-        showAllUsers(response.data.isActivated);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const handleBlock = (user: any) => {
+  //   axios
+  //     .put(`${baseUrl}/Users/${user}`, user, { headers: reqHeaders })
+  //     .then((response) => {
+  //       showAllUsers(response.data.isActivated);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
-  const handleView = (user: any) => {
-    setModalState("show-user");
-    setUserItem(user);
-  };
+  // const handleView = (user: any) => {
+  //   setModalState("show-user");
+  //   setUserItem(user);
+  // };
 
   React.useEffect(() => {
     showAllUsers();
   }, [userItem]);
   return (
     <>
-      <Modal
+      {/* <Modal
         open={modalState === "show-user"}
         onClose={handleClose}
         aria-labelledby="modal-title"
@@ -93,18 +85,16 @@ function User() {
             <b>Status:</b> {userItem?.isActivated ? "Active" : "Not Active"}
           </p>
         </Box>
-      </Modal>
+      </Modal> */}
       {/* Filteration */}
       <Box sx={{ pb: 3 }}>
         <Typography variant="h5" component="h2" gutterBottom>
           Users
         </Typography>
       </Box>
-      <Paper sx={{ p: 3, rounded: 3, bgcolor: "white" }}>
-        <Box display="flex" alignItems="center" mb={3}>
-          <IconButton size="large" sx={{ mr: 2 }}>
-            {/* <CiSearch /> */}
-          </IconButton>
+      <Paper sx={{ p: 3, rounded: 3, bgcolor: "white",boxShadow:'none' }}>
+        {/* <Box display="flex" alignItems="center" mb={3}>
+         
           <InputBase
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -133,7 +123,7 @@ function User() {
           >
             <FilterList /> Filter
           </Button>
-        </Box>
+        </Box> */}
 
         <TableContainer component={Paper} sx={{ color: "aqua" }}>
           <Table sx={{ minWidth: 650 }} size="small">
@@ -165,9 +155,8 @@ function User() {
             </TableBody>
           </Table>
         </TableContainer>
-
+{/* 
         <Box sx={{ display: "flex", justifyContent: "flex-end", p: 3 }}>
-          {/* <Typography variant="body2">Showing</Typography> */}
           <FormControl sx={{ minWidth: 50, marginLeft: "auto" }}>
             <Select
               value={selectedRowsPerPage}
@@ -180,7 +169,7 @@ function User() {
           <Typography variant="body2" component="p" sx={{ mx: 2 }}>
             of 5 Results
           </Typography>
-        </Box>
+        </Box> */}
       </Paper>
     </>
   );
