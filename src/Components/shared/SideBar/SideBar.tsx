@@ -71,7 +71,7 @@ export default function SideBar() {
   const itemsList=[
     {text:"Home",icon:<HomeIcon/>,onClick:()=>navigate('/dashboard')},
     {text:"Users",icon:<PeopleOutlineIcon/>,onClick:()=>navigate('/dashboard/user')},
-    {text:"Rooms",icon:<RoomServiceIcon/>,onClick:()=>navigate('/dashboard/room')},
+    {text:"Rooms",icon:<RoomServiceIcon/>,onClick:()=>navigate('/dashboard/rooms')},
     {text:"Ads",icon:<CalendarMonthIcon/>,onClick:()=>navigate('/dashboard/ads')},
     {text:"Booking",icon:<PeopleOutlineIcon/>,onClick:()=>navigate('/dashboard/book')},
     {text:"ChangePassword",icon:<LockOpenIcon/>,onClick:()=>navigate('/forget-pass')},

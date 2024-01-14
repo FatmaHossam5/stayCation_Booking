@@ -43,8 +43,8 @@ const routes =createBrowserRouter([
       {path:"user",element:<User/>},
       {path:"ads",element:<Ads/>},
       {path:"book",element:<Bookings/>},
-      {path:"room",element:<Rooms/>},
-      {path:"add-room",element:<AddRoom/>},
+      {path:"rooms",element:<Rooms/>},
+      {path:"rooms/add-room",element:<AddRoom/>},
 
 
 

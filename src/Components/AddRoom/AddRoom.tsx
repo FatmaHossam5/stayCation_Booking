@@ -7,19 +7,25 @@ import { useForm } from 'react-hook-form';
 import Select from 'react-dropdown-select';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import { useNavigate } from 'react-router';
+import { ToastContext } from '../../Context/ToastContext';
+import useApi from '../../custom Hook/useApi';
 
 
 export default function AddRoom() {
   const { register, handleSubmit, formState: { errors } } = useForm()
   let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDUzNjEyMCwiZXhwIjoxNzA1NzQ1NzIwfQ.p15lXfscJSFl8OJ4drIUj0vPPS3nO4L_U6iTbtwBdf8'
   let Headers = { Authorization: reqHeaders }
-  const [facilities, setFacilities] = React.useState([{ "value": '', 'label': '' }])
+
   const [selectedValue, setSelectedValue] = React.useState([])
   const [imgs, setImgs] = React.useState(''),
     handleImage = (e) => {
       setImgs(e.target.files[0])
     }
     const navigate=useNavigate()
+    const{getToastValue}=React.useContext(ToastContext)
+    const{facilities}=useApi('http://154.41.228.234:3000/api/v0/admin/room-facilities')
+
+    const{getAllRooms}=useApi('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=40')
   const theme = createTheme({
     components: {
       MuiFilledInput: {
@@ -54,31 +60,20 @@ export default function AddRoom() {
   const AddNewRoom = (data) => {
     const formattedSelected = selectedValue.map(({ value }) => value)
     axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
-      console.log(response);
+      getToastValue("success","Added SuccessFully!")
+      navigate('/dashboard/rooms')
+      getAllRooms()
     }).catch((error) => {
-      console.log(error);
+      getToastValue("error",error?.response?.data)
 
     })
 
 
 
   }
-  {/*Get All Facilities */ }
-  const getAllFacilities = () => {
-    axios.get('http://154.41.228.234:3000/api/v0/admin/room-facilities', { headers: Headers }).then((response) => {
-      console.log(response?.data?.data?.facilities);
-      setFacilities(response?.data?.data?.facilities)
-      const newFacilities = response?.data?.data?.facilities
-      const facilities = newFacilities.map(({ _id: value, name: label }) => ({ value, label }))
-      setFacilities(facilities)
-    }).catch((error) => {
-      console.log(error);
-    })
-  }
 
-  React.useEffect(
-    () => { getAllFacilities() }
-    , [])
+
+
   return (
     <>
       <Container>
@@ -121,7 +116,7 @@ export default function AddRoom() {
                         justifyContent: "flex-start"
                       }}
                       label="Price"
-                      {...register("price",{required:true})} />
+                      {...register("price",{required:true,valueAsNumber:true})} />
                     {errors.price&&errors.price.type==="required"&& <Typography sx={{color:"red"}}>price is required</Typography>}
 
                   </Grid>
@@ -159,13 +154,17 @@ export default function AddRoom() {
 
                   </Grid>
                   <Grid item xs={6}>
+                 
 
                     <Select
                       options={facilities}
                       onChange={(selectedValue) => setSelectedValue(selectedValue)}
                       multi
+                      placeholder="Select Facilities"
                     
-                    ></Select>
+                    >
+
+                    </Select>
                   </Grid>
                 </Grid>
               </Box>
@@ -199,7 +198,7 @@ export default function AddRoom() {
         <Button onClick={()=>navigate(-1)} type='button' variant="outlined" sx={{ color:'#203FC7',mr:5}}>
           Cancel
         </Button>
-        <Button onClick={()=>navigate(-1)} type='submit' variant="contained" sx={{ color:'white',bgcolor:'#203FC7'}}>
+        <Button type='submit' variant="contained" sx={{ color:'white',bgcolor:'#203FC7'}}>
           Save
         </Button>
     

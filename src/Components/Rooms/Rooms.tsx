@@ -9,6 +9,7 @@ import axios from 'axios';
 import Avatar from '../../assets/avatar.png'
 import { useNavigate } from 'react-router';
 import EditIcon from '@mui/icons-material/Edit';
+import useApi from '../../custom Hook/useApi';
 
 
 
@@ -32,27 +33,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-
 export default function Rooms() {
 const [age, setAge] =useState('');
 const handleChange = (event: SelectChangeEvent) => {
   setAge(event.target.value);
 };
-const[rooms,setRooms]=useState([])
-let reqHeaders='Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
-let Headers ={Authorization:reqHeaders}
+const{rooms,getAllRooms}=useApi('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=40');
 const navigate=useNavigate()
-const getAllRooms = () =>{
-  axios.get('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=10',{headers:Headers}).then((response)=>{
-    console.log(response);
-    setRooms(response?.data?.data?.rooms)
-  }).catch((error)=>{
-    console.log(error);
-    
-  })
-}
-console.log(rooms);
-
 useEffect(()=>{getAllRooms()},[])
   return (<>
     <Box sx={{display:"flex",justifyContent:"space-between",mb:4}}>
@@ -60,7 +47,7 @@ useEffect(()=>{getAllRooms()},[])
       <Typography variant='h5'>Rooms Table Details</Typography>
       <Typography variant='subtitle1'>You can check all details</Typography>
       </Box>
-    <Button variant="contained"onClick={() => {navigate('/dashboard/add-room');}}>Add New Room</Button>
+    <Button variant="contained"onClick={() => {navigate('/dashboard/rooms/add-room');}}>Add New Room</Button>
     </Box>
     <Box sx={{display:"flex",justifyContent:"space-between"}}>
       <Box
@@ -125,7 +112,7 @@ useEffect(()=>{getAllRooms()},[])
               <StyledTableCell component="th" scope="row">{room?.images[0]===''?<img src={Avatar}/>:<img src={'http://upskilling-egypt.com:3000/uploads/'+room?.images[0]} alt="" />}
           
               </StyledTableCell>
-              <StyledTableCell align="right">{room?.price}</StyledTableCell>
+              <StyledTableCell align="right" >{room?.price}</StyledTableCell>
               <StyledTableCell align="right">{room?.discount}</StyledTableCell>
               <StyledTableCell align="right">{room?.capacity}</StyledTableCell>
               <StyledTableCell align="right">
