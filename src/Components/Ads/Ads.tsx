@@ -2,14 +2,13 @@ import { Box, Button, FormControl, Grid, IconButton, Modal, TextField, Typograph
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { useEffect, useState } from 'react';
 import trash from '../../assets/Email (1).png';
 import { useForm } from 'react-hook-form';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-import { textAlign } from '@mui/system';
+import { toast } from 'react-toastify';
 
 {/*MUI Table Style */ }
 const style = {
@@ -57,10 +56,10 @@ export default function Ads() {
   {/*Get All Ads */ }
   const getAllAds = () => {
     axios.get('http://154.41.228.234:3000/api/v0/admin/ads', { headers: Headers }).then((response) => {
-      console.log(response.data.data.ads);
+      
       setAds(response.data.data.ads)
     }).catch((error) => {
-      console.log(error.response.message);
+      toast.error(error?.response?.message);
     })
   }
 
@@ -81,13 +80,13 @@ export default function Ads() {
   const deleteAD = () => {
     axios.delete(`http://154.41.228.234:3000/api/v0/admin/ads/${adId}`, { headers: Headers })
       .then((response) => {
-        console.log(response);
+  
         setAdId(adId);
         handleClose();
         getAllAds()
 
       }).catch((error) => {
-        console.log(error);
+        toast.error(error?.response?.message);
       })
   }
     {/* Update Room */ }
@@ -98,7 +97,7 @@ export default function Ads() {
         handleClose();
         getAllAds();
       }).catch((error) => {
-        console.log(error);
+        toast.error(error?.response?.message);
   
       })
     }
