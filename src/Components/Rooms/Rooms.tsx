@@ -5,11 +5,10 @@ import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow
 ,TextField,InputLabel,MenuItem,FormControl,IconButton   } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {  useEffect, useState } from 'react';
-import axios from 'axios';
 import Avatar from '../../assets/avatar.png'
 import { useNavigate } from 'react-router';
 import EditIcon from '@mui/icons-material/Edit';
-import useApi from '../../custom Hook/useFacilities';
+import useRooms from '../../custom Hook/useRooms';
 
 
 
@@ -38,7 +37,7 @@ const [age, setAge] =useState('');
 const handleChange = (event: SelectChangeEvent) => {
   setAge(event.target.value);
 };
-const{rooms,getAllRooms}=useApi('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=40');
+const{rooms,getAllRooms}=useRooms();
 const navigate=useNavigate()
 useEffect(()=>{getAllRooms()},[])
   return (<>

@@ -1,5 +1,4 @@
-
-import { Box, Button, Container, FormControl, Grid, Paper, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, FormControl, Grid,TextField, Typography } from '@mui/material'
 import * as React from 'react'
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import axios from 'axios';
@@ -9,32 +8,24 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import useFacilities from '../../custom Hook/useFacilities';
+import useRooms from '../../custom Hook/useRooms';
 
 
 export default function AddRoom() {
   const { register, handleSubmit, formState: { errors } } = useForm()
   let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDUzNjEyMCwiZXhwIjoxNzA1NzQ1NzIwfQ.p15lXfscJSFl8OJ4drIUj0vPPS3nO4L_U6iTbtwBdf8'
   let Headers = { Authorization: reqHeaders }
-  const[rooms,setRooms]=React.useState([])
   const [selectedValue, setSelectedValue] = React.useState([])
   const [imgs, setImgs] = React.useState(''),
     handleImage = (e) => {
       setImgs(e.target.files[0])
     }
-    const navigate=useNavigate()
-   
-    const{facilities}=useFacilities()
+    const navigate=useNavigate();
+    const{facilities}=useFacilities();
+    const{getAllRooms}=useRooms();
 
    
-    const getAllRooms = () =>{
-      axios.get('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=40',{headers:Headers}).then((response)=>{
-        setRooms(response?.data?.data?.rooms)
-      }).catch((error)=>{
-  
-        toast.error(error?.response?.data)
-        
-      })
-    }
+ 
   const theme = createTheme({
     components: {
       MuiFilledInput: {
@@ -165,16 +156,12 @@ React.useEffect(()=>{
 
                   </Grid>
                   <Grid item xs={6}>
-                 
-
                     <Select
                       options={facilities}
                       onChange={(selectedValue) => setSelectedValue(selectedValue)}
                       multi
                       placeholder="Select Facilities"
-                    
                     >
-
                     </Select>
                   </Grid>
                 </Grid>
