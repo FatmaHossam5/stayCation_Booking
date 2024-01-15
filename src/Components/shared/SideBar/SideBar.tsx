@@ -17,7 +17,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { CSSObject, Theme, styled, useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router";
-import { useAppStore } from "../../../appStore";
+// import { useAppStore } from "../../../appStore";
+import GridViewIcon from '@mui/icons-material/GridView';
 
 const drawerWidth = 240;
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -79,6 +80,11 @@ export default function SideBar() {
       onClick: () => navigate("/dashboard/room"),
     },
     {
+      text: "Facilities",
+      icon: <GridViewIcon />,
+      onClick: () => navigate("/dashboard/facilities"),
+    },
+    {
       text: "Ads",
       icon: <CalendarMonthIcon />,
       onClick: () => navigate("/dashboard/ads"),
@@ -91,12 +97,12 @@ export default function SideBar() {
     {
       text: "ChangePassword",
       icon: <LockOpenIcon />,
-      onClick: () => navigate("/forget-pass"),
+      onClick: () => navigate("/change-pass"),
     },
     { text: "LogOut", icon: <LogoutIcon /> },
   ];
   const navigate = useNavigate();
-  const open = useAppStore((state) => state.dopen);
+  // const open = useAppStore((state) => state.dopen);
 
   return (
     <Box sx={{ display: "flex" }}>

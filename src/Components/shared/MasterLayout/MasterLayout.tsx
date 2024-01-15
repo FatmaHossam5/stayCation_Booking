@@ -16,7 +16,7 @@ export default function MasterLayout() {
           <SideBar />
         </Box>
         {/* main content area */}
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box component="main" sx={{ flexGrow: 1, p: 3,marginTop:"4rem", paddingLeft: "3rem" }}>
           <Outlet />
         </Box>
       </Box>

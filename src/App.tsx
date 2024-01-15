@@ -22,6 +22,8 @@ import Rooms from './Components/Rooms/Rooms'
 import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
+import Facilities from './Components/Facilities/Facilities'
+import { ToastContainer } from 'react-toastify'
 
 
 function App() {
@@ -52,12 +54,7 @@ const routes =createBrowserRouter([
       {path:"ads",element:<Ads/>},
       {path:"book",element:<Bookings/>},
       {path:"room",element:<Rooms/>},
-
-
-
-
-
-
+      {path:"facilities",element:<Facilities/>}
     ]
   }
 ])
@@ -65,6 +62,7 @@ const routes =createBrowserRouter([
   return (
     <>
 <RouterProvider router={routes}/>
+<ToastContainer/>
     </>
   )
 }

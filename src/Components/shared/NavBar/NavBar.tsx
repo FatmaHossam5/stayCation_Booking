@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import { styled } from "@mui/material/styles";
 import * as React from "react";
-import { useAppStore } from "../../../appStore";
+// import { useAppStore } from "../../../appStore";
 import avatar from "../../../assets/avatar.png";
 
 const Search = styled("div")(({ theme }) => ({
@@ -71,8 +71,8 @@ export default function NavBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const updateOpen = useAppStore((state) => state.updateOpen);
-  const dopen = useAppStore((state) => state.dopen);
+  // const updateOpen = useAppStore((state) => state.updateOpen);
+  // const dopen = useAppStore((state) => state.dopen);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
