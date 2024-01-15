@@ -9,7 +9,7 @@ import axios from 'axios';
 import Avatar from '../../assets/avatar.png'
 import { useNavigate } from 'react-router';
 import EditIcon from '@mui/icons-material/Edit';
-import useApi from '../../custom Hook/useApi';
+import useApi from '../../custom Hook/useFacilities';
 
 
 

@@ -7,25 +7,34 @@ import { useForm } from 'react-hook-form';
 import Select from 'react-dropdown-select';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import { useNavigate } from 'react-router';
-import { ToastContext } from '../../Context/ToastContext';
-import useApi from '../../custom Hook/useApi';
+import { toast } from 'react-toastify';
+import useFacilities from '../../custom Hook/useFacilities';
 
 
 export default function AddRoom() {
   const { register, handleSubmit, formState: { errors } } = useForm()
   let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDUzNjEyMCwiZXhwIjoxNzA1NzQ1NzIwfQ.p15lXfscJSFl8OJ4drIUj0vPPS3nO4L_U6iTbtwBdf8'
   let Headers = { Authorization: reqHeaders }
-
+  const[rooms,setRooms]=React.useState([])
   const [selectedValue, setSelectedValue] = React.useState([])
   const [imgs, setImgs] = React.useState(''),
     handleImage = (e) => {
       setImgs(e.target.files[0])
     }
     const navigate=useNavigate()
-    const{getToastValue}=React.useContext(ToastContext)
-    const{facilities}=useApi('http://154.41.228.234:3000/api/v0/admin/room-facilities')
+   
+    const{facilities}=useFacilities()
 
-    const{getAllRooms}=useApi('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=40')
+   
+    const getAllRooms = () =>{
+      axios.get('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=40',{headers:Headers}).then((response)=>{
+        setRooms(response?.data?.data?.rooms)
+      }).catch((error)=>{
+  
+        toast.error(error?.response?.data)
+        
+      })
+    }
   const theme = createTheme({
     components: {
       MuiFilledInput: {
@@ -60,19 +69,21 @@ export default function AddRoom() {
   const AddNewRoom = (data) => {
     const formattedSelected = selectedValue.map(({ value }) => value)
     axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
-      getToastValue("success","Added SuccessFully!")
+    toast.success("Added SuccessFully!")
       navigate('/dashboard/rooms')
       getAllRooms()
     }).catch((error) => {
-      getToastValue("error",error?.response?.data)
+      toast.error(error?.response?.data)
 
     })
 
 
 
   }
+React.useEffect(()=>{
+  getAllRooms()
 
-
+},[])
 
   return (
     <>
