@@ -5,8 +5,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -36,7 +36,7 @@ console.log(errors);
       console.log(response.data.data.ads);
       setAds(response.data.data.ads)
     }).catch((error) => {
-      console.log(error.response.message);
+      toast.error(error.response.message);
     })
 
 
@@ -46,12 +46,12 @@ console.log(errors);
   {/*create Ads */ }
   const createAds = (data) => {
     axios.post('http://154.41.228.234:3000/api/v0/admin/ads', data, { headers: Headers }).then((response) => {
-      console.log(response);
+    toast.success("Added SuccessFully !")
       navigate(-1)
       getAllAds();
 
     }).catch((error) => {
-      console.log(error);
+   toast.error(error?.response?.data)
 
     })
   }
@@ -63,7 +63,7 @@ console.log(errors);
       setRooms(response?.data?.data?.rooms)
 
     }).catch((error) => {
-      console.log(error);
+      toast.error(error?.response?.data)
 
     })
   }
@@ -91,7 +91,7 @@ console.log(errors);
                 <select {...register("room", { required: true })} className='selectStyle'defaultValue=''>
                 <option value="" disabled > Room Name</option>
 
-                  {rooms.map((room) => <option value={room._id}>{room.roomNumber}</option>)}
+                  {rooms.map((room) => <option value={room?._id}>{room?.roomNumber}</option>)}
                 </select>
               </Grid>
               {errors.room && errors.room.type === 'required' && <span className='span-error'> Room Name is required </span>}
