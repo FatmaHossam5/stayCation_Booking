@@ -62,7 +62,9 @@ export default function AddRoom() {
       navigate('/dashboard/rooms')
       getAllRooms()
     }).catch((error) => {
-      toast.error(error?.response?.data?.message)
+
+      
+      toast.error(error?.response?.data)
     })
 
   }
@@ -72,7 +74,7 @@ export default function AddRoom() {
   return (
     <>
       <Container>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop:4}}>
           <FormControl component='form' sx={{ display: "flex", justifyContent: "center", alignItems: "center" }} defaultValue="" required onSubmit={handleSubmit(AddNewRoom)}>
             <ThemeProvider theme={theme}>
               <Box sx={{ width: '100%', display: "flex", justifyContent: "center" }}>

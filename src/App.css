@@ -1,3 +1,6 @@
+.body{
+    font-family: 'Poppins', sans-serif;
+}
 *{margin: 0;
 padding: 0;
 }
@@ -23,3 +26,10 @@ padding: 0;
     padding-top: 0px!important;
 }
 .Select::placeholder{color: black!important;}
+.css-1p823my-MuiListItem-root{
+    cursor: pointer;
+}
+.css-1p823my-MuiListItem-root:hover{
+background-color:  #1A1B1E2B;
+
+}

@@ -19,17 +19,26 @@ import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
 import AddRoom from './Components/AddRoom/AddRoom'
+import Navbar from './Components/Navbar/Navbar'
+import { AuthContext } from './Context/AuthContext'
+import { useContext } from 'react'
+import ChangePassword from './Components/ChangePassword/ChangePassword'
+
 
 function App() {
+ 
+  let {userData,saveUserData,role}:any=useContext(AuthContext)
 const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
       {index:true,element:<LandingPage/>},
+      {path:"nav",element:<Navbar/>},
       {path:"signin",element:<SignIn/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
+      {path:"change-pass",element:<ChangePassword/>}
 
     ]
   },
@@ -58,7 +67,7 @@ const routes =createBrowserRouter([
 
   return (
     <>
- <RouterProvider router={routes}/>
+<RouterProvider router={routes}/>
     </>
   )
 }
