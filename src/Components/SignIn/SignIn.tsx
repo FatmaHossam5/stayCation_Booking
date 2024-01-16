@@ -8,7 +8,7 @@ export default function SignIn() {
   const {register,handleSubmit,formState:{errors}}=useForm();
 const {baseUrl}=useContext(AuthContext)
   const signIn=(data)=>{
-    axios.post(`${baseUrl}/admin/users/login`,data).then((response)=>{console.log(response);
+    axios.post(`${baseUrl}/admin/users/login`,data).then((response)=>{localStorage.setItem('userToken', response.data.data.token );
     }).catch((error)=>{console.log(error);
     })
     
