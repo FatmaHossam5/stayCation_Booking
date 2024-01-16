@@ -2,14 +2,20 @@
 import { styled } from '@mui/material/styles';
 import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow
   ,Paper,tableCellClasses, Box, Typography, Button
-,TextField,InputLabel,MenuItem,FormControl,IconButton   } from '@mui/material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+,TextField,InputLabel,MenuItem,FormControl,IconButton, Grid   } from '@mui/material';
+import Select from 'react-dropdown-select';
 import {  useEffect, useState } from 'react';
 import Avatar from '../../assets/avatar.png'
 import { useNavigate } from 'react-router';
 import EditIcon from '@mui/icons-material/Edit';
 import useRooms from '../../custom Hook/useRooms';
-
+import useFacilities from '../../custom Hook/useFacilities';
+import { Modal } from '@mui/base';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import trash from '../../assets/Email (1).png'
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -32,15 +38,156 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function Rooms() {
-const [age, setAge] =useState('');
-const handleChange = (event: SelectChangeEvent) => {
-  setAge(event.target.value);
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  borderRadius: "7px",
+
+  boxShadow: 24,
+  p: 4,
 };
+export default function Rooms() {
+const [modalState, setModalState] = useState('close')
+const [roomId, setRoomId] = useState(0)
+const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+const [selectedValue, setSelectedValue] = useState([])
 const{rooms,getAllRooms}=useRooms();
+const{getAllFacilities,formattedFacilities}=useFacilities()
 const navigate=useNavigate()
-useEffect(()=>{getAllRooms()},[])
+let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
+  let Headers = { Authorization: reqHeaders }
+  
+
+  {/* show Modals */}
+  const showUpdateModal = (room) => {
+    setModalState('update-modal')
+    setRoomId(room._id)
+    setValue("roomNumber", room.roomNumber);
+    setValue("price", room.price);
+    setValue("capacity", room.capacity);
+    setValue("discount", room.discount);
+   
+    
+    
+  }
+  const handleClose = () => setModalState("close");
+
+  const UpdateRoom = (data) => {
+    const formattedSelected = selectedValue.map(({ value }) => value)
+    axios.put(`http://154.41.228.234:3000/api/v0/admin/rooms/${roomId}`, { ...data, facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
+      toast.success("Updated SuccessFully!")
+      handleClose();
+      getAllRooms();
+    }).catch((error) => {
+     
+      
+      toast.error(error?.response?.data?.message)
+
+    })
+  }
+useEffect(()=>{getAllRooms();
+  getAllFacilities();
+},[])
   return (<>
+      <Modal
+        open={modalState === "update-modal"}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box sx={style}>
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <IconButton onClick={handleClose} sx={{ color: "red" }} >
+              < CancelOutlinedIcon />
+            </IconButton>
+          </Grid>
+          <FormControl component='form' onSubmit={handleSubmit(UpdateRoom)}>
+            <Box sx={{ width: '100%', display: "flex", justifyContent: "center" }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }} >
+                <Grid item xs={12} sx={{ color: "#17202A" }} >
+                  <TextField
+                    InputLabelProps={{
+                      style: { color: 'black' },
+                    }}
+                    sx={{ bgcolor: "#F7F7F7", mb: 5, }}
+                    variant='filled'
+                    label="Room Number"
+                    fullWidth
+                    {...register("roomNumber", { required: true })}
+                  />
+                  {errors.roomNumber && errors.roomNumber.type === "required" && <Typography sx={{ color: "red" }}>Room Number is required</Typography>}
+                </Grid>
+              </Grid>
+            </Box>
+
+          <Box sx={{ width: '100%' }}>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }}>
+              <Grid item xs={6} >
+                <TextField
+                  InputLabelProps={{
+                    style: { color: 'black' },
+                  }}
+                  variant='filled'
+                  sx={{
+                    bgcolor: "#F7F7F7", display: "flex",
+                    justifyContent: "flex-start"
+                  }}
+                  label="Price"
+                  {...register("price", { required: true })} />
+                {errors.price && errors.price.type === "required" && <Typography sx={{ color: "red" }}>price is required</Typography>}
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  InputLabelProps={{
+                    style: { color: 'black' },
+                  }}
+                  sx={{
+                    bgcolor: "#F7F7F7", mb: 5, display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                  variant='filled'
+                  label="Capacity"
+                  {...register("capacity", { required: true })}
+                />
+                {errors.capacity && errors.capacity.type === "required" && <Typography sx={{ color: "red" }}>capacity is required</Typography>}
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  InputLabelProps={{
+                    style: { color: 'black' },
+                  }}
+                  sx={{
+                    bgcolor: "#F7F7F7", mb: 5, display: "flex",
+                    justifyContent: "flex-start",
+                  }}
+                  variant='filled'
+                  label="Discount"
+                  {...register("discount", { required: true })}
+                />
+                {errors.discount && errors.discount.type === "required" && <Typography sx={{ color: "red" }}>discount is required</Typography>}
+              </Grid>
+              <Grid item xs={6}>
+                <Select
+                  options={formattedFacilities}
+                  onChange={(selectedValue) => setSelectedValue(selectedValue)}
+                  multi
+                ></Select>
+              </Grid>
+            </Grid>
+            <Grid sx={{ textAlign: 'right', mt: 3 }}>
+            <Button type='submit' variant="contained" color="primary"  >  Update  </Button>
+          </Grid>
+          </Box>
+
+          </FormControl>
+        </Box>
+
+      </Modal>
+  
     <Box sx={{display:"flex",justifyContent:"space-between",mb:4}}>
       <Box>
       <Typography variant='h5'>Rooms Table Details</Typography>
@@ -54,41 +201,7 @@ useEffect(()=>{getAllRooms()},[])
       <TextField  fullWidth label="Search by number ..." id="fullWidth" />
       </Box>
   
-    <Box>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <Select
-          value={age}
-          onChange={handleChange}
-          displayEmpty
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-          <MenuItem value="">
-            <em>Tag</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
- 
-      </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <Select
-          value={age}
-          onChange={handleChange}
-          displayEmpty
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-          <MenuItem value="">
-            <em>Category</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
    
-      </FormControl>
-   
-      </Box>
 
     </Box>
     <TableContainer component={Paper}>
@@ -114,10 +227,11 @@ useEffect(()=>{getAllRooms()},[])
               <StyledTableCell align="right" >{room?.price}</StyledTableCell>
               <StyledTableCell align="right">{room?.discount}</StyledTableCell>
               <StyledTableCell align="right">{room?.capacity}</StyledTableCell>
-              <StyledTableCell align="right">
-              <IconButton aria-label="delete">
-<EditIcon />
-</IconButton> 
+              <StyledTableCell align="center">
+                <IconButton onClick={() => showUpdateModal(room)} >
+                  <EditIcon />
+                </IconButton>
+               
               </StyledTableCell>
 
 

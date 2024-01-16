@@ -26,6 +26,6 @@ const useFacilities = () => {
   useEffect(() => {
     getAllFacilities();
   }, []);
-  return { facilities,formattedFacilities  }
+  return { facilities,formattedFacilities,getAllFacilities  }
 }
 export default useFacilities
