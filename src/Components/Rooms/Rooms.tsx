@@ -12,9 +12,9 @@ import Avatar from '../../assets/avatar.png'
 import { useNavigate } from 'react-router';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import trash from '../../assets/Email (1).png'
+import useRooms from '../../custom Hook/useRooms';
 
 
 
@@ -51,28 +51,20 @@ const style = {
   p: 4,
 };
 export default function Rooms() {
+  
+    
+    const{rooms,getAllRooms}=useRooms();
+    const navigate=useNavigate()
   const [age, setAge] = useState('');
   const [modalState, setModalState] = useState('close')
   const [roomId, setRoomId] = useState(0)
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value);
   };
-  const [rooms, setRooms] = useState([])
   let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
   let Headers = { Authorization: reqHeaders }
-  const navigate = useNavigate()
 
 
-  const getAllRooms = () => {
-    axios.get('http://154.41.228.234:3000/api/v0/admin/rooms?page=1&size=10', { headers: Headers }).then((response) => {
-      console.log(response);
-      setRooms(response?.data?.data?.rooms)
-    }).catch((error) => {
-      console.log(error);
-
-    })
-  }
-  console.log(rooms);
 
   const showDeleteModal = (id) => {
     setModalState('delete-modal')
@@ -94,6 +86,8 @@ export default function Rooms() {
       })
   }
   useEffect(() => { getAllRooms() }, [])
+
+
   return (<>
     <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
       <Modal
@@ -129,7 +123,7 @@ export default function Rooms() {
         <Typography variant='h5'>Rooms Table Details</Typography>
         <Typography variant='subtitle1'>You can check all details</Typography>
       </Box>
-      <Button variant="contained" onClick={() => { navigate('/dashboard/add-room'); }}>Add New Room</Button>
+    <Button variant="contained"onClick={() => {navigate('/dashboard/rooms/add-room');}}>Add New Room</Button>
     </Box>
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <Box
@@ -194,7 +188,7 @@ export default function Rooms() {
               <StyledTableCell component="th" scope="row" crossorigin='anonymous'>{room?.images[0] === '' ? <img src={Avatar} /> : <img src={'http://upskilling-egypt.com:3000/uploads/' + room?.images[0]} alt="" />}
 
               </StyledTableCell>
-              <StyledTableCell align="right">{room?.price}</StyledTableCell>
+              <StyledTableCell align="right" >{room?.price}</StyledTableCell>
               <StyledTableCell align="right">{room?.discount}</StyledTableCell>
               <StyledTableCell align="right">{room?.capacity}</StyledTableCell>
               <StyledTableCell align="center">
@@ -204,9 +198,7 @@ export default function Rooms() {
                 <IconButton aria-label="delete" onClick={() => showDeleteModal(room._id)}>
                   < DeleteOutlineOutlinedIcon />
                 </IconButton>
-                <IconButton >
-                  < RemoveRedEyeIcon />
-                </IconButton>
+             
               </StyledTableCell>
 
 
