@@ -22,7 +22,7 @@ export default function AddRoom() {
     }
   const navigate = useNavigate();
   const { formattedFacilities } = useFacilities();
-  const { getAllRooms } = useRooms();
+  const { RoomsRefetch } = useRooms();
 
   const theme = createTheme({
     components: {
@@ -61,7 +61,7 @@ export default function AddRoom() {
     axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
       toast.success("Added SuccessFully!")
       navigate('/dashboard/rooms')
-      getAllRooms()
+      RoomsRefetch()
     }).catch((error) => {
 
       
@@ -69,9 +69,7 @@ export default function AddRoom() {
     })
 
   }
-  React.useEffect(() => {
-    getAllRooms()
-  }, [])
+
   return (
     <>
       <Container>

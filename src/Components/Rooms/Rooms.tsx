@@ -1,21 +1,26 @@
 // import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import {Table,TableBody,TableCell,TableContainer,TableHead,TableRow
-  ,Paper,tableCellClasses, Box, Typography, Button
-,TextField,InputLabel,MenuItem,FormControl,IconButton, Grid   } from '@mui/material';
+import {
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow
+  , Paper, tableCellClasses, Box, Typography, Button
+  , TextField, InputLabel, MenuItem, FormControl, IconButton, Modal, Grid
+} from '@mui/material';
 import Select from 'react-dropdown-select';
+
 import {  useEffect, useState } from 'react';
+import useFacilities from '../../custom Hook/useFacilities';
+import axios from 'axios';
 import Avatar from '../../assets/avatar.png'
 import { useNavigate } from 'react-router';
 import EditIcon from '@mui/icons-material/Edit';
-import useRooms from '../../custom Hook/useRooms';
-import useFacilities from '../../custom Hook/useFacilities';
-import { Modal } from '@mui/base';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import trash from '../../assets/Email (1).png'
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import useRooms from '../../custom Hook/useRooms';
 import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+
+
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -43,26 +48,37 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 800,
   bgcolor: 'background.paper',
   borderRadius: "7px",
 
   boxShadow: 24,
   p: 4,
 };
+
+
 export default function Rooms() {
-const [modalState, setModalState] = useState('close')
 const [roomId, setRoomId] = useState(0)
 const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 const [selectedValue, setSelectedValue] = useState([])
-const{rooms,getAllRooms}=useRooms();
-const{getAllFacilities,formattedFacilities}=useFacilities()
+const{formattedFacilities}=useFacilities()
 const navigate=useNavigate()
+const{rooms,refetchRooms  }=useRooms();
+const [age, setAge] = useState('');
+const [modalState, setModalState] = useState('close')
+const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value);
+  };
 let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
-  let Headers = { Authorization: reqHeaders }
-  
+let Headers = { Authorization: reqHeaders }
 
-  {/* show Modals */}
+
+console.log(refetchRooms);
+       {/* show Modals */}
+  const showDeleteModal = (id) => {
+    setModalState('delete-modal')
+    setRoomId(id)
+  }
   const showUpdateModal = (room) => {
     setModalState('update-modal')
     setRoomId(room._id)
@@ -81,7 +97,7 @@ let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMT
     axios.put(`http://154.41.228.234:3000/api/v0/admin/rooms/${roomId}`, { ...data, facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
       toast.success("Updated SuccessFully!")
       handleClose();
-      getAllRooms();
+      refetchRooms ();
     }).catch((error) => {
      
       
@@ -89,9 +105,23 @@ let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMT
 
     })
   }
-useEffect(()=>{getAllRooms();
-  getAllFacilities();
-},[])
+
+  const deleteRoom = () => {
+    axios.delete(`http://154.41.228.234:3000/api/v0/admin/rooms/${roomId}`, { headers: Headers })
+      .then((response) => {
+        toast.success("Deleted SuccessFully !")
+        setRoomId(roomId);
+        handleClose();
+        refetchRooms ()
+    
+
+      }).catch((error) => {
+      
+        toast.error(error?.response?.data)
+      })
+  }
+
+
   return (<>
       <Modal
         open={modalState === "update-modal"}
@@ -175,6 +205,8 @@ useEffect(()=>{getAllRooms();
                   options={formattedFacilities}
                   onChange={(selectedValue) => setSelectedValue(selectedValue)}
                   multi
+                 
+            
                 ></Select>
               </Grid>
             </Grid>
@@ -186,6 +218,35 @@ useEffect(()=>{getAllRooms();
           </FormControl>
         </Box>
 
+      </Modal>
+      <Modal
+        open={modalState === "delete-modal"}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+
+        <Box sx={style}>
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <IconButton onClick={handleClose} sx={{ color: "red" }} >
+              < CancelOutlinedIcon />
+            </IconButton>
+          </Grid>
+          <Grid sx={{ textAlign: "center" }}>
+            <img src={trash} alt="trash" />
+          </Grid>
+
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
+            Delete This Room?
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2, textAlign: "center" }}>
+            are you sure you want to delete this item ? if you are sure just click on delete it
+          </Typography>
+          <Grid sx={{ textAlign: 'right', mt: 3 }}>
+            <Button variant="contained" color="error" onClick={deleteRoom} >  Delete  </Button>
+
+          </Grid>
+        </Box>
       </Modal>
   
     <Box sx={{display:"flex",justifyContent:"space-between",mb:4}}>
@@ -232,6 +293,10 @@ useEffect(()=>{getAllRooms();
                   <EditIcon />
                 </IconButton>
                
+                <IconButton aria-label="delete" onClick={() => showDeleteModal(room._id)}>
+                  < DeleteOutlineOutlinedIcon />
+                </IconButton>
+             
               </StyledTableCell>
 
 
