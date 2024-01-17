@@ -15,6 +15,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import trash from '../../assets/Email (1).png'
 import useRooms from '../../custom Hook/useRooms';
+import { toast } from 'react-toastify';
 
 
 
@@ -53,7 +54,7 @@ const style = {
 export default function Rooms() {
   
     
-    const{rooms,getAllRooms}=useRooms();
+    const{rooms,RoomsRefetch }=useRooms();
     const navigate=useNavigate()
   const [age, setAge] = useState('');
   const [modalState, setModalState] = useState('close')
@@ -65,6 +66,7 @@ export default function Rooms() {
   let Headers = { Authorization: reqHeaders }
 
 
+console.log(RoomsRefetch);
 
   const showDeleteModal = (id) => {
     setModalState('delete-modal')
@@ -76,16 +78,17 @@ export default function Rooms() {
   const deleteRoom = () => {
     axios.delete(`http://154.41.228.234:3000/api/v0/admin/rooms/${roomId}`, { headers: Headers })
       .then((response) => {
-        console.log(response);
+        toast.success("Deleted SuccessFully !")
         setRoomId(roomId);
         handleClose();
-        getAllRooms()
+        RoomsRefetch()
+    
 
       }).catch((error) => {
-        console.log(error);
+      
+        toast.error(error?.response?.data)
       })
   }
-  useEffect(() => { getAllRooms() }, [])
 
 
   return (<>
