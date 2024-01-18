@@ -12,6 +12,7 @@ padding: 0;
 .css-cveggr-MuiListItemIcon-root{
     color: white !important;
 }
+
  {/*Select DropDown Styles*/} 
 .css-wmy1p7-ReactDropdownSelect{
     min-height: 55px!important;
@@ -26,6 +27,7 @@ padding: 0;
     padding-top: 0px!important;
 }
 .Select::placeholder{color: black!important;}
+
 .css-1p823my-MuiListItem-root{
     cursor: pointer;
 }

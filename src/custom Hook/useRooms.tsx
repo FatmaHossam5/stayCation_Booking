@@ -22,11 +22,11 @@ const useRooms = () => {
     }
     getAllRooms();
   }, [fetchCount]);
-  const RoomsRefetch = () => {
+  const refetchRooms  = () => {
     setFetchCount((prev) => prev+1);
     
     
   };
-  return { rooms ,RoomsRefetch}
+  return { rooms ,refetchRooms }
 }
 export default useRooms
