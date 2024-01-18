@@ -21,6 +21,7 @@ import Rooms from './Components/Rooms/Rooms'
 import Navbar from './Components/Navbar/Navbar'
 import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
+import RoomDetails from './Components/RoomDetails/RoomDetails'
 
 function App() {
  
@@ -35,6 +36,7 @@ const routes =createBrowserRouter([
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
+      {path:"roomdetails",element:<RoomDetails/>},
 
     ]
   },
@@ -49,10 +51,6 @@ const routes =createBrowserRouter([
       {path:"ads",element:<Ads/>},
       {path:"book",element:<Bookings/>},
       {path:"room",element:<Rooms/>},
-
-
-
-
 
 
     ]

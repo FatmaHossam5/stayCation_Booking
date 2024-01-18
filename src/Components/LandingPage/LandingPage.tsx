@@ -76,11 +76,12 @@ export default function LandingPage() {
                 color: "#FBFCFC",
                 bgcolor: "#3252DF",
                 fontFamily: "Poppins",
+                marginTop:'10px',
                 borderRadius: "4px",
                 "&:hover": { color: "#FBFCFC", bgcolor: "#3252DF" },
               }}
             >
-              Continue to Book
+              Explore
             </Button>
           </Grid>
           <Grid item xs={6}>
@@ -94,3 +95,4 @@ export default function LandingPage() {
     </div>
   );
 }
+

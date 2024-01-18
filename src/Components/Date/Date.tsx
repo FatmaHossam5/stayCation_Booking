@@ -1,47 +1,44 @@
-import React, { useEffect, useRef, useState } from "react";
-import { DateRange } from "react-date-range";
-import format from "date-fns/format";
-import { addDays } from "date-fns";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
-import { Box, Button, Fade, TextField } from "@mui/material";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-export default function DateComponent() {
-  const today = new Date();
-  const endDate = addDays(today, 7);
+const DateRangePicker = () => {
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
-  const [open, setOpen] = useState(true);
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+  };
 
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: today,
-      endDate: endDate,
-      key: "selection",
-    },
-  ]);
-
-  const handleClose = () => {
-    setOpen(!open);
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
   };
 
   return (
-    <>
-      <Box>
-        {open && (
-          <DateRange
-            onChange={(item) => setDateRange([item.selection])}
-            editableDateInputs={true}
-            moveRangeOnFirstSelection={false}
-            ranges={dateRange}
-            months={1}
-            direction="horizontal"
-          />
-        )}
-  
-          <AccessTimeIcon onClick={handleClose} />
-      
-      </Box>
-    </>
+    <div>
+      <DatePicker
+        selected={startDate}
+        onChange={handleStartDateChange}
+        selectsStart
+        startDate={startDate}
+        endDate={endDate}
+        placeholderText="Start Date"
+        className="start-date-picker"
+      />
+
+      <DatePicker
+        selected={endDate}
+        onChange={handleEndDateChange}
+        selectsEnd
+        startDate={startDate}
+        endDate={endDate}
+        minDate={startDate}
+        placeholderText="End Date"
+        className="end-date-picker"
+
+      />
+    </div>
   );
-}
+};
+
+export default DateRangePicker;
