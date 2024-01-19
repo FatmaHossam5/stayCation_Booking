@@ -65,6 +65,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function SideBar() {
+ 
+  const logOut = ()=>{
+    localStorage.removeItem('userToken')
+navigate('/signin')
+  }
   const theme = useTheme();
   const itemsList=[
     {text:"Home",icon:<HomeIcon/>,onClick:()=>navigate('/dashboard')},
@@ -73,7 +78,7 @@ export default function SideBar() {
     {text:"Ads",icon:<CalendarMonthIcon/>,onClick:()=>navigate('/dashboard/ads')},
     {text:"Booking",icon:<PeopleOutlineIcon/>,onClick:()=>navigate('/dashboard/book')},
     {text:"ChangePassword",icon:<LockOpenIcon/>,onClick:()=>navigate('/forget-pass')},
-    {text:"LogOut",icon:<LogoutIcon/>},]
+    {text:"LogOut",icon:<LogoutIcon/>,onClick:()=>logOut()}]
  const navigate=useNavigate();
  const open=useAppStore((state)=>state.dopen)
 
