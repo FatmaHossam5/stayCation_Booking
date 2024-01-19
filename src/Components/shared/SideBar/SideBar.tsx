@@ -17,9 +17,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { CSSObject, Theme, styled, useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router";
-// import { useAppStore } from "../../../appStore";
-import GridViewIcon from '@mui/icons-material/GridView';
 
+import GridViewIcon from '@mui/icons-material/GridView';
+import { useAppStore } from "../../../appStore";
+import DryCleaningIcon from '@mui/icons-material/DryCleaning';
 const drawerWidth = 240;
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -67,42 +68,17 @@ const Drawer = styled(MuiDrawer, {
 
 export default function SideBar() {
   const theme = useTheme();
-  const itemsList = [
-    { text: "Home", icon: <HomeIcon />, onClick: () => navigate("/dashboard") },
-    {
-      text: "Users",
-      icon: <PeopleOutlineIcon />,
-      onClick: () => navigate("/dashboard/user"),
-    },
-    {
-      text: "Rooms",
-      icon: <RoomServiceIcon />,
-      onClick: () => navigate("/dashboard/room"),
-    },
-    {
-      text: "Facilities",
-      icon: <GridViewIcon />,
-      onClick: () => navigate("/dashboard/facilities"),
-    },
-    {
-      text: "Ads",
-      icon: <CalendarMonthIcon />,
-      onClick: () => navigate("/dashboard/ads"),
-    },
-    {
-      text: "Booking",
-      icon: <PeopleOutlineIcon />,
-      onClick: () => navigate("/dashboard/book"),
-    },
-    {
-      text: "ChangePassword",
-      icon: <LockOpenIcon />,
-      onClick: () => navigate("/change-pass"),
-    },
-    { text: "LogOut", icon: <LogoutIcon /> },
-  ];
-  const navigate = useNavigate();
-  // const open = useAppStore((state) => state.dopen);
+  const itemsList=[
+    {text:"Home",icon:<HomeIcon/>,onClick:()=>navigate('/dashboard')},
+    {text:"Users",icon:<PeopleOutlineIcon/>,onClick:()=>navigate('/dashboard/user')},
+    {text:"Rooms",icon:<RoomServiceIcon/>,onClick:()=>navigate('/dashboard/rooms')},
+    {text:"Ads",icon:<CalendarMonthIcon/>,onClick:()=>navigate('/dashboard/ads')},
+    {text:"Booking",icon:<PeopleOutlineIcon/>,onClick:()=>navigate('/dashboard/book')},
+    {text:"Facilities",icon:<DryCleaningIcon/>,onClick:()=>navigate('/dashboard/facilities')},
+    {text:"ChangePassword",icon:<LockOpenIcon/>,onClick:()=>navigate('/forget-pass')},
+    {text:"LogOut",icon:<LogoutIcon/>},]
+ const navigate=useNavigate();
+ const open=useAppStore((state)=>state.dopen)
 
   return (
     <Box sx={{ display: "flex" }}>

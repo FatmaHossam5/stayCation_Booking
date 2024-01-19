@@ -12,6 +12,22 @@ padding: 0;
 .css-cveggr-MuiListItemIcon-root{
     color: white !important;
 }
+
+ {/*Select DropDown Styles*/} 
+.css-wmy1p7-ReactDropdownSelect{
+    min-height: 55px!important;
+    border-radius: 4px!important;
+    width: 100%!important;
+    background-color:#e6e5e5!important;
+    display: flex!important;
+    justify-content: flex-end!important;
+   
+}
+.css-wd28pw-MuiGrid-root>.MuiGrid-item{
+    padding-top: 0px!important;
+}
+.Select::placeholder{color: black!important;}
+
 .css-1p823my-MuiListItem-root{
     cursor: pointer;
 }

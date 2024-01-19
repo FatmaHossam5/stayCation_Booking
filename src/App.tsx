@@ -18,7 +18,8 @@ import User from './Components/User/User'
 import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
-// import Navbar from './Components/Navbar/Navbar'
+import AddRoom from './Components/AddRoom/AddRoom'
+import Navbar from './Components/Navbar/Navbar'
 import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
@@ -34,7 +35,7 @@ const routes =createBrowserRouter([
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
       {index:true,element:<LandingPage/>},
-      // {path:"nav",element:<Navbar/>},
+      {path:"nav",element:<Navbar/>},
       {path:"signin",element:<SignIn/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
@@ -53,8 +54,16 @@ const routes =createBrowserRouter([
       {path:"user",element:<User/>},
       {path:"ads",element:<Ads/>},
       {path:"book",element:<Bookings/>},
-      {path:"room",element:<Rooms/>},
-      {path:"facilities",element:<Facilities/>}
+      {path:"facilities",element:<Facilities/>},
+      {path:"rooms",element:<Rooms/>},
+      {path:"rooms/add-room",element:<AddRoom/>},
+
+
+
+
+
+
+
     ]
   }
 ])
