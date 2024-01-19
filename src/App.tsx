@@ -18,17 +18,23 @@ import User from './Components/User/User'
 import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
+import AddRoom from './Components/AddRoom/AddRoom'
+import Navbar from './Components/Navbar/Navbar'
+import { AuthContext } from './Context/AuthContext'
+import { useContext } from 'react'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
 import AddAds from './Components/AddAds/AddAds'
-import AddRoom from './Components/AddRoom/AddRoom'
-import { ToastContainer } from 'react-toastify'
+import AdsParent from './Components/AdsParent/AdsParent'
 
 function App() {
+ 
+  let {userData,saveUserData,role}:any=useContext(AuthContext)
 const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
       {index:true,element:<LandingPage/>},
+      {path:"nav",element:<Navbar/>},
       {path:"signin",element:<SignIn/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
@@ -38,7 +44,8 @@ const routes =createBrowserRouter([
     ]
   },
   {
-    path:"dashboard",element:<MasterLayout/>,errorElement:<NotFound/>,
+    path:"dashboard",element:
+    <MasterLayout/>,errorElement:<NotFound/>,
     children:[
       {index:true,element:<Home/>},
       {path:"contact",element:<ContactInfo/>},
@@ -47,10 +54,11 @@ const routes =createBrowserRouter([
       {path:"user",element:<User/>},
       {path:"ads",element:<Ads/>},
       {path:"ads/add-ads",element:<AddAds/>},
+  
 
       {path:"book",element:<Bookings/>},
       {path:"rooms",element:<Rooms/>},
-      {path:"add-room",element:<AddRoom/>},
+      {path:"rooms/add-room",element:<AddRoom/>},
 
 
 
@@ -65,7 +73,6 @@ const routes =createBrowserRouter([
   return (
     <>
  <RouterProvider router={routes}/>
- <ToastContainer/>
     </>
   )
 }

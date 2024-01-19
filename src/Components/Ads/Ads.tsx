@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Grid, IconButton, Modal, TextField, Typography, TableContainer, Table, TableHead, TableRow, tableCellClasses, TableCell, Paper, TableBody, ButtonBase, InputLabel, MenuItem } from '@mui/material';
+import { Box, Button, FormControl, Grid, IconButton, Modal, TextField, Typography, TableContainer, Table, TableHead, TableRow, tableCellClasses, TableCell, Paper, TableBody, ButtonBase, InputLabel, MenuItem, FormHelperText, Select, Menu } from '@mui/material';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
@@ -9,6 +9,10 @@ import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import AddAds from '../AddAds/AddAds';
+import { useAdsContext } from '../../Context/AdsContext';
+import CustomPagination from '../Pagination/Pagination';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 {/*MUI Table Style */ }
 const style = {
@@ -17,7 +21,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: '#203FC7',
   borderRadius: "7px",
 
   boxShadow: 24,
@@ -52,12 +56,43 @@ export default function Ads() {
   const [adId, setAdId] = useState(0)
   const navigate =useNavigate()
 
+ const [currentPage, setCurrentPage] = useState(1);
+ const [totalPages, setTotalPages] = useState(1);
+ const [rowsPerPage, setRowsPerPage] = useState(5);
+ const handlePageChange = (event, newPage) => {
+  setCurrentPage(newPage);
+  getAllAds(newPage+1)
+};
+
+const handleRowsPerPageChange = (event) => {
+  setRowsPerPage(parseInt(event.target.value, 5));
+  setCurrentPage(1);
+  getAllAds(1)
+};
+const [anchorElArray, setAnchorElArray] = useState(Array(ads.length).fill(null));
+
+const handleClick = (event,index) => {
+  const newAnchorElArray = [...anchorElArray];
+  newAnchorElArray[index] = event.currentTarget;
+  setAnchorElArray(newAnchorElArray);
+};
+
+const handleCloseAncorEl = (index) => {
+  const newAnchorElArray = [...anchorElArray];
+  newAnchorElArray[index] = null;
+  setAnchorElArray(newAnchorElArray);
+};
+
+
+console.log(errors);
 
   {/*Get All Ads */ }
   const getAllAds = () => {
-    axios.get('http://154.41.228.234:3000/api/v0/admin/ads', { headers: Headers }).then((response) => {
+    axios.get(`http://154.41.228.234:3000/api/v0/admin/ads?page=${currentPage}&size=${rowsPerPage}`, { headers: Headers }).then((response) => {
+    
       
       setAds(response.data.data.ads)
+      setTotalPages(response.data.data.totalCount)
     }).catch((error) => {
       toast.error(error?.response?.message);
     })
@@ -71,7 +106,8 @@ export default function Ads() {
     setModalState('update-modal')
     setAdId(ad._id)
     setValue("discount", ad?.room?.discount);
-    setValue("isActive", ad?.isActive);
+// setIsActive(ad.isActive)
+    // setValue('isActive', ad?.isActive);
     
  
   }
@@ -91,11 +127,13 @@ export default function Ads() {
   }
     {/* Update Room */ }
     const UpdateAd = (data) => {
-   
-      axios.put(`http://154.41.228.234:3000/api/v0/admin/ads/${adId}`, data, { headers: Headers } ).then((response) => {
+
+      axios.put(`http://154.41.228.234:3000/api/v0/admin/ads/${adId}`,data, { headers: Headers } ).then((response) => {
         console.log(response);
         handleClose();
         getAllAds();
+    
+        
       }).catch((error) => {
         toast.error(error?.response?.message);
   
@@ -106,8 +144,9 @@ export default function Ads() {
       navigate('/dashboard/ads/add-ads')
     }
   useEffect(() => {
-    getAllAds()
-  }, [])
+    getAllAds(currentPage);
+    
+  }, [currentPage])
 
  
 
@@ -151,33 +190,78 @@ export default function Ads() {
           aria-labelledby="modal-title"
           aria-describedby="modal-description"
         >
-          <Box sx={style}>
-            <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <IconButton onClick={handleClose} sx={{ color: "red" }} >
-                < CancelOutlinedIcon />
-              </IconButton>
-            </Grid>
-            <FormControl component='form' fullWidth onSubmit={handleSubmit(UpdateAd)} >
 
-             <Box sx={{textAlign:"center"}}>
-              <label htmlFor=""> Discount:</label>
-              <input type="number" {...register("discount", { required: true })} placeholder='Discount' className='selectStyle' />
-              {errors.discount && errors.discount.type === 'required' && <span className='span-error'> Discount is required </span>}
-              <label htmlFor=""> Active:</label>
 
-              <select {...register("isActive", { required: true })} className='selectStyle'>
-                <option value={true}>Yes</option>
-                <option value={false}>No</option>
-              </select>
-              {errors.isActive && errors.isActive.type === 'required' && <span className='span-error'> Thid Field is required </span>}
 
-              <Grid sx={{ textAlign: 'right', mt: 3 }}>
-                <Button type='submit' variant="contained" color="primary"  >  update  </Button>
+<Box sx={style} >
+  <Grid container spacing={3}>
+   <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, }}>
+      <Typography variant="h4" color="white">
+         Ads
+      </Typography>
+      <IconButton sx={{ color: 'white' }} onClick={handleClose}>
+        <CancelOutlinedIcon />
+      </IconButton>
+    </Grid>
+    <form onSubmit={handleSubmit(UpdateAd)} style={{width:'100%'}}>
+<Box sx={{ margin:"auto" }}>
+ <Grid item lg={12}>
+ 
 
-              </Grid>
-              </Box>
+
+  <FormControl fullWidth sx={{ mt: 2 ,marginLeft:1}}>
+        <TextField
+InputLabelProps={{
+style: { color: '#203FC7' },
+ }}
+ sx={{
+ bgcolor: 'white',
+ mb: 1,
+ display: 'flex',
+ justifyContent: 'flex-start',
+ borderRadius:"7px",
+ borderBottom:"none",
+ }}
+ variant="filled"
+ label="Discount"
+ {...register('discount', { required: true })}
+ error={Boolean(errors.discount)}
+ helperText={errors.discount && errors.discount.type === 'required' && 'Discount is required'}
+ />
+   </FormControl>
+
+ 
+              <FormControl fullWidth sx={{ mt: 2 ,marginLeft:1,bgcolor:"white",borderRadius:"10px"}}>
+              <InputLabel id="active">Active</InputLabel>
+              <Select
+                {...register('isActive', { required: true })}
+                labelId="active"
+                id="active"
+          // value={isActive}
+          // onChange={handleActiveChange}
+                label="Active"
+               
+              >
+                <MenuItem value={true}>Yes</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
+              </Select>
             </FormControl>
-          </Box>
+            {errors.isActive && <span className="errorMsg">Active is required</span>}
+   <Grid item sx={{ textAlign: 'right', mt: 3 }}>
+     <Button type="submit" variant="contained"sx={{bgcolor:" #203FC7"}}  className="addAds">
+       Save
+     </Button>
+   </Grid>
+  
+ </Grid>
+ </Box>
+</form>
+  </Grid>
+ </Box>
+
+
+
+
 
         </Modal>
 
@@ -203,8 +287,8 @@ export default function Ads() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {ads.map((ad) => (
-              <StyledTableRow key={ad._id}>
+            {ads.map((ad,index) => (
+              <StyledTableRow key={index}>
                 <StyledTableCell component="th" scope="row">
                   {ad?.room?.roomNumber}
                 </StyledTableCell>
@@ -221,19 +305,61 @@ export default function Ads() {
                       : <ButtonBase >No</ButtonBase>
                   }
                 </StyledTableCell>
-                <StyledTableCell align="center">
-                  <IconButton onClick={() => showUpdateModal(ad)}  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton aria-label="delete" onClick={() => showDeleteModal(ad?._id)} >
-                    < DeleteOutlineOutlinedIcon />
-                  </IconButton>
-                
-                </StyledTableCell>
+              
+
+<StyledTableCell align="center">
+      <div>
+        <IconButton
+          aria-label="more"
+          id={`long-button-${index}`}
+          aria-controls={open ? `long-menu-${index}` : undefined}
+          aria-expanded={open ? 'true' : undefined}
+          aria-haspopup="true"
+          onClick={(event) => handleClick(event, index)}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          id={`long-menu-${index}`}
+          MenuListProps={{
+            'aria-labelledby': `long-button-${index}`,
+          }}
+          anchorEl={anchorElArray[index]}
+          open={Boolean(anchorElArray[index])}
+          onClose={() => handleCloseAncorEl(index)}
+        >
+       
+       <MenuItem onClick={()=>{handleClose();showDeleteModal(ad?._id)}}>
+          <IconButton aria-label="delete">
+                  < DeleteOutlineOutlinedIcon />
+                </IconButton>
+                Delete
+          </MenuItem>
+          <MenuItem onClick={()=>{handleClose();showUpdateModal(ad)}}>
+          <IconButton >
+          <EditIcon />
+                </IconButton>
+                Update
+          </MenuItem>
+        </Menu>
+      </div>
+    </StyledTableCell>
+          
+
+
+
               </StyledTableRow>
             ))}
           </TableBody>
+    
         </Table>
+        <CustomPagination
+        totalCount={totalPages * rowsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
       </TableContainer>
     </>
   )
@@ -245,3 +371,69 @@ export default function Ads() {
 
 
 
+
+
+// <Box>
+// <Box sx={style}>
+//   <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
+//     <IconButton onClick={handleClose} sx={{ color: "red" }} >
+//       < CancelOutlinedIcon />
+//     </IconButton>
+//   </Grid>
+//   <FormControl component='form' fullWidth onSubmit={handleSubmit(UpdateAd)} >
+//    <Box sx={{textAlign:"center"}}>
+//    <InputLabel htmlFor="discount">Discount:</InputLabel>
+// <TextField
+// type="number"
+// id="discount"
+// {...register('discount', { required: true })}
+// placeholder="Discount"
+// variant="outlined"
+// fullWidth
+// margin="normal"
+// error={Boolean(errors.discount)}
+// />
+// {errors.discount && errors.discount.type === 'required' && (
+// <FormHelperText error>Discount is required</FormHelperText>
+// )}
+// <InputLabel id="isActive-label">Active:</InputLabel>
+// <Select
+// labelId="isActive-label"
+// id="isActive"
+// {...register('isActive', { required: true })}
+// className="selectStyle"
+// defaultValue=""
+// variant="outlined"
+// error={Boolean(errors.isActive)}
+// >
+// <MenuItem value="" disabled>
+//   Select an option
+// </MenuItem>
+// <MenuItem value={true}>Yes</MenuItem>
+// <MenuItem value={false}>No</MenuItem>
+// </Select>
+// {errors.isActive && errors.isActive.type === 'required' && (
+// <FormHelperText error>This Field is required</FormHelperText>)}
+//     <Grid sx={{ textAlign: 'right', mt: 3 }}>
+//       <Button type='submit' variant="contained" color="primary"  >  update  </Button>
+
+//     </Grid>
+//     </Box>
+//   </FormControl>
+// </Box>
+// </Box>
+
+
+{/* <TextField
+// type="number"
+// id="discount"
+// {...register('discount', { required: true })}
+// placeholder="Discount"
+// variant="outlined"
+// fullWidth
+// margin="normal"
+// error={Boolean(errors.discount)}
+// />
+// {errors.discount && errors.discount.type === 'required' && (
+// <FormHelperText error>Discount is required</FormHelperText>
+// )} */}
