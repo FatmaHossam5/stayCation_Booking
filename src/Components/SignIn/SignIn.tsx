@@ -4,12 +4,27 @@ import signin from "../../assets/bg-signin.png";
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { AuthContext } from '../../Context/AuthContext';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 export default function SignIn() {
   const {register,handleSubmit,formState:{errors}}=useForm();
-const {baseUrl}=useContext(AuthContext)
+const {baseUrl,saveUserData,role,userData}=useContext(AuthContext)
+const navigate=useNavigate()
+
   const signIn=(data)=>{
-    axios.post(`${baseUrl}/admin/users/login`,data).then((response)=>{localStorage.setItem('userToken', response.data.data.token );
-    }).catch((error)=>{console.log(error);
+    axios.post(`${baseUrl}/admin/users/login`,data).then((response)=>
+    {localStorage.setItem('userToken', response.data.data.token );
+    saveUserData();
+    {role==='admin'?navigate('/dashboard'):navigate('/user')}
+
+toast.success('logIn SuccessFully')
+    
+
+     
+ 
+    
+    }).catch((error)=>{
+      toast.error(error.response.data);
     })
     
   }

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-
+import { jwtDecode } from "jwt-decode";
 
 export  const AuthContext = createContext ({});
 
@@ -17,15 +17,19 @@ export default function AuthContextProvider(props:any){
 
   const saveUserData = () => {
     const encodedToken:any = localStorage.getItem("userToken");
-
-    setUserData(encodedToken)
-    setRole(encodedToken.userGroup)
+    const decodedToken:any = jwtDecode(encodedToken)
+    setUserData(decodedToken)
+    setRole(decodedToken.role)
+    console.log(userData);
+    
+console.log(role);
 
   };
 
   useEffect(() => {
     if (localStorage.getItem("userToken")) {
       saveUserData();
+      
     }
   }, []);
 
