@@ -9,8 +9,6 @@ import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import AddAds from '../AddAds/AddAds';
-import { useAdsContext } from '../../Context/AdsContext';
 import CustomPagination from '../Pagination/Pagination';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { AuthContext } from '../../Context/AuthContext';
@@ -108,8 +106,7 @@ const handleCloseAncorEl = (index) => {
     setModalState('update-modal')
     setAdId(ad._id)
     setValue("discount", ad?.room?.discount);
-// setIsActive(ad.isActive)
-    // setValue('isActive', ad?.isActive);
+
     
  
   }
@@ -237,16 +234,12 @@ style: { color: '#203FC7' },
               <InputLabel id="active">Active</InputLabel>
               <Select
                 {...register('isActive', { required: true })}
-             
-          // value={isActive}
-          // onChange={handleActiveChange}
-           
               >
                 <MenuItem value={true}>Yes</MenuItem>
                 <MenuItem value={false}>No</MenuItem>
               </Select>
             </FormControl>
-            {errors.isActive && <span className="errorMsg">Active is required</span>}
+            {errors.isActive && errors.isActive.type==='required'&& <Typography sx={{color:"red"}}>Active is required</Typography>}
    <Grid item sx={{ textAlign: 'right', mt: 3 }}>
      <Button type="submit" variant="contained"sx={{bgcolor:" #203FC7"}}  className="addAds">
        Save
@@ -300,9 +293,7 @@ style: { color: '#203FC7' },
                 <StyledTableCell align="right">
 
                   {
-                    ad?.isActive == true ?
-                      <ButtonBase >Yes</ButtonBase>
-                      : <ButtonBase >No</ButtonBase>
+                    ad?.isActive ?'Yes':'No'
                   }
                 </StyledTableCell>
               

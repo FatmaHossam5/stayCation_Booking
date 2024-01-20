@@ -8,7 +8,6 @@ import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import useRooms from '../../custom Hook/useRooms';
-import { useAdsContext } from '../../Context/AdsContext';
 import { AuthContext } from '../../Context/AuthContext';
 
 const style = {

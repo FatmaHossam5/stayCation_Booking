@@ -10,7 +10,7 @@ const CustomPagination = ({ totalCount, currentPage, onPageChange, rowsPerPage, 
       onChange={onPageChange}
       showFirstButton
       showLastButton
-      rowsPerPageOptions={[10, 25, 50, 100]}
+
       onRowsPerPageChange={onRowsPerPageChange}
     />
   );

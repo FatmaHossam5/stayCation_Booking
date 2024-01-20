@@ -24,7 +24,7 @@ import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
 import AddAds from './Components/AddAds/AddAds'
-import AdsParent from './Components/AdsParent/AdsParent'
+
 
 function App() {
  
