@@ -3,12 +3,13 @@ import { Grid, IconButton, InputLabel, MenuItem, Select, TextField, Typography, 
 import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import useRooms from '../../custom Hook/useRooms';
 import { useAdsContext } from '../../Context/AdsContext';
+import { AuthContext } from '../../Context/AuthContext';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -23,48 +24,32 @@ const style = {
 };
 
 export default function AddAds() {
-  const { register, handleSubmit, formState: { errors },control } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate=useNavigate();
   const {rooms ,refetchRooms}=useRooms();
-  let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
-  let Headers = { Authorization: reqHeaders }
+  const{baseUrl,reqHeaders}=useContext(AuthContext)
   const [ads, setAds] = useState([])
-const[isActive,setIsActive]=useState("")
-const handleSelectChange = (event) => {
-  const selectedValue = event.target.value ;
-  setIsActive(selectedValue);
-};
+
  
 console.log(errors);
 
   {/*Get All Ads */ }
   const getAllAds = () => {
-    axios.get('http://154.41.228.234:3000/api/v0/admin/ads', { headers: Headers }).then((response) => {
-     
-      setAds(response.data.data.ads)
-    }).catch((error) => {
-    
-      
+    axios.get(`${baseUrl}/admin/ads`, { headers: reqHeaders }).then((response) => {
+      setAds(response?.data?.data?.ads)
+    }).catch((error) => { 
       toast.error(error.response.message);
     })
-
-
   }
 
 
   {/*create Ads */ }
   const createAds = (data) => {
- 
-
-    axios.post('http://154.41.228.234:3000/api/v0/admin/ads', data, { headers: Headers }).then((response) => {
-  
+    axios.post(`${baseUrl}/admin/ads`, data, { headers: reqHeaders }).then((response) => {
     toast.success("Added SuccessFully !")
       navigate(`/dashboard/ads`)
- 
-
     }).catch((error) => {
    toast.error(error?.response?.data)
-
     })
   }
 
@@ -103,7 +88,6 @@ console.log(errors);
               defaultValue=""
               error={Boolean(errors.room)}
               
-
             >
               <MenuItem value="" disabled>
                 Room Name
@@ -149,14 +133,9 @@ console.log(errors);
                     <InputLabel htmlFor="isActive" sx={{ color: 'white' }}>
                       Active
                     </InputLabel>
-                  
                         <Select
                        {...register('isActive',{required:true})}
-                          className="selectStyle"
                           error={Boolean(errors.isActive)}
-                          value={isActive}
-                          onChange={handleSelectChange}
-
                         >
                           <MenuItem value="" disabled>
                             Active

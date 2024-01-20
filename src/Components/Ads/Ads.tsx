@@ -2,7 +2,7 @@ import { Box, Button, FormControl, Grid, IconButton, Modal, TextField, Typograph
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import trash from '../../assets/Email (1).png';
 import { useForm } from 'react-hook-form';
 import { styled } from '@mui/material/styles';
@@ -13,6 +13,7 @@ import AddAds from '../AddAds/AddAds';
 import { useAdsContext } from '../../Context/AdsContext';
 import CustomPagination from '../Pagination/Pagination';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { AuthContext } from '../../Context/AuthContext';
 
 {/*MUI Table Style */ }
 const style = {
@@ -51,8 +52,8 @@ export default function Ads() {
   const { register, handleSubmit, formState: { errors }, setValue} = useForm();
   const handleClose = () => setModalState("close");
   const [ads, setAds] = useState([])
-  let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
-  let Headers = { Authorization: reqHeaders }
+  const{baseUrl,reqHeaders}=useContext(AuthContext)
+
   const [adId, setAdId] = useState(0)
   const navigate =useNavigate()
 
@@ -84,12 +85,13 @@ const handleCloseAncorEl = (index) => {
 };
 
 
-console.log(errors);
+
 
   {/*Get All Ads */ }
   const getAllAds = () => {
-    axios.get(`http://154.41.228.234:3000/api/v0/admin/ads?page=${currentPage}&size=${rowsPerPage}`, { headers: Headers }).then((response) => {
+    axios.get(`${baseUrl}/admin/ads?page=${currentPage}&size=${rowsPerPage}`, { headers: reqHeaders }).then((response) => {
     
+
       
       setAds(response.data.data.ads)
       setTotalPages(response.data.data.totalCount)
@@ -114,7 +116,7 @@ console.log(errors);
 
   {/* Delete Room */ }
   const deleteAD = () => {
-    axios.delete(`http://154.41.228.234:3000/api/v0/admin/ads/${adId}`, { headers: Headers })
+    axios.delete(`${baseUrl}/admin/ads/${adId}`, { headers: reqHeaders })
       .then((response) => {
   
         setAdId(adId);
@@ -128,7 +130,7 @@ console.log(errors);
     {/* Update Room */ }
     const UpdateAd = (data) => {
 
-      axios.put(`http://154.41.228.234:3000/api/v0/admin/ads/${adId}`,data, { headers: Headers } ).then((response) => {
+      axios.put(`${baseUrl}/admin/ads/${adId}`,data, { headers: reqHeaders } ).then((response) => {
         console.log(response);
         handleClose();
         getAllAds();
@@ -235,12 +237,10 @@ style: { color: '#203FC7' },
               <InputLabel id="active">Active</InputLabel>
               <Select
                 {...register('isActive', { required: true })}
-                labelId="active"
-                id="active"
+             
           // value={isActive}
           // onChange={handleActiveChange}
-                label="Active"
-               
+           
               >
                 <MenuItem value={true}>Yes</MenuItem>
                 <MenuItem value={false}>No</MenuItem>
