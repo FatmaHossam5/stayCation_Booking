@@ -24,6 +24,8 @@ import facilityImg from "../../assets/tx-seztx-pool-21834-square.avif"
 import noData from "../../assets/freepik--Character--inject-70.png"
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { AuthContext } from '../../Context/AuthContext';
+import { toast } from 'react-toastify';
 
 
 const style = {
@@ -77,7 +79,8 @@ export default function Facilities() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagesArray, setPagesArray] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const reHeaders = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDk3MTU4MSwiZXhwIjoxNzA2MTgxMTgxfQ.GNEwSislg2H1QrSh5o6qwWeex9TjICFe8v5gZwDcqo0`
+  const{baseUrl,reqHeaders}=useContext(AuthContext)
+
   const [anchorElArray, setAnchorElArray] = useState(Array(rows?.length).fill(null));
   const handleClick = (event, index) => {
     const newAnchorElArray = [...anchorElArray];
@@ -112,25 +115,22 @@ export default function Facilities() {
   const handleShowDelete = (id) => {
     setShowState('delete-state');
     setItemID(id);
-    console.log(item);
+    
 
   }
   const handleShowUpdate = (item) => {
     setShowState('update-state');
-    setItemID(item.id)
+    setItemID(item._id)
     setValue("name", item.name)
     console.log(item);
   }
-  const handleShowData = () => {
-    setShowState('view-state');
-  }
+
 
   const getFacilities = (page) => {
-    axios.get(`http://154.41.228.234:3000/api/v0/admin/room-facilities`,
+    axios.get(`${baseUrl}/admin/room-facilities`,
       {
-        headers: {
-          Authorization: reHeaders
-        },
+        headers: reqHeaders,
+      
         params: {
           size: rowsPerPage,
           page: page,
@@ -138,64 +138,64 @@ export default function Facilities() {
         }
 
       }).then((response) => {
-        console.log(response);
-        setPagesArray(response?.data?.data.totalCount);
-        setRows(response.data.data.facilities);
+        setPagesArray(response?.data?.data?.totalCount);
+        setRows(response?.data?.data?.facilities);
       }).catch((error) => {
-        console.log(error.message);
-        // getToastValue('error', error.response.data.message)
+    
+        toast.error(error?.message)
       })
   }
 
   const deleteFacility = () => {
-    axios.delete(`http://154.41.228.234:3000/api/v0/admin/room-facilities/${itemID}`,
+    axios.delete(`${baseUrl}/admin/room-facilities/${itemID}`,
       {
-        headers: {
-          Authorization: reHeaders
-        }
+        headers:reqHeaders
+        
       }).then((response) => {
-        console.log(response);
+       
+       toast.success("Deleted SuccessFully")
         handleClose()
-        getFacilities()
+        getFacilities(1)
       }).catch((error) => {
-        console.log(error);
-        // getToastValue('error', error.response.data.message)
+       toast.error(error?.response?.data)
       })
   }
 
   const onSubmit = (data: any) => {
-    axios.post(`http://154.41.228.234:3000/api/v0/admin/room-facilities`, data,
+    axios.post(`${baseUrl}/admin/room-facilities`, data,
       {
-        headers: {
-          Authorization: reHeaders
-        }
+        headers: reqHeaders
       }).then((response) => {
-        console.log(response.data.message);
-        setRows(response.data.data.facilities);
+        
+        toast.success(response?.data?.message)
+        setRows(response?.data?.data?.facilities);
         handleClose()
-        getFacilities()
+        getFacilities(1)
       }).catch((error) => {
-        console.log(error);
-        // getToastValue('error', error.response.data.message)
+        toast.error(error?.response?.data)
+        
       })
   }
   const updateFacility=(data)=>{
-    axios.put(`http://154.41.228.234:3000/api/v0/admin/room-facilities/${itemID}`,data,{  headers: {
-      Authorization: reHeaders
-    }}).then((response)=>{
-      console.log(response);
+    axios.put(`${baseUrl}/admin/room-facilities/${itemID}`,data,{  headers: reqHeaders
+      
+    }).then((response)=>{
+     
+      toast.success(response?.data?.message)
+      handleClose()
+      getFacilities(1)
       
     }).catch((error)=>{
-      console.log(error);
+    toast.error(error?.response?.data)
       
     })
   }
 
   useEffect(() => {
-    getFacilities()
+    getFacilities(1)
   }, [])
 
-  const [name, setName] = useState()
+
 
   return (
     <>
@@ -222,9 +222,9 @@ export default function Facilities() {
             <Grid item xs={12} sx={{ padding: "0 2.5rem" }}>
 
               <TextField sx={{ marginTop: "2.5rem", width: "100%" }} label="name"
-                name="name"
-                autoFocus
-                onInput={e => setName(e.target.value)}
+                // name="name"
+                // autoFocus
+                // onInput={e => setName(e.target.value)}
                 {...register("name", { required: true })}
               />
               {errors.name?.type == "required" && <p style={{ color: "red" }}>name is required</p>}
@@ -259,7 +259,7 @@ export default function Facilities() {
               <HighlightOffIcon sx={{ color: "red" }} onClick={handleClose} />
             </Grid>
           </Grid>
-          <form action="" onSubmit={handleSubmit(updateFacility)}>
+          <form  onSubmit={handleSubmit(updateFacility)}>
             <Grid item xs={12} sx={{ padding: "0 2.5rem" }}>
 
               <TextField  {...register("name", { required: true })} sx={{ marginTop: "2.5rem", width: "100%" }} label="name"
@@ -313,34 +313,7 @@ export default function Facilities() {
         </Box>
       </Modal>
 
-      <Modal
-        open={showState == 'view-state'}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
 
-        <Box sx={style}>
-
-          <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ padding: " 2.5rem" }}>
-
-            <Grid item xs={12} sx={{ textAlign: "end" }}  >
-              <HighlightOffIcon sx={{ color: "red", marginBottom: "20px" }} onClick={handleClose} />
-            </Grid>
-
-            <Grid item xs={12} sx={{ textAlign: "center" }}>
-              <img src={facilityImg} alt="" style={{ width: "300px", height: "300px" }} />
-              {/* <Avatar src={facilityImg} sx={{ margin: "auto" , width:"100px", height:"100px"}} /> */}
-              <Typography id="modal-modal-title" variant="h6" component="h4" sx={{ padding: " 1rem" }}>
-                Facility: test
-              </Typography>
-
-            </Grid>
-
-          </Grid>
-
-        </Box>
-      </Modal>
 
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={6}>
@@ -379,8 +352,8 @@ export default function Facilities() {
                     <StyledTableRow key={index}>
                       <StyledTableCell component="th" scope="row"> {row.name} </StyledTableCell>
                       <StyledTableCell align="center">{row.createdBy ? row.createdBy.userName : "null"}</StyledTableCell>
-                      <StyledTableCell align="center">{row.createdAt}</StyledTableCell>
-                      <StyledTableCell align="center">{row.updatedAt}</StyledTableCell>
+                      <StyledTableCell align="center">{new Date(row?.createdAt).toLocaleDateString()}</StyledTableCell>
+                      <StyledTableCell align="center">{new Date(row?.updatedAt).toLocaleDateString()}</StyledTableCell>
                       <StyledTableCell align="center"
 
                       >
