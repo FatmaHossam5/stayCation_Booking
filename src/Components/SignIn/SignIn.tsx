@@ -8,12 +8,17 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 export default function SignIn() {
   const {register,handleSubmit,formState:{errors}}=useForm();
-const {baseUrl,saveUserData,role,userData}=useContext(AuthContext)
+const {baseUrl,saveUserData,role}=useContext(AuthContext)
 const navigate=useNavigate()
 
   const signIn=(data)=>{
     axios.post(`${baseUrl}/admin/users/login`,data).then((response)=>
-    {localStorage.setItem('userToken', response.data.data.token );
+    {
+   
+      const role=response?.data?.data?.user?.role
+      localStorage.setItem("userToken",response?.data?.data?.token)
+      localStorage.setItem("role",role)
+ 
     saveUserData();
     {role==='admin'?navigate('/dashboard'):navigate('/user')}
 
@@ -24,7 +29,11 @@ toast.success('logIn SuccessFully')
  
     
     }).catch((error)=>{
-      toast.error(error.response.data);
+      console.log(error);
+      
+      toast.error(error?.response?.data?.message);
+     
+      
     })
     
   }

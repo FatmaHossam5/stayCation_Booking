@@ -6,8 +6,8 @@ export  const AuthContext = createContext ({});
 
 export default function AuthContextProvider(props:any){
 
-  const [userData, setUserData] = useState(null);
-  const[role,setRole]=useState(null)
+  const [userData, setUserData] = useState('');
+  const[role,setRole]=useState('')
   
 
   let reqHeaders={
@@ -17,12 +17,8 @@ export default function AuthContextProvider(props:any){
 
   const saveUserData = () => {
     const encodedToken:any = localStorage.getItem("userToken");
-    const decodedToken:any = jwtDecode(encodedToken)
-    setUserData(decodedToken)
-    setRole(decodedToken.role)
-    console.log(userData);
-    
-console.log(role);
+setUserData(encodedToken)
+
 
   };
 
