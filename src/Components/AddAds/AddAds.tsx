@@ -23,7 +23,11 @@ const style = {
 };
 
 export default function AddAds() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors },getValues } = useForm({defaultValues:{
+    room:'',
+    discount:0,
+    isActive:''
+    }});
   const navigate=useNavigate();
   const {rooms ,refetchRooms}=useRooms();
   const{baseUrl,reqHeaders}=useContext(AuthContext)
@@ -48,7 +52,7 @@ console.log(errors);
     toast.success("Added SuccessFully !")
       navigate(`/dashboard/ads`)
     }).catch((error) => {
-   toast.error(error?.response?.data)
+   toast.error(error?.response?.data?.message)
     })
   }
 
@@ -83,15 +87,16 @@ console.log(errors);
             </InputLabel>
             <Select
               {...register('room', { required: true })}
-              className="selectStyle"
-              defaultValue=""
+              
+          
+              defaultValue={getValues("room")}
               error={Boolean(errors.room)}
               
             >
               <MenuItem value="" disabled>
                 Room Name
               </MenuItem>
-              {rooms.map((room) => (
+              {rooms?.map((room) => (
                 <MenuItem key={room?._id} value={room?._id}>
                   {room?.roomNumber}
                 </MenuItem>
@@ -122,6 +127,7 @@ console.log(errors);
       variant="filled"
       label="Discount"
       {...register('discount', { required: true })}
+      defaultValue={getValues('discount')}
       error={Boolean(errors.discount)}
       helperText={errors.discount && errors.discount.type === 'required' && 'Discount is required'}
     />
@@ -133,7 +139,8 @@ console.log(errors);
                       Active
                     </InputLabel>
                         <Select
-                       {...register('isActive',{required:true})}
+                       {...register('isActive',{required:false})}
+                       defaultValue={getValues("isActive")}
                           error={Boolean(errors.isActive)}
                         >
                           <MenuItem value="" disabled>
