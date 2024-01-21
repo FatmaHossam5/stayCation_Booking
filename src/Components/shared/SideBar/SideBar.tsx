@@ -67,7 +67,7 @@ const Drawer = styled(MuiDrawer, {
 export default function SideBar() {
  
   const logOut = ()=>{
-    localStorage.removeItem('userToken')&&
+    localStorage.removeItem('userToken')
     localStorage.removeItem('role')
 navigate('/signin')
   }
