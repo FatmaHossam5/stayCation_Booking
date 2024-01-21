@@ -23,6 +23,7 @@ import Navbar from './Components/Navbar/Navbar'
 import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
+import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
 import AddAds from './Components/AddAds/AddAds'
 
 
@@ -33,9 +34,8 @@ const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
-      {index:true,element:<LandingPage/>},
-      {path:"nav",element:<Navbar/>},
-      {path:"signin",element:<SignIn/>},
+      {index:true,element:<SignIn saveUserData={saveUserData}/>},
+      {path:"signin",element:<SignIn saveUserData={saveUserData}/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
@@ -44,8 +44,11 @@ const routes =createBrowserRouter([
     ]
   },
   {
-    path:"dashboard",element:
-    <MasterLayout/>,errorElement:<NotFound/>,
+    path:"dashboard",
+    element:<ProtectedRoute userData={userData} >
+    <MasterLayout userData={userData}/>
+    </ProtectedRoute>,
+    errorElement:<NotFound/>,
     children:[
       {index:true,element:<Home/>},
       {path:"contact",element:<ContactInfo/>},
@@ -65,6 +68,14 @@ const routes =createBrowserRouter([
 
 
 
+
+    ]
+  },
+  {
+    path:"user",
+    errorElement:<NotFound/>,
+    children:[
+      {index:true,element:<LandingPage/>},
 
     ]
   }

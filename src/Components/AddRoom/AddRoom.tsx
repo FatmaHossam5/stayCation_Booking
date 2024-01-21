@@ -9,12 +9,11 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import useFacilities from '../../custom Hook/useFacilities';
 import useRooms from '../../custom Hook/useRooms';
+import { AuthContext } from '../../Context/AuthContext';
 
 
 export default function AddRoom() {
   const { register, handleSubmit, formState: { errors } } = useForm()
-  let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDUzNjEyMCwiZXhwIjoxNzA1NzQ1NzIwfQ.p15lXfscJSFl8OJ4drIUj0vPPS3nO4L_U6iTbtwBdf8'
-  let Headers = { Authorization: reqHeaders }
   const [selectedValue, setSelectedValue] = React.useState([])
   const [imgs, setImgs] = React.useState(''),
     handleImage = (e) => {
@@ -23,6 +22,7 @@ export default function AddRoom() {
   const navigate = useNavigate();
   const { formattedFacilities } = useFacilities();
   const { RoomsRefetch } = useRooms();
+  const{baseUrl,reqHeaders}=React.useContext(AuthContext)
 
   const theme = createTheme({
     components: {
@@ -58,7 +58,7 @@ export default function AddRoom() {
   const AddNewRoom = (data) => {
     const formattedSelected = selectedValue.map(({ value }) => value)
     setSelectedValue(formattedSelected)
-    axios.post('http://154.41.228.234:3000/api/v0/admin/rooms', { ...data, imgs: data.imgs[0], facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
+    axios.post(`${baseUrl}/admin/rooms`, { ...data, imgs: data.imgs[0], facilities: formattedSelected }, { headers: { ...reqHeaders, "Content-Type": "multipart/form-data" } }).then((response) => {
       toast.success("Added SuccessFully!")
       navigate('/dashboard/rooms')
       RoomsRefetch()

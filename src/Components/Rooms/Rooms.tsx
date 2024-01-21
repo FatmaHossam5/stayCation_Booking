@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import Select from 'react-dropdown-select';
 
-import {  useEffect, useState } from 'react';
+import {  useContext, useEffect, useState } from 'react';
 import useFacilities from '../../custom Hook/useFacilities';
 import axios from 'axios';
 import Avatar from '../../assets/avatar.png'
@@ -19,6 +19,7 @@ import trash from '../../assets/Email (1).png'
 import useRooms from '../../custom Hook/useRooms';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import { AuthContext } from '../../Context/AuthContext';
 
 
 
@@ -64,14 +65,8 @@ const [selectedValue, setSelectedValue] = useState([])
 const{formattedFacilities}=useFacilities()
 const navigate=useNavigate()
 const{rooms,refetchRooms  }=useRooms();
-const [age, setAge] = useState('');
 const [modalState, setModalState] = useState('close')
-const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
-  };
-let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
-let Headers = { Authorization: reqHeaders }
-
+const{baseUrl,reqHeaders}=useContext(AuthContext)
 
 console.log(refetchRooms);
        {/* show Modals */}
@@ -94,7 +89,7 @@ console.log(refetchRooms);
 
   const UpdateRoom = (data) => {
     const formattedSelected = selectedValue.map(({ value }) => value)
-    axios.put(`http://154.41.228.234:3000/api/v0/admin/rooms/${roomId}`, { ...data, facilities: formattedSelected }, { headers: { ...Headers, "Content-Type": "multipart/form-data" } }).then((response) => {
+    axios.put(`${baseUrl}/admin/rooms/${roomId}`, { ...data, facilities: formattedSelected }, { headers: { ...reqHeaders, "Content-Type": "multipart/form-data" } }).then((response) => {
       toast.success("Updated SuccessFully!")
       handleClose();
       refetchRooms ();
@@ -107,7 +102,7 @@ console.log(refetchRooms);
   }
 
   const deleteRoom = () => {
-    axios.delete(`http://154.41.228.234:3000/api/v0/admin/rooms/${roomId}`, { headers: Headers })
+    axios.delete(`${baseUrl}/admin/rooms/${roomId}`, { headers: reqHeaders })
       .then((response) => {
         toast.success("Deleted SuccessFully !")
         setRoomId(roomId);
@@ -282,7 +277,8 @@ console.log(refetchRooms);
             <StyledTableRow  key={room?.id}>
               <StyledTableCell align="center">{room?.roomNumber}</StyledTableCell>
 
-              <StyledTableCell component="th" scope="row">{room?.images[0]===''?<img src={Avatar}/>:<img src={'http://upskilling-egypt.com:3000/uploads/'+room?.images[0]} alt="" />}
+              <StyledTableCell align='right'>{room?.images&&room?.images.length>0?<img src={room?.images[0]} style={{width:'50px',height:"50px",borderRadius:"25px"}}/>:<img src={Avatar} style={{width:'50px',height:"50px"
+              }}/>}
           
               </StyledTableCell>
               <StyledTableCell align="right" >{room?.price}</StyledTableCell>
