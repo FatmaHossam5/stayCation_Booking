@@ -1,22 +1,44 @@
 .body{
-    font-family: 'Cabin', sans-serif;
-    font-family: 'Inter', sans-serif;
     font-family: 'Poppins', sans-serif;
 }
 
-.start-date-picker{
-    background-color: #F5F6F8;
-    width: 200px;
-    padding: 15px;
-    border: none;
-    border-radius: 4px;
+
+*{margin: 0;
+padding: 0;
+}
+ {/*SideBar Styles*/} 
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+    background-color: #203FC7!important;
+    color: white!important;
+}
+.css-cveggr-MuiListItemIcon-root{
+    color: white !important;
 }
 
-.end-date-picker{
-    background-color: #F5F6F8;
-    width: 200px;
-    padding: 15px;
-    border: none;
-    border-radius: 4px;
-    margin-left: 7px;
+ {/*Select DropDown Styles*/} 
+.css-wmy1p7-ReactDropdownSelect{
+    min-height: 55px!important;
+    border-radius: 4px!important;
+    width: 100%!important;
+    background-color:#e6e5e5!important;
+    display: flex!important;
+    justify-content: flex-end!important;
+   
 }
+.css-wd28pw-MuiGrid-root>.MuiGrid-item{
+    padding-top: 0px!important;
+}
+.Select::placeholder{color: black!important;}
+
+.css-1p823my-MuiListItem-root{
+    cursor: pointer;
+}
+.css-1p823my-MuiListItem-root:hover{
+background-color:  #1A1B1E2B;
+
+}
+ {/*DatePicker Styles*/} 
+ .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+    padding: 0rem!important;
+    padding-left: 5rem!important;
+ }
