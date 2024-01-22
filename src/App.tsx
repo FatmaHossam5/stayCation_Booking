@@ -26,6 +26,7 @@ import ChangePassword from './Components/ChangePassword/ChangePassword'
 import Facilities from './Components/Facilities/Facilities'
 import { ToastContainer } from 'react-toastify'
 import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
+import AddAds from './Components/AddAds/AddAds'
 
 
 function App() {
@@ -57,6 +58,9 @@ const routes =createBrowserRouter([
       {path:"status",element:<StatusInfo/>},
       {path:"user",element:<User/>},
       {path:"ads",element:<Ads/>},
+      {path:"ads/add-ads",element:<AddAds/>},
+  
+
       {path:"book",element:<Bookings/>},
       {path:"facilities",element:<Facilities/>},
       {path:"rooms",element:<Rooms/>},
@@ -82,8 +86,7 @@ const routes =createBrowserRouter([
 
   return (
     <>
-<RouterProvider router={routes}/>
-<ToastContainer/>
+ <RouterProvider router={routes}/>
     </>
   )
 }

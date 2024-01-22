@@ -70,6 +70,7 @@ export default function SideBar() {
  
   const logOut = ()=>{
     localStorage.removeItem('userToken')
+    localStorage.removeItem('role')
 navigate('/signin')
   }
   const theme = useTheme();

@@ -13,7 +13,9 @@ padding: 0;
     color: white !important;
 }
 
+
  {/*Select DropDown Styles*/} 
+
 .css-wmy1p7-ReactDropdownSelect{
     min-height: 55px!important;
     border-radius: 4px!important;
@@ -34,4 +36,13 @@ padding: 0;
 .css-1p823my-MuiListItem-root:hover{
 background-color:  #1A1B1E2B;
 
+}
+/* .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
+    color: white!important;
+}
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+    color: white!important;
+} */
+.css-1sszw6i-MuiButtonBase-root-MuiButton-root{
+    background-color: #203FC7!important;
 }

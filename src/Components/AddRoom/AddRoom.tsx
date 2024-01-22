@@ -1,4 +1,4 @@
-import { Box, Button, Container, FormControl, Grid, InputLabel, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, FormControl, Grid, InputAdornment, InputLabel, TextField, Typography } from '@mui/material'
 import * as React from 'react'
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import axios from 'axios';
@@ -143,13 +143,18 @@ export default function AddRoom() {
                       error={Boolean(errors.discount)}
                       helperText={errors.discount && errors.discount.type === "required" && "discount is required"}
                     />
+     
+
+
                   </Grid>
                   <Grid item xs={6}>
                     <Select
                       options={formattedFacilities}
                       onChange={(selectedValue) => setSelectedValue(selectedValue)}
-                      multi
                       placeholder="Select Facilities"
+
+                      multi
+                     
                     >
                     </Select>
                   </Grid>

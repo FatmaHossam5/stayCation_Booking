@@ -28,15 +28,27 @@ import { AuthContext } from '../../Context/AuthContext';
 import { toast } from 'react-toastify';
 
 
+// const style = {
+//   position: 'absolute' as 'absolute',
+//   top: '50%',
+//   left: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   width: 400,
+//   bgcolor: 'background.paper',
+//   boxShadow: 24,
+//   borderRadius: 2
+// };
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: '#203FC7',
+  borderRadius: "7px",
+
   boxShadow: 24,
-  borderRadius: 2
+  p: 4,
 };
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -111,6 +123,8 @@ export default function Facilities() {
   };
   const handleShowAdd = () => {
     setShowState('add-state')
+    setValue('name', '');
+    
   }
   const handleShowDelete = (id) => {
     setShowState('delete-state');
@@ -210,22 +224,25 @@ export default function Facilities() {
 
           <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ padding: " 2.5rem 2.5rem 0 2.5rem" }}>
             <Grid item xs={6} >
-              <Typography id="modal-modal-title" variant="h6" component="h2">
+              <Typography id="modal-modal-title" variant="h6" component="h2" sx={{color:"white"}}>
                 Add Facility
               </Typography>
             </Grid>
             <Grid item xs={6} sx={{ textAlign: "end" }}  >
-              <HighlightOffIcon sx={{ color: "red" }} onClick={handleClose} />
+              <HighlightOffIcon sx={{ color: "white" }} onClick={handleClose} />
             </Grid>
           </Grid>
           <form action="" onSubmit={handleSubmit(onSubmit)}>
             <Grid item xs={12} sx={{ padding: "0 2.5rem" }}>
 
-              <TextField sx={{ marginTop: "2.5rem", width: "100%" }} label="name"
+              <TextField sx={{ marginTop: "2.5rem", width: "100%" }} label="Facility Name"
                 // name="name"
                 // autoFocus
                 // onInput={e => setName(e.target.value)}
                 {...register("name", { required: true })}
+                InputLabelProps={{
+                  style: { color: 'white' },
+                }}
               />
               {errors.name?.type == "required" && <p style={{ color: "red" }}>name is required</p>}
 
@@ -233,7 +250,7 @@ export default function Facilities() {
             <Divider light sx={{ marginY: "2rem" }} />
 
             <Grid sx={{ textAlign: "end", padding: "0 2.5rem 1.5rem 2.5rem" }}>
-              <Button variant="contained" type="submit">save</Button>
+              <Button variant="contained" type="submit" sx={{bgcolor:"#203FC7"}}>save</Button>
 
             </Grid>
           </form>
@@ -250,20 +267,22 @@ export default function Facilities() {
         <Box sx={style}>
 
           <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ padding: " 2.5rem 2.5rem 0 2.5rem" }}>
-            <Grid item xs={6} >
-              <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Grid item xs={9} >
+              <Typography id="modal-modal-title" variant="h6" component="h2" sx={{color:"white"}}>
                 Update Facility
               </Typography>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: "end" }}  >
-              <HighlightOffIcon sx={{ color: "red" }} onClick={handleClose} />
+            <Grid item xs={3} sx={{ textAlign: "end" }}  >
+              <HighlightOffIcon sx={{ color: "white" }} onClick={handleClose} />
             </Grid>
           </Grid>
           <form  onSubmit={handleSubmit(updateFacility)}>
             <Grid item xs={12} sx={{ padding: "0 2.5rem" }}>
 
               <TextField  {...register("name", { required: true })} sx={{ marginTop: "2.5rem", width: "100%" }} label="name"
-
+   InputLabelProps={{
+    style: { color: 'white' },
+  }}
                 autoFocus
 
 
@@ -274,7 +293,7 @@ export default function Facilities() {
             <Divider light sx={{ marginY: "2rem" }} />
 
             <Grid sx={{ textAlign: "end", padding: "0 2.5rem 1.5rem 2.5rem" }}>
-              <Button variant="contained" type="submit">Update</Button>
+              <Button variant="contained" type="submit"sx={{bgcolor:"#203FC7"}}>Update</Button>
 
             </Grid>
           </form>
@@ -290,23 +309,23 @@ export default function Facilities() {
       >
         <Box sx={style}>
 
-          <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ padding: " 2.5rem" }}>
+          <Grid container columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ padding: " 1.5rem" }}>
             <Grid item xs={12} sx={{ textAlign: "end" }}  >
-              <HighlightOffIcon sx={{ color: "red", marginBottom: "20px" }} onClick={handleClose} />
+              <HighlightOffIcon sx={{ color: "white", marginBottom: "20px" }} onClick={handleClose} />
             </Grid>
             <Grid item xs={12} sx={{ textAlign: "center", }}>
               <Avatar src={deleteImg} sx={{ margin: "auto" }} />
-              <Typography id="modal-modal-title" variant="h6" component="h4" sx={{ padding: " 1rem" }}>
+              <Typography id="modal-modal-title" variant="h6" component="h4" sx={{ padding: " 1rem" ,color:"white"}}>
                 Delete This Facility ?
               </Typography>
-              <Typography id="modal-modal-title" variant="body1" component="p">
+              <Typography id="modal-modal-title" variant="body1" component="p" sx={{color:"White"}}>
                 are you sure you want to delete this item ?
                 if you are sure just click on delete it
               </Typography>
 
             </Grid>
             <Grid xs={12} sx={{ textAlign: "end", marginTop: "1rem" }}>
-              <Button variant="contained" type="button" onClick={deleteFacility}>Delete</Button>
+              <Button variant="contained" type="button" onClick={deleteFacility}sx={{bgcolor:"#203FC7"}}>Delete</Button>
             </Grid>
           </Grid>
 
