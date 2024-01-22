@@ -11,6 +11,7 @@ import {
   Box,
   Typography,
   tableCellClasses,
+  TablePagination,
 
 } from "@mui/material";
 import axios from "axios";
@@ -55,13 +56,24 @@ function User() {
   
   const handleClose = () => setModalState("close");
   const [userItem, setUserItem] = React.useState();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pagesArray, setPagesArray] = React.useState([]);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const showAllUsers = () => {
+  const showAllUsers = (page) => {
     axios
-      .get(`${baseUrl}/admin/users?page=1&size=10`, { headers: reqHeaders })
+      .get(`${baseUrl}/admin/users?page=1&size=10`, { headers: reqHeaders ,
+        params: {
+          size: rowsPerPage,
+          page: page,
+         
+        }})
       .then((response) => {
+        console.log(response);
+        
+        setPagesArray(response?.data?.data?.totalCount);
         setUsersList(response.data);
-        // console.log(response.data);
+   
       })
       .catch((error) => {
         console.log(error);
@@ -70,8 +82,18 @@ function User() {
 
 
 
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage + 1); 
+    showAllUsers(newPage + 1); 
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setCurrentPage(1); 
+    showAllUsers(1); 
+  };
+
   React.useEffect(() => {
-    showAllUsers();
+    showAllUsers(1);
   }, [userItem]);
   return (
     <>
@@ -115,6 +137,15 @@ function User() {
                 : ""}
             </TableBody>
           </Table>
+          <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={pagesArray} 
+                  rowsPerPage={rowsPerPage}
+                  page={currentPage-1}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
         </TableContainer>
 
       </Paper>
