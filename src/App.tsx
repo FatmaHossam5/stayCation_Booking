@@ -24,6 +24,7 @@ import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
 import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
+import AddAds from './Components/AddAds/AddAds'
 
 
 function App() {
@@ -55,6 +56,9 @@ const routes =createBrowserRouter([
       {path:"status",element:<StatusInfo/>},
       {path:"user",element:<User/>},
       {path:"ads",element:<Ads/>},
+      {path:"ads/add-ads",element:<AddAds/>},
+  
+
       {path:"book",element:<Bookings/>},
       {path:"rooms",element:<Rooms/>},
       {path:"rooms/add-room",element:<AddRoom/>},
@@ -79,7 +83,7 @@ const routes =createBrowserRouter([
 
   return (
     <>
-<RouterProvider router={routes}/>
+ <RouterProvider router={routes}/>
     </>
   )
 }
