@@ -40,7 +40,7 @@ export default function RestPassword() {
       </Grid>
 
       <Grid item xs={12} sm={4} >
-        <Typography variant="h5" style={{marginBottom: "2rem"}}>Resrt Password</Typography>
+        <Typography variant="h5" style={{marginBottom: "2rem"}}>Reset Password</Typography>
         <Typography variant="body1" sx={{ marginTop: '10px' }}>
           If you already have an account register
         </Typography>

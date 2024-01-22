@@ -23,6 +23,8 @@ import Navbar from './Components/Navbar/Navbar'
 import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
+import Facilities from './Components/Facilities/Facilities'
+import { ToastContainer } from 'react-toastify'
 import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
 import AddAds from './Components/AddAds/AddAds'
 
@@ -60,6 +62,7 @@ const routes =createBrowserRouter([
   
 
       {path:"book",element:<Bookings/>},
+      {path:"facilities",element:<Facilities/>},
       {path:"rooms",element:<Rooms/>},
       {path:"rooms/add-room",element:<AddRoom/>},
 
