@@ -1,5 +1,48 @@
 .body{
-    font-family: 'Cabin', sans-serif;
-    font-family: 'Inter', sans-serif;
     font-family: 'Poppins', sans-serif;
+}
+*{margin: 0;
+padding: 0;
+}
+ {/*SideBar Styles*/} 
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+    background-color: #203FC7!important;
+    color: white!important;
+}
+.css-cveggr-MuiListItemIcon-root{
+    color: white !important;
+}
+
+
+ {/*Select DropDown Styles*/} 
+
+.css-wmy1p7-ReactDropdownSelect{
+    min-height: 55px!important;
+    border-radius: 4px!important;
+    width: 100%!important;
+    background-color:#e6e5e5!important;
+    display: flex!important;
+    justify-content: flex-end!important;
+   
+}
+.css-wd28pw-MuiGrid-root>.MuiGrid-item{
+    padding-top: 0px!important;
+}
+.Select::placeholder{color: black!important;}
+
+.css-1p823my-MuiListItem-root{
+    cursor: pointer;
+}
+.css-1p823my-MuiListItem-root:hover{
+background-color:  #1A1B1E2B;
+
+}
+/* .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
+    color: white!important;
+}
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+    color: white!important;
+} */
+.css-1sszw6i-MuiButtonBase-root-MuiButton-root{
+    background-color: #203FC7!important;
 }
