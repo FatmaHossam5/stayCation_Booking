@@ -1,3 +1,4 @@
+import Rate from './sections/RateSection'
 import Navbar from "../Navbar/Navbar";
 import Footer from "../shared/Footer/Footer";
 import {
@@ -17,6 +18,7 @@ export default function LandingPage() {
 
   return (
     <div>
+     <Rate/>
       <Navbar />
       <Container>
         <Grid container spacing={2} sx={{ boxShadow: "none" }}>

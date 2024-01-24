@@ -33,7 +33,12 @@ export default function MyDate() {
   //  },
 
   // });
+
+  
     navigate(`/user/available-rooms?startDate=${startDate}&endDate=${endDate}`,{state:{ranges:dateRange,count:count}})
+
+
+
     // navigate(`available-rooms/${startDate}/${endDate}`,{state:{ranges:dateRange,count:count}});
   }
   const handleChange = (ranges) => {
