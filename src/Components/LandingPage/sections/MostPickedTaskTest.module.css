@@ -1,0 +1,60 @@
+.roomPopular {
+  position: relative;
+}
+
+.layer {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: #fff;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.7s;
+}
+
+.roomPopular:hover .layer {
+  opacity: 1;
+}
+
+/* .parent {
+  background-color: aqua;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-around;
+} */
+
+.child {
+  width: 23%;
+  position: relative;
+  margin-bottom:5rem 
+}
+
+.child:hover .layer{
+opacity: 1;
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #FF498B;
+  width: 40%;
+  text-align: center;
+  padding: 0.5rem;
+  border-top-right-radius: 0.7rem;
+  border-bottom-left-radius: 0.7rem;
+}
+.details{
+  position: absolute;
+  bottom: 0.7rem;
+  left: 1rem;
+  color:#fff
+}
