@@ -1,11 +1,14 @@
-import { Box, Button, FormControl, Grid, IconButton, Modal, TextField, Typography, MenuItem, TableContainer, Table, TableHead, TableRow, tableCellClasses, TableCell, Paper, TableBody, ButtonBase} from '@mui/material';
+import { Box, Button, FormControl, Grid, IconButton, Modal, TextField, Typography, MenuItem, TableContainer, Table, TableHead, TableRow, tableCellClasses, TableCell, Paper, TableBody, ButtonBase, TablePagination, Menu} from '@mui/material';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import  { useEffect, useState } from 'react';
+import  { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
-
+import { AuthContext } from '../../Context/AuthContext';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { toast } from 'react-toastify';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -13,8 +16,9 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: '#203FC7',
   borderRadius: "7px",
+
   boxShadow: 24,
   p: 4,
 };
@@ -40,141 +44,110 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function Bookig() {
 
-  const [modalState, setModalState] = useState('close')
-  const handleClose = () => setModalState("close");
+ 
   const[book,setBook]=useState([])
-  let reqHeaders = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDQ4NDEyNiwiZXhwIjoxNzA1NjkzNzI2fQ.N9gU4yHP3g8g5ajsm_Tf6w1EIDJE-Gfu4e0tsPejUj8'
-  let Headers = { Authorization: reqHeaders }
-const getAllBookig =()=>{
-  axios.get('http://154.41.228.234:3000/api/v0/admin/booking?page=1&size=10',{headers:Headers}).then((response)=>{
+  const{baseUrl,reqHeaders}=useContext(AuthContext)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagesArray, setPagesArray] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [showState, setShowState] = useState();
+  const [itemID, setItemID] = useState(0);
+  const handleClose = () => setShowState(false);
+  const [anchorElArray, setAnchorElArray] = useState(Array(book?.length).fill(null));
+
+  const handleClick = (event, index) => {
+    const newAnchorElArray = [...anchorElArray];
+    newAnchorElArray[index] = event.currentTarget;
+    setAnchorElArray(newAnchorElArray);
+  };
+
+  const handleCloseAncorEl = (index: number) => {
+    const newAnchorElArray = [...anchorElArray];
+    newAnchorElArray[index] = null;
+    setAnchorElArray(newAnchorElArray);
+  };
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage + 1); 
+    getAllBookig(newPage + 1); 
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setCurrentPage(1); 
+    getAllBookig(1); 
+  };
+
+const getAllBookig =(page)=>{
+  axios.get(`${baseUrl}/admin/booking?page=1&size=10`,{headers:reqHeaders,  params: {
+    size: rowsPerPage,
+    page: page,
+   
+  }}).then((response)=>{
     console.log(response?.data?.data?.booking);
-    // setBook(response?.data?.data?.booking);
+    setBook(response?.data?.data?.booking);
+    setPagesArray(response?.data?.data?.totalCount);
   }).catch((error)=>{
-    console.log(error.response.message);
+    console.log(error?.response?.message);
     
   })
 }
+
+const deleteBooking = () => {
+  axios.delete(`${baseUrl}/admin/booking/${itemID}`,
+    {
+      headers:reqHeaders
+      
+    }).then((response) => {
+     
+     toast.success("Deleted SuccessFully")
+  
+      handleClose()
+      getAllBookig(1)
+    }).catch((error) => {
+     toast.error(error?.response?.data)
+    })
+}
+const handleShowDelete = (id) => {
+  setShowState('delete-modal');
+  setItemID(id);
+
+  
+
+}
+console.log(itemID);
 useEffect(()=>{
-  getAllBookig()
+  getAllBookig(1)
 },[])
   return (
     <>
     
     <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
       <Modal
-        open={modalState === "delete-modal"}
+        open={showState === "delete-modal"}
         onClose={handleClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
         <Box sx={style}>
           <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <IconButton onClick={handleClose} sx={{ color: "red" }} >
+            <IconButton onClick={handleClose} sx={{ color: "white" }} >
               < CancelOutlinedIcon />
             </IconButton>
           </Grid>
           
 
-          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ textAlign: "center" }}>
-            Delete This Room?
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ textAlign: "center", color: "white" }}>
+            Delete This  Booking?
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2, textAlign: "center" }}>
+          <Typography id="modal-modal-description" sx={{ mt: 2, textAlign: "center", color: "white" }}>
             are you sure you want to delete this item ? if you are sure just click on delete it
           </Typography>
           <Grid sx={{ textAlign: 'right', mt: 3 }}>
-            <Button variant="contained" color="error"  >  Delete  </Button>
+            <Button variant="contained" color="error"onClick={deleteBooking}  >  Delete  </Button>
           </Grid>
         </Box>
       </Modal>
-      <Modal
-        open={modalState === "update-modal"}
-        onClose={handleClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box sx={style}>
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <IconButton onClick={handleClose} sx={{ color: "red" }} >
-              < CancelOutlinedIcon />
-            </IconButton>
-          </Grid>
-          {/* <FormControl component='form' >
-            <Box sx={{ width: '100%', display: "flex", justifyContent: "center" }}>
-              <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }} >
-                <Grid item xs={12} sx={{ color: "#17202A" }} >
-                  <TextField
-                    InputLabelProps={{
-                      style: { color: 'black' },
-                    }}
-                    sx={{ bgcolor: "#F7F7F7", mb: 5, }}
-                    variant='filled'
-                    label="Room Number"
-                    fullWidth
-                    {...register("roomNumber", { required: true })}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+   
        
-          <Box sx={{ width: '100%' }}>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }}>
-              <Grid item xs={6} >
-                <TextField
-                  InputLabelProps={{
-                    style: { color: 'black' },
-                  }}
-                  variant='filled'
-                  sx={{
-                    bgcolor: "#F7F7F7", display: "flex",
-                    justifyContent: "flex-start"
-                  }}
-                  label="Price"
-                  {...register("price", { required: true })} />
-                {errors.price && errors.price.type === "required" && <Typography sx={{ color: "red" }}>price is required</Typography>}
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  InputLabelProps={{
-                    style: { color: 'black' },
-                  }}
-                  sx={{
-                    bgcolor: "#F7F7F7", mb: 5, display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                  variant='filled'
-                  label="Capacity"
-                  {...register("capacity", { required: true })}
-                />
-                {errors.capacity && errors.capacity.type === "required" && <Typography sx={{ color: "red" }}>capacity is required</Typography>}
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  InputLabelProps={{
-                    style: { color: 'black' },
-                  }}
-                  sx={{
-                    bgcolor: "#F7F7F7", mb: 5, display: "flex",
-                    justifyContent: "flex-start",
-                  }}
-                  variant='filled'
-                  label="Discount"
-                  {...register("discount", { required: true })}
-                />
-                {errors.discount && errors.discount.type === "required" && <Typography sx={{ color: "red" }}>discount is required</Typography>}
-              </Grid>
-              <Grid item xs={6}>
-               
-              </Grid>
-            </Grid>
-            <Grid sx={{ textAlign: 'right', mt: 3 }}>
-            <Button type='submit' variant="contained" color="primary"  >  Update  </Button>
-          </Grid>
-          </Box>
-         
-          </FormControl> */}
-        </Box>
-       
-      </Modal>
       <Box>
         <Typography variant='h5'>Booking Table Details</Typography>
         <Typography variant='subtitle1'>You can check all details</Typography>
@@ -189,31 +162,67 @@ useEffect(()=>{
             <StyledTableCell align="right">price</StyledTableCell>
             <StyledTableCell align="right">Start Date</StyledTableCell>
             <StyledTableCell align="right">End Date</StyledTableCell>
-            <StyledTableCell align="right">User</StyledTableCell>
-            <StyledTableCell align="center">Actions</StyledTableCell>
+            <StyledTableCell align="right" >Status</StyledTableCell>
+            <StyledTableCell align="right">Actions</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {book?.map((index) => (
-            <StyledTableRow key={index._id}>
-              {/* <StyledTableCell component="th" scope="row">
-                {index?.booking?.roomNumber}
-              </StyledTableCell> */}
+          
+          {book?.map((boo,index) => (
+            <StyledTableRow key={index}>
              
-              <StyledTableCell align="right">{index?.booking?.totalPrice}</StyledTableCell>
-              <StyledTableCell align="right">{index?.booking?.startDate}</StyledTableCell>
-              <StyledTableCell align="right">{index?.booking?.endDate}</StyledTableCell>
-              <StyledTableCell align="right">{index?.booking?.user}</StyledTableCell>
+             
+              <StyledTableCell align="right">{boo?.totalPrice}</StyledTableCell>
+              <StyledTableCell align="right">{ new Date (boo?.startDate).toLocaleDateString()}</StyledTableCell>
+              <StyledTableCell align="right">{ new Date (boo?.endDate).toLocaleDateString()}</StyledTableCell>
+              <StyledTableCell align="right">{boo?.status}</StyledTableCell>
 
-              <StyledTableCell align="center">
-                <IconButton >
-                  < RemoveRedEyeIcon />
-                </IconButton>
+              <StyledTableCell align="right">
+              <div>
+                          <IconButton
+                            aria-label="more"
+                            id={`long-button-${index}`}
+                            aria-controls={open ? `long-menu-${index}` : undefined}
+                            aria-expanded={open ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={(event) => handleClick(event, index)}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                          <Menu
+                            id={`long-menu-${index}`}
+                            MenuListProps={{
+                              'aria-labelledby': `long-button-${index}`,
+                            }}
+                            anchorEl={anchorElArray[index]}
+                            open={Boolean(anchorElArray[index])}
+                            onClose={() => handleCloseAncorEl(index)}
+                          >
+
+                            <MenuItem onClick={() => { handleClose(); handleShowDelete(boo?._id) }}>
+                              <IconButton aria-label="delete">
+                                < DeleteOutlineOutlinedIcon />
+                              </IconButton>
+                              Delete
+                            </MenuItem>
+                           
+                          </Menu>
+                        </div>
               </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
       </Table>
+      
+      <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={pagesArray} 
+                  rowsPerPage={rowsPerPage}
+                  page={currentPage-1}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
     </TableContainer>
     </>
   )
