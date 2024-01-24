@@ -58,31 +58,9 @@ export default function LandingPage() {
               Start Booking
             </Typography>
 
-            <Typography
-              variant="h6"
-              sx={{
-                color: "#152C5B",
-                fontSize: "16px",
-                fontWeight: 400,
-                fontFamily: "Poppins",
-              }}
-            >
-              Pick a Date
-            </Typography>
 
            <Date/>
-            <Button
-              sx={{
-                color: "#FBFCFC",
-                bgcolor: "#3252DF",
-                fontFamily: "Poppins",
-                marginTop:'10px',
-                borderRadius: "4px",
-                "&:hover": { color: "#FBFCFC", bgcolor: "#3252DF" },
-              }}
-            >
-              Explore
-            </Button>
+          
           </Grid>
           <Grid item xs={6}>
             <Card sx={{ boxShadow: "none" }}>

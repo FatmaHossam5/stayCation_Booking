@@ -15,7 +15,9 @@ padding: 0;
     color: white !important;
 }
 
+
  {/*Select DropDown Styles*/} 
+
 .css-wmy1p7-ReactDropdownSelect{
     min-height: 55px!important;
     border-radius: 4px!important;
@@ -37,8 +39,21 @@ padding: 0;
 background-color:  #1A1B1E2B;
 
 }
- {/*DatePicker Styles*/} 
- .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
-    padding: 0rem!important;
-    padding-left: 5rem!important;
- }
+/* .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
+    color: white!important;
+}
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+    color: white!important;
+} */
+.css-1sszw6i-MuiButtonBase-root-MuiButton-root{
+    background-color: #203FC7!important;
+} {/*DatePicker Styles*/} 
+.pickDateStyle{
+    padding-top: 0.5rem;
+    text-align: center;
+    padding-bottom: 0.2rem;
+    padding-right: 4rem;
+    padding-left: 3.8rem;
+    background-color: #f0f0f0;
+    border: none;
+}

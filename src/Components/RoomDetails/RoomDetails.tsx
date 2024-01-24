@@ -15,6 +15,11 @@ import tv from "../../assets/tv.png";
 import Navbar from "../Navbar/Navbar";
 // import Carousel from '../Carousel/Carousel';
 import Footer from "../shared/Footer/Footer";
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router";
+import axios from "axios";
+import MyDate from "../Date/Date";
+import { format } from "date-fns";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -25,7 +30,53 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 export default function DetailsRoom() {
 
-    
+  
+
+
+  const { roomId } = useParams();
+  const [roomDetails, setRoomDetails] = useState({});
+ const location=useLocation();
+//  const searchParams = new URLSearchParams(location.search);
+//  const [startDate, setStartDate] = useState(searchParams.get('startDate') || '');
+//  const [endDate, setEndDate] = useState(searchParams.get('endDate') || '');
+
+ const count = location?.state?.count;
+ console.log('Count from location state:', count);
+  const dateRange=location?.state?.ranges
+  console.log(`${format(dateRange[0].startDate,'ddMMM')}`);
+  
+  // const [dateRange, setDateRange] = useState({
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //   });
+  // const queryParams = new URLSearchParams(search);
+  // const startDateParam = queryParams.get('startDate');
+  // const endDateParam  = queryParams.get('endDate');
+  useEffect(() => {
+      axios.get(`http://154.41.228.234:3000/api/v0/portal/rooms/${roomId}`, {
+          params: {
+              startDate,
+              endDate,
+          },
+      })
+      .then((response) => {
+        // setStartDate(searchParams.get('startDate') || '');
+        // setEndDate(searchParams.get('endDate') || '');
+          console.log(response);
+          setRoomDetails(response?.data?.data?.room);
+       
+      })
+      .catch((error) => {
+          console.log(error);
+      });
+  }, [roomId, location.search]);
+
+     console.log(roomDetails);
+
+    //  console.log(count);
+    //  console.log(ranges);
+     
+     
 
   return (
     <>
@@ -116,7 +167,10 @@ export default function DetailsRoom() {
             {/* data picker */}
             <Grid item xs={6}>
               <Item sx={{ boxShadow: "none"}}>
-                <Date />
+
+              <input type="text" value={`${startDate} - ${endDate}`} />
+              <input type="text" value={count} />
+
               </Item>
             </Grid>
             <Grid item xs={6} sx={{ desplay: "flex", alignItems: 'center' }}>

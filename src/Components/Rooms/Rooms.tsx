@@ -3,10 +3,10 @@ import { styled } from '@mui/material/styles';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow
   , Paper, tableCellClasses, Box, Typography, Button
-  , TextField, InputLabel, MenuItem, FormControl, IconButton, Modal, Grid
+  , TextField, InputLabel, MenuItem, FormControl, IconButton, Modal, Grid, Menu
 } from '@mui/material';
 import Select from 'react-dropdown-select';
-
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {  useContext, useEffect, useState } from 'react';
 import useFacilities from '../../custom Hook/useFacilities';
 import axios from 'axios';
@@ -20,6 +20,7 @@ import useRooms from '../../custom Hook/useRooms';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../Context/AuthContext';
+import CustomPagination from '../Pagination/Pagination';
 
 
 
@@ -64,11 +65,28 @@ const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 const [selectedValue, setSelectedValue] = useState([])
 const{formattedFacilities}=useFacilities()
 const navigate=useNavigate()
-const{rooms,refetchRooms  }=useRooms();
+
 const [modalState, setModalState] = useState('close')
 const{baseUrl,reqHeaders}=useContext(AuthContext)
+const{rooms,refetchRooms , currentPage, totalPages, rowsPerPage, handlePageChange, handleRowsPerPageChange}=useRooms();
 
-console.log(refetchRooms);
+// console.log(refetchRooms);
+const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+const open = Boolean(anchorEl);
+const [anchorElArray, setAnchorElArray] = useState(Array(rooms.length).fill(null));
+
+const handleClick = (event: MouseEvent<HTMLElement>, index: number) => {
+  const newAnchorElArray = [...anchorElArray];
+  newAnchorElArray[index] = event.currentTarget;
+  setAnchorElArray(newAnchorElArray);
+};
+
+const handleCloseAncorEl = (index: number) => {
+  const newAnchorElArray = [...anchorElArray];
+  newAnchorElArray[index] = null;
+  setAnchorElArray(newAnchorElArray);
+};
+
        {/* show Modals */}
   const showDeleteModal = (id) => {
     setModalState('delete-modal')
@@ -273,8 +291,8 @@ console.log(refetchRooms);
           </TableRow>
         </TableHead>
         <TableBody>
-          {rooms.map((room) => (
-            <StyledTableRow  key={room?.id}>
+          {rooms.map((room,index) => (
+            <StyledTableRow  key={room.index}>
               <StyledTableCell align="center">{room?.roomNumber}</StyledTableCell>
 
               <StyledTableCell align='right'>{room?.images&&room?.images.length>0?<img src={room?.images[0]} style={{width:'50px',height:"50px",borderRadius:"25px"}}/>:<img src={Avatar} style={{width:'50px',height:"50px"
@@ -284,15 +302,47 @@ console.log(refetchRooms);
               <StyledTableCell align="right" >{room?.price}</StyledTableCell>
               <StyledTableCell align="right">{room?.discount}</StyledTableCell>
               <StyledTableCell align="right">{room?.capacity}</StyledTableCell>
-              <StyledTableCell align="center">
-                <IconButton onClick={() => showUpdateModal(room)} >
-                  <EditIcon />
-                </IconButton>
-               
-                <IconButton aria-label="delete" onClick={() => showDeleteModal(room._id)}>
+              <StyledTableCell align="right">
+            
+
+<div>
+        <IconButton
+          aria-label="more"
+          id={`long-button-${index}`}
+          aria-controls={open ? `long-menu-${index}` : undefined}
+          aria-expanded={open ? 'true' : undefined}
+          aria-haspopup="true"
+          onClick={(event) => handleClick(event, index)}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          id={`long-menu-${index}`}
+          MenuListProps={{
+            'aria-labelledby': `long-button-${index}`,
+          }}
+          anchorEl={anchorElArray[index]}
+          open={Boolean(anchorElArray[index])}
+          onClose={() => handleCloseAncorEl(index)}
+        >
+       
+       <MenuItem onClick={()=>{handleClose();showDeleteModal(room._id)}}>
+          <IconButton aria-label="delete">
                   < DeleteOutlineOutlinedIcon />
                 </IconButton>
-             
+                Delete
+          </MenuItem>
+          <MenuItem onClick={() => { handleClose(); showUpdateModal(room) }}>
+                              <IconButton >
+                                <EditIcon />
+                              </IconButton>
+                              Update
+                            </MenuItem>
+        </Menu>
+      </div>
+
+
+
               </StyledTableCell>
 
 
@@ -300,7 +350,15 @@ console.log(refetchRooms);
           ))}
           
         </TableBody>
+       
       </Table>
+      <CustomPagination
+        totalCount={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      /> 
     </TableContainer>
     </>  );
 }

@@ -21,15 +21,25 @@ import Rooms from './Components/Rooms/Rooms'
 import AddRoom from './Components/AddRoom/AddRoom'
 import Navbar from './Components/Navbar/Navbar'
 import { AuthContext } from './Context/AuthContext'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import RoomDetails from './Components/RoomDetails/RoomDetails'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
+import Facilities from './Components/Facilities/Facilities'
+import { ToastContainer } from 'react-toastify'
 import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
+import AddAds from './Components/AddAds/AddAds'
+import AvilableRooms from './Components/AvilableRooms/AvilableRooms'
+import MyDate from './Components/Date/Date'
 
 
 function App() {
  
   let {userData,saveUserData,role}:any=useContext(AuthContext)
+  const [count, setCount] = useState(0);
+
+  const handleCountChange = (newCount) => {
+    setCount(newCount);
+  };
 const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
@@ -57,7 +67,11 @@ const routes =createBrowserRouter([
       {path:"status",element:<StatusInfo/>},
       {path:"user",element:<User/>},
       {path:"ads",element:<Ads/>},
+      {path:"ads/add-ads",element:<AddAds/>},
+  
+
       {path:"book",element:<Bookings/>},
+      {path:"facilities",element:<Facilities/>},
       {path:"rooms",element:<Rooms/>},
       {path:"rooms/add-room",element:<AddRoom/>},
 
@@ -73,7 +87,14 @@ const routes =createBrowserRouter([
     path:"user",
     errorElement:<NotFound/>,
     children:[
-      {index:true,element:<LandingPage/>},
+      {index:true,element:<LandingPage />},
+  
+      
+
+      {path:"available-rooms",element:<AvilableRooms/>},
+      {path:"room-details/:roomId/",element:<RoomDetails/>},
+
+
 
     ]
   }
@@ -81,7 +102,7 @@ const routes =createBrowserRouter([
 
   return (
     <>
-<RouterProvider router={routes}/>
+ <RouterProvider router={routes}/>
     </>
   )
 }
