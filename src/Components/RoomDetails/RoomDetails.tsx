@@ -1,4 +1,4 @@
-import { Typography, Container } from "@mui/material";
+import { Typography, Container, TextField, Button, Avatar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -44,6 +44,8 @@ export default function DetailsRoom() {
  console.log('Count from location state:', count);
   const dateRange=location?.state?.ranges
   console.log(`${format(dateRange[0].startDate,'ddMMM')}`);
+  const startDate=`${format(dateRange[0].startDate,'ddMMM')}`
+  const endDate=`${format(dateRange[0].endDate,'ddMMM')}`
   
   // const [dateRange, setDateRange] = useState({
   //     startDate: new Date(),
@@ -167,9 +169,42 @@ export default function DetailsRoom() {
             {/* data picker */}
             <Grid item xs={6}>
               <Item sx={{ boxShadow: "none"}}>
+              <Typography sx={{fontFamily:'Poppins',fontSize:"20px",fontWeight:500,color:'#152C5B'}}>Start Booking</Typography>
+             
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <Typography sx={{color:'#1ABC9C',fontFamily:'Poppins',fontWeight:500,fontSize:"30px"}}>{roomDetails.price}$</Typography>
+    <Typography sx={{color:'#B0B0B0',fontFamily:'Poppins',fontWeight:500,fontSize:"30px"}}>per night</Typography>
+    </Box>
+    <Typography sx={{color:'#FF1612',}}>Discount {roomDetails?.discount} Off </Typography>
+      <Box sx={{ backgroundColor: '#fff', padding: '20px' }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant="h6">Pick a Date</Typography> 
+        </Grid>
+        <Grid item xs={12}>
+          <Box sx={{display: 'flex', alignItems: 'center'}}>
+          <Box sx={{display: 'flex', justifyContent: 'center',width: '4%'}}>
+          <img src={Avatar}  alt="calendar" style={{ width: '100%', height: 'auto'}}/>
+          </Box>
+          <TextField sx={{ width:'40%' }}  value={`${startDate} - ${endDate}`}/>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography sx={{color:'#B0B0B0',fontFamily:'Poppins',fontWeight:500,fontSize:"16px"}}>You will pay</Typography>
+          <Typography sx={{color:'#152C5B',fontFamily:'Poppins',fontWeight:500,fontSize:"16px"}}>{roomDetails.price*count}</Typography>
+          <Typography sx={{color:'#B0B0B0',fontFamily:'Poppins',fontWeight:500,fontSize:"16px"}}>per</Typography>
+          <Typography sx={{color:'#152C5B',fontFamily:'Poppins',fontWeight:500,fontSize:"16px"}}> {count}</Typography>
+       </Box>
+            <Button sx={{color:'#FFFFFF',bgcolor:'#3252DF','&:hover': { bgcolor: '#3252DF' } }}>
+              Continue Book
+            </Button>
+        </Grid>
+      </Grid>
+    </Box>
 
-              <input type="text" value={`${startDate} - ${endDate}`} />
-              <input type="text" value={count} />
+              {/* <input type="text" value={`${startDate} - ${endDate}`} />
+              <input type="text" value={count} /> */}
 
               </Item>
             </Grid>
