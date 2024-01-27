@@ -26,20 +26,8 @@ export default function MyDate() {
   const handleExplor =()=>{
    const startDate=format(dateRange[0]?.startDate,'YYY-MM-dd')
    const endDate=format(dateRange[0]?.endDate,'YYY-MM-dd')
-  //  navigate(`/user/room-details/${roomId}?startDate=${startDate}&endDate=${endDate}`, {
-  //   state: { DetailsRoom:response.data, count
-   
-    
-  //  },
-
-  // });
-
-  
     navigate(`/user/available-rooms?startDate=${startDate}&endDate=${endDate}`,{state:{ranges:dateRange,count:count}})
-
-
-
-    // navigate(`available-rooms/${startDate}/${endDate}`,{state:{ranges:dateRange,count:count}});
+  
   }
   const handleChange = (ranges) => {
     setDateRange([ranges?.selection])

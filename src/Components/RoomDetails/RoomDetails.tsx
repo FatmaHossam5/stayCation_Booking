@@ -29,10 +29,6 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 export default function DetailsRoom() {
-
-  
-
-
   const { roomId } = useParams();
   const [roomDetails, setRoomDetails] = useState({});
  const location=useLocation();
