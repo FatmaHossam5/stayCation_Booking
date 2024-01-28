@@ -1,38 +1,42 @@
-import React, { useEffect } from 'react'
-import { FacebookProvider, LoginButton } from 'react-facebook-sdk';
+import React, { useContext, useState } from 'react';
+import axios from 'axios';
+import FacebookLogin from 'react-facebook-login';
+import { AuthContext } from '../../Context/AuthContext';
 
+const FacebookLoginButton = () => {
+  const [accessToken, setAccessToken] = useState(null);
+  const {baseUrl,reqHeaders}=useContext(AuthContext)
 
+  const handleFacebookLogin = (response) => {
+    setAccessToken(response.accessToken);
 
-export default function LoginFace() {
-
-    const facebookAuthEndpoint = "{{baseUrlLocal}}/api/v0/portal/users/auth/facebook";
-
-  const handleResponse = (data) => {
-    console.log('Facebook login response:', data);
+    axios({
+      method: 'post',
+      url: `${baseUrl}/portal/users/auth/facebook`,
+      headers: {
+        Headers: reqHeaders,
+      },
+      data: { accessToken },
+    })
+      .then((response) => {
+        console.log('API response:', response.data);
+      })
+      .catch((error) => {
+        console.error('API error:', error);
+      });
   };
 
-
-  useEffect(() => {
-   
-  }, []);
-
   return (
-    <>
-       <FacebookProvider appId="your-app-id">
-      <LoginButton
-        scope="email"
-        onResponse={handleResponse}
-        onError={(error) => console.error('Facebook login error:', error)}
-        render={({ onClick, isProcessing }) => (
-          <button onClick={onClick} disabled={isProcessing}>
-            Login with Facebook
-          </button>
-        )}
-      />
-    </FacebookProvider>
-    </>
-  )
-}
+    <FacebookLogin
+      appId="YOUR_FACEBOOK_APP_ID" 
+      autoLoad={false}
+      fields="name,email"
+      callback={handleFacebookLogin}
+      buttonText="Login with Facebook"
+      cssClass="facebook-login-button"
+      icon="fa-facebook-square"
+    />
+  );
+};
 
-
-
+export default FacebookLoginButton;

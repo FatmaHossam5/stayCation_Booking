@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Box, Typography, TextField, Button, Grid, FormControl } from '@mui/material';
 import signin from "../../assets/bg-signin.png";
 import { useForm } from 'react-hook-form';
+import LoginFace from "../LoginFace/LoginFace";
 import axios from 'axios';
 import { AuthContext } from '../../Context/AuthContext';
 export default function SignIn() {
@@ -35,6 +36,7 @@ const {baseUrl}=useContext(AuthContext)
   </Grid>
 </Grid>
 </FormControl>
+<LoginFace/>
     </>
   )
 }
