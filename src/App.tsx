@@ -12,7 +12,7 @@ import RestPassword from './Components/ResetPassword/RestPassword'
 import MasterLayout from './Components/shared/MasterLayout/MasterLayout'
 import Home from './Components/Home/Home'
 import ContactInfo from './Components/ContactInfo/ContactInfo'
-import PaymentInfo from './Components/PaymentInfo/PaymentInfo'
+import PaymentInfo from './Components/BookingInfo/BookingInfo'
 import StatusInfo from './Components/StatusInfo/StatusInfo'
 import User from './Components/User/User'
 import Ads from './Components/Ads/Ads'
@@ -30,6 +30,10 @@ import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
 import AddAds from './Components/AddAds/AddAds'
 import AvilableRooms from './Components/AvilableRooms/AvilableRooms'
 import MyDate from './Components/Date/Date'
+import BookingInfo from './Components/BookingInfo/BookingInfo'
+
+import Pay from './Components/Pay/Pay'
+import PaymentWrapper from './Components/Pay/PaymentWrapper'
 
 
 function App() {
@@ -93,6 +97,10 @@ const routes =createBrowserRouter([
 
       {path:"available-rooms",element:<AvilableRooms/>},
       {path:"room-details/:roomId/",element:<RoomDetails/>},
+      {path:"create-booking/:roomId/",element:<BookingInfo/>},
+      {path:"pay-booking/:bookingId/",element:<PaymentWrapper/>},
+
+
 
 
 

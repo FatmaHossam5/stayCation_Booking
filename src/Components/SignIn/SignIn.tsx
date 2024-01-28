@@ -18,6 +18,10 @@ const navigate=useNavigate()
       const role=response?.data?.data?.user?.role
       localStorage.setItem("userToken",response?.data?.data?.token)
       localStorage.setItem("role",role)
+      localStorage.setItem("userName",response?.data?.data?.user?.userName)
+      
+     
+      
  
     saveUserData();
     {role==='admin'?navigate('/dashboard'):navigate('/user')}
