@@ -22,6 +22,7 @@ import Navbar from './Components/Navbar/Navbar'
 import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
 import RoomDetails from './Components/RoomDetails/RoomDetails'
+import FavoriteList from './Components/FavoriteList/FavoriteList'
 
 function App() {
  
@@ -37,6 +38,8 @@ const routes =createBrowserRouter([
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
       {path:"roomdetails",element:<RoomDetails/>},
+      {path:"fav",element:<FavoriteList/>},
+
 
     ]
   },
