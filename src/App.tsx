@@ -21,26 +21,34 @@ import Rooms from './Components/Rooms/Rooms'
 import AddRoom from './Components/AddRoom/AddRoom'
 import Navbar from './Components/Navbar/Navbar'
 import { AuthContext } from './Context/AuthContext'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
+import RoomDetails from './Components/RoomDetails/RoomDetails'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
 import Facilities from './Components/Facilities/Facilities'
 import { ToastContainer } from 'react-toastify'
 import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
 import AddAds from './Components/AddAds/AddAds'
+import AvilableRooms from './Components/AvilableRooms/AvilableRooms'
+import MyDate from './Components/Date/Date'
+import UserLayout from './Components/shared/UserLayout/UserLayout'
 
 
 function App() {
  
   let {userData,saveUserData,role}:any=useContext(AuthContext)
+  
+
+ 
 const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
-      {index:true,element:<SignIn saveUserData={saveUserData}/>},
+      {index:true,element:<LandingPage saveUserData={saveUserData}/>},
       {path:"signin",element:<SignIn saveUserData={saveUserData}/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
+      {path:"roomdetails",element:<RoomDetails/>},
       {path:"change-pass",element:<ChangePassword/>}
 
     ]
@@ -76,9 +84,17 @@ const routes =createBrowserRouter([
   },
   {
     path:"user",
+    element:<UserLayout/>,
     errorElement:<NotFound/>,
     children:[
-      {index:true,element:<LandingPage/>},
+      {index:true,element:<LandingPage />},
+  
+      
+
+      {path:"available-rooms",element:<AvilableRooms/>},
+      {path:"room-details/:roomId/",element:<RoomDetails/>},
+
+
 
     ]
   }
