@@ -7,6 +7,8 @@
 padding: 0;
 box-sizing: border-box;
 /* overflow-x: hidden; */
+box-sizing: border-box;
+/* overflow-x: hidden; */
 }
  {/*SideBar Styles*/} 
 .css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
@@ -81,4 +83,7 @@ background-color:  #1A1B1E2B;
     background-color: #FF498B!important;
     color: white;
     
+}
+.translate{
+    transform: translateX(-5%);
 }
