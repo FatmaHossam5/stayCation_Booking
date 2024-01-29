@@ -7,6 +7,8 @@
 padding: 0;
 box-sizing: border-box;
 /* overflow-x: hidden; */
+box-sizing: border-box;
+/* overflow-x: hidden; */
 }
  {/*SideBar Styles*/} 
 .css-12i7wg6-MuiPaper-root-MuiDrawer-paper{

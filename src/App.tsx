@@ -36,6 +36,7 @@ import BookingInfo from './Components/BookingInfo/BookingInfo'
 import Pay from './Components/Pay/Pay'
 import PaymentWrapper from './Components/Pay/PaymentWrapper'
 
+import FavoriteList from './Components/FavoriteList/FavoriteList'
 
 function App() {
  
@@ -54,6 +55,8 @@ const routes =createBrowserRouter([
       {path:"reset-pass",element:<RestPassword/>},
       {path:"roomdetails",element:<RoomDetails/>},
       {path:"change-pass",element:<ChangePassword/>}
+      {path:"fav",element:<FavoriteList/>},
+
 
     ]
   },

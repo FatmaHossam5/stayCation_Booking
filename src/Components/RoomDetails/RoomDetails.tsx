@@ -1,4 +1,5 @@
 import { Typography, Container, TextField, Button, Avatar, InputAdornment } from "@mui/material";
+import { Typography, Container, TextField, Button, Avatar, InputAdornment } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -8,6 +9,9 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import axios from "axios";
 import { format } from "date-fns";
+import PunchClockIcon from '@mui/icons-material/PunchClock';
+import { AuthContext } from "../../Context/AuthContext";
+import { toast } from "react-toastify";
 import PunchClockIcon from '@mui/icons-material/PunchClock';
 import { AuthContext } from "../../Context/AuthContext";
 import { toast } from "react-toastify";
@@ -58,7 +62,17 @@ export default function DetailsRoom() {
         endDate,
       },
     })
+    axios.get(`${baseUrl}/portal/rooms/${roomId}`, {
+      params: {
+        startDate,
+        endDate,
+      },
+    })
       .then((response) => {
+
+
+        setRoomDetails(response?.data?.data?.room);
+
 
 
         setRoomDetails(response?.data?.data?.room);
@@ -67,14 +81,18 @@ export default function DetailsRoom() {
       .catch((error) => {
 
         toast.error(error?.message)
+
+        toast.error(error?.message)
       });
   }, [roomId, location.search]);
+
 
 
   return (
     <>
 
 
+      {/* <Carousel/> */}
       {/* <Carousel/> */}
       <Typography
         sx={{
@@ -117,6 +135,21 @@ export default function DetailsRoom() {
 
 
 
+      <Box sx={{ width: "100%", display: "flex", marginLeft: 5 }}>
+        {roomDetails && roomDetails?.images?.map((img, index) => (
+          <img src={img} width={"40%"} style={{
+            marginRight: '10px',
+            borderRadius: '8px',
+
+          }} alt={`Image${index + 1}`} />
+        ))
+
+        }
+
+      </Box>
+
+
+
       <Container maxWidth="lg">
         <Box sx={{ width: "100%" }}>
           <Grid
@@ -124,6 +157,7 @@ export default function DetailsRoom() {
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
+            <Grid item xs={7}>
             <Grid item xs={7}>
               <Item
                 sx={{
@@ -170,6 +204,22 @@ export default function DetailsRoom() {
                 design: enabling Singapore to use design for economic growth and
                 to make lives better.
               </Item>
+              {/*  Facilities  */}
+              <Grid item xs={6} sx={{ marginBottom: 3 }}>
+
+                <Item sx={{ boxShadow: "none", display: 'flex', justifyContent: "center", alignItems: 'center' }}>
+                  {roomDetails?.facilities?.map((facility, index) => (
+                    <>
+                      <Box sx={{ marginRight: '15px' }}>
+                        <img src={bedRoom} alt="icons" />
+                        <Typography sx={{ color: '#B0B0B0', fonSize: '8px', fontFamily: 'Poppins' }}>{facility?.name}</Typography>
+                      </Box>
+                    </>
+                  ))}
+                </Item>
+
+
+              </Grid>
               {/*  Facilities  */}
               <Grid item xs={6} sx={{ marginBottom: 3 }}>
 
