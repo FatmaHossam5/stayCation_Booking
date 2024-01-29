@@ -32,6 +32,7 @@ import AvilableRooms from './Components/AvilableRooms/AvilableRooms'
 import MyDate from './Components/Date/Date'
 import UserLayout from './Components/shared/UserLayout/UserLayout'
 
+import FavoriteList from './Components/FavoriteList/FavoriteList'
 
 function App() {
  
@@ -50,6 +51,8 @@ const routes =createBrowserRouter([
       {path:"reset-pass",element:<RestPassword/>},
       {path:"roomdetails",element:<RoomDetails/>},
       {path:"change-pass",element:<ChangePassword/>}
+      {path:"fav",element:<FavoriteList/>},
+
 
     ]
   },
