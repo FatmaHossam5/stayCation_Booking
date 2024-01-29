@@ -55,7 +55,6 @@ const routes =createBrowserRouter([
       {path:"reset-pass",element:<RestPassword/>},
       {path:"roomdetails",element:<RoomDetails/>},
       {path:"change-pass",element:<ChangePassword/>},
-      {path:"fav",element:<FavoriteList/>},
 
 
     ]
@@ -102,6 +101,8 @@ const routes =createBrowserRouter([
       {path:"room-details/:roomId/",element:<RoomDetails/>},
       {path:"create-booking/:roomId/",element:<BookingInfo/>},
       {path:"pay-booking/:bookingId/",element:<PaymentWrapper/>},
+      {path:"fav",element:<FavoriteList/>},
+
 
 
 
