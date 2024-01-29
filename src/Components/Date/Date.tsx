@@ -41,7 +41,7 @@ export default function MyDate() {
     setCount(count + 1)
   }
   const handleDecrement = () => {
-    setCount((prevCount) => Math.max(prevCount - 1, 0))// to keep the count at 0 when attempting to decrement below it
+    setCount((prevCount) => Math.max(prevCount - 1, 1))// to keep the count at 1 when attempting to decrement below it
   }
   return (
     <>

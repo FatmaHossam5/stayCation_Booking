@@ -36,11 +36,9 @@ import UserLayout from './Components/shared/UserLayout/UserLayout'
 function App() {
  
   let {userData,saveUserData,role}:any=useContext(AuthContext)
-  const [count, setCount] = useState(0);
+  
 
-  const handleCountChange = (newCount) => {
-    setCount(newCount);
-  };
+ 
 const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
