@@ -1,25 +1,16 @@
-import { Typography, Container, TextField, Button, Avatar } from "@mui/material";
+import { Typography, Container, TextField, Button, Avatar, InputAdornment } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import Date from "../Date/Date";
 import bedRoom from "../../assets/bedRoom.png";
-import livingroom from "../../assets/livingroom.png";
-import bathRoom from "../../assets/bathRoom.png";
-import diningroom from "../../assets/diningroom.png";
-import wifi from  "../../assets/wifi.png";
-import unit from '../../assets/unit.png';
-import refigrator from '../../assets/refigrator.png';
-import tv from "../../assets/tv.png";
-import Navbar from "../Navbar/Navbar";
-// import Carousel from '../Carousel/Carousel';
-import Footer from "../shared/Footer/Footer";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router";
 import axios from "axios";
-import MyDate from "../Date/Date";
 import { format } from "date-fns";
+import PunchClockIcon from '@mui/icons-material/PunchClock';
+import { AuthContext } from "../../Context/AuthContext";
+import { toast } from "react-toastify";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -30,61 +21,43 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 export default function DetailsRoom() {
 
-  
-
-
   const { roomId } = useParams();
   const [roomDetails, setRoomDetails] = useState({});
- const location=useLocation();
-//  const searchParams = new URLSearchParams(location.search);
-//  const [startDate, setStartDate] = useState(searchParams.get('startDate') || '');
-//  const [endDate, setEndDate] = useState(searchParams.get('endDate') || '');
+  const location = useLocation();
+  const count = location?.state?.count;
+  const dateRange = location?.state?.ranges
+  const startDate = `${format(dateRange[0]?.startDate, 'ddMMM')}`
+  const endDate = `${format(dateRange[0]?.endDate, 'ddMMM')}`
+  const { baseUrl } = useContext(AuthContext)
 
- const count = location?.state?.count;
- console.log('Count from location state:', count);
-  const dateRange=location?.state?.ranges
-  console.log(`${format(dateRange[0].startDate,'ddMMM')}`);
-  const startDate=`${format(dateRange[0].startDate,'ddMMM')}`
-  const endDate=`${format(dateRange[0].endDate,'ddMMM')}`
-  
-  // const [dateRange, setDateRange] = useState({
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //   });
-  // const queryParams = new URLSearchParams(search);
-  // const startDateParam = queryParams.get('startDate');
-  // const endDateParam  = queryParams.get('endDate');
+
+
+
   useEffect(() => {
-      axios.get(`http://154.41.228.234:3000/api/v0/portal/rooms/${roomId}`, {
-          params: {
-              startDate,
-              endDate,
-          },
-      })
+    axios.get(`${baseUrl}/portal/rooms/${roomId}`, {
+      params: {
+        startDate,
+        endDate,
+      },
+    })
       .then((response) => {
-        // setStartDate(searchParams.get('startDate') || '');
-        // setEndDate(searchParams.get('endDate') || '');
-          console.log(response);
-          setRoomDetails(response?.data?.data?.room);
-       
+
+
+        setRoomDetails(response?.data?.data?.room);
+
       })
       .catch((error) => {
-          console.log(error);
+
+        toast.error(error?.message)
       });
   }, [roomId, location.search]);
 
-     console.log(roomDetails);
-
-    //  console.log(count);
-    //  console.log(ranges);
-     
-     
 
   return (
     <>
-  <Navbar />
 
-  {/* <Carousel/> */}
+
+      {/* <Carousel/> */}
       <Typography
         sx={{
           color: "#152C5B",
@@ -111,6 +84,21 @@ export default function DetailsRoom() {
         Bogor, Indonesia
       </Typography>
 
+      <Box sx={{ width: "100%", display: "flex", marginLeft: 5 }}>
+        {roomDetails && roomDetails?.images?.map((img, index) => (
+          <img src={img} width={"40%"} style={{
+            marginRight: '10px',
+            borderRadius: '8px',
+
+          }} alt={`Image${index + 1}`} />
+        ))
+
+        }
+
+      </Box>
+
+
+
       <Container maxWidth="lg">
         <Box sx={{ width: "100%" }}>
           <Grid
@@ -118,7 +106,7 @@ export default function DetailsRoom() {
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
-            <Grid item xs={6}>
+            <Grid item xs={7}>
               <Item
                 sx={{
                   boxShadow: "none",
@@ -164,104 +152,88 @@ export default function DetailsRoom() {
                 design: enabling Singapore to use design for economic growth and
                 to make lives better.
               </Item>
+              {/*  Facilities  */}
+              <Grid item xs={6} sx={{ marginBottom: 3 }}>
+
+                <Item sx={{ boxShadow: "none", display: 'flex', justifyContent: "center", alignItems: 'center' }}>
+                  {roomDetails?.facilities?.map((facility, index) => (
+                    <>
+                      <Box sx={{ marginRight: '15px' }}>
+                        <img src={bedRoom} alt="icons" />
+                        <Typography sx={{ color: '#B0B0B0', fonSize: '8px', fontFamily: 'Poppins' }}>{facility?.name}</Typography>
+                      </Box>
+                    </>
+                  ))}
+                </Item>
+
+
+              </Grid>
             </Grid>
 
             {/* data picker */}
-            <Grid item xs={6}>
-              <Item sx={{ boxShadow: "none"}}>
-              <Typography sx={{fontFamily:'Poppins',fontSize:"20px",fontWeight:500,color:'#152C5B'}}>Start Booking</Typography>
-             
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-    <Typography sx={{color:'#1ABC9C',fontFamily:'Poppins',fontWeight:500,fontSize:"30px"}}>{roomDetails.price}$</Typography>
-    <Typography sx={{color:'#B0B0B0',fontFamily:'Poppins',fontWeight:500,fontSize:"30px"}}>per night</Typography>
-    </Box>
-    <Typography sx={{color:'#FF1612',}}>Discount {roomDetails?.discount} Off </Typography>
-      <Box sx={{ backgroundColor: '#fff', padding: '20px' }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant="h6">Pick a Date</Typography> 
-        </Grid>
-        <Grid item xs={12}>
-          <Box sx={{display: 'flex', alignItems: 'center'}}>
-          <Box sx={{display: 'flex', justifyContent: 'center',width: '4%'}}>
-          <img src={Avatar}  alt="calendar" style={{ width: '100%', height: 'auto'}}/>
-          </Box>
-          <TextField sx={{ width:'40%' }}  value={`${startDate} - ${endDate}`}/>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={{color:'#B0B0B0',fontFamily:'Poppins',fontWeight:500,fontSize:"16px"}}>You will pay</Typography>
-          <Typography sx={{color:'#152C5B',fontFamily:'Poppins',fontWeight:500,fontSize:"16px"}}>{roomDetails.price*count}</Typography>
-          <Typography sx={{color:'#B0B0B0',fontFamily:'Poppins',fontWeight:500,fontSize:"16px"}}>per</Typography>
-          <Typography sx={{color:'#152C5B',fontFamily:'Poppins',fontWeight:500,fontSize:"16px"}}> {count}</Typography>
-       </Box>
-            <Button sx={{color:'#FFFFFF',bgcolor:'#3252DF','&:hover': { bgcolor: '#3252DF' } }}>
-              Continue Book
-            </Button>
-        </Grid>
-      </Grid>
-    </Box>
+            <Grid item xs={5}>
+              <Item sx={{ boxShadow: "none", textAlign: "center", border: "1px solid #e0e0e0", borderRadius: "8px", padding: "20px" }}>
+                <Typography sx={{ fontFamily: 'Poppins', fontSize: "20px", fontWeight: 500, color: '#152C5B' }}>Start Booking</Typography>
 
-              {/* <input type="text" value={`${startDate} - ${endDate}`} />
-              <input type="text" value={count} /> */}
+                <Box sx={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
+                  <Typography sx={{ color: '#1ABC9C', fontFamily: 'Poppins', fontWeight: 500, fontSize: "30px" }}>{roomDetails.price}$</Typography>
+                  <Typography sx={{ color: '#B0B0B0', fontFamily: 'Poppins', fontWeight: 500, fontSize: "30px" }}>per night</Typography>
+                </Box>
+                <Typography sx={{ color: '#FF1612', }}>Discount {roomDetails?.discount} % Off </Typography>
+                <Box sx={{ backgroundColor: '#fff', padding: '20px' }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <Typography variant="h6">Pick a Date</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', width: '4%' }}>
+
+                        </Box>
+                        <TextField sx={{
+                          width: '50%',
+
+                          "& input": {
+                            textAlign: 'center',
+                          },
+                        }} value={`${startDate} - ${endDate}`}
+
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PunchClockIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+
+
+                        />
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box sx={{ display: 'flex', justifyContent: "center", alignItems: 'center', marginBottom: 5 }}>
+                        <Typography sx={{ color: '#B0B0B0', fontFamily: 'Poppins', fontWeight: 500, fontSize: "16px" }}>You will pay</Typography>
+                        <Typography sx={{ color: '#152C5B', fontFamily: 'Poppins', fontWeight: 500, fontSize: "16px" }}>{roomDetails?.price * count}</Typography>
+                        <Typography sx={{ color: '#B0B0B0', fontFamily: 'Poppins', fontWeight: 500, fontSize: "16px" }}>per</Typography>
+                        <Typography sx={{ color: '#152C5B', fontFamily: 'Poppins', fontWeight: 500, fontSize: "16px" }}> {count}</Typography>
+                      </Box>
+                      <Button sx={{ color: '#FFFFFF', bgcolor: '#3252DF', '&:hover': { bgcolor: '#3252DF' } }}>
+                        Continue Book
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Box>
+
+
 
               </Item>
             </Grid>
-            <Grid item xs={6} sx={{ desplay: "flex", alignItems: 'center' }}>
-                {/* all icons */}
-              <Item sx={{ boxShadow: "none", display: 'flex', alignItems: 'center'}}>
-                <Box  sx={{ marginRight: '15px' }}>
-                  <img src={bedRoom} alt="icons" />
-                  <Typography sx={{color:'#B0B0B0',fonSize:'8px',fontFamily:'Poppins'}}>bedroom</Typography>
-                </Box>
 
-                <Box  sx={{ marginRight: '15px' }}>
-                <img src={livingroom} alt="icons" />
-                 <Typography sx={{color:'#B0B0B0',fonSize:'8px',fontFamily:'Poppins'}}>living room</Typography>
-                </Box>
 
-                <Box  sx={{ marginRight: '15px' }}>
-                <img src={bathRoom} alt="icons" />
-                <Typography sx={{color:'#B0B0B0',fonSize:'8px',fontFamily:'Poppins'}}>bathroom</Typography>
-                </Box>
-
-                <Box  sx={{ marginRight: '15px' }}>
-                <img src={diningroom} alt="icons" />
-                <Typography sx={{color:'#B0B0B0',fonSize:'8px',fontFamily:'Poppins'}}>dining room</Typography>
-                </Box>
-                
-                
-              </Item>
-
-              <Item sx={{ boxShadow: "none" ,display: 'flex', alignItems: 'center' }}>
-              <Box  sx={{ marginRight: '15px' }}>
-                  <img src={wifi} alt="icons" />
-                  <Typography sx={{color:'#B0B0B0',fonSize:'8px',fontFamily:'Poppins'}}>10 mbp/s</Typography>
-                </Box>
-
-                <Box  sx={{ marginRight: '15px' }}>
-                  <img src={unit} alt="icons" />
-                  <Typography sx={{color:'#B0B0B0',fonSize:'8px',fontFamily:'Poppins'}}>7 unit ready</Typography>
-                </Box>
-
-                <Box  sx={{ marginRight: '15px' }}>
-                  <img src={refigrator} alt="icons" />
-                  <Typography sx={{color:'#B0B0B0',fonSize:'8px',fontFamily:'Poppins'}}>2 refigrator</Typography>
-                </Box>
-
-                <Box  sx={{ marginRight: '15px' }}>
-                  <img src={tv} alt="icons" />
-                  <Typography sx={{color:'#B0B0B0',fonSize:'8px',fontFamily:'Poppins'}}>4 television</Typography>
-                </Box>
-              
-              </Item>
-            </Grid>
-            
           </Grid>
         </Box>
       </Container>
-      <Footer/>
+
     </>
   );
 }
