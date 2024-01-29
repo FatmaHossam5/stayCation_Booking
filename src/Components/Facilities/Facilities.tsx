@@ -61,30 +61,17 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 export default function Facilities() {
-
   const [showState, setShowState] = useState();
-
   const handleClose = () => setShowState(false);
-
-
-
-
-
-
-
-  /////////////////// manual logic ///////////////////
-
   const navigate = useNavigate()
-  const [pageArray, setPageArray] = useState()
-  const [searchValue, setSearchValue] = useState()
   const [rows, setRows] = useState()
   const [itemID, setItemID] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pagesArray, setPagesArray] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const{baseUrl,reqHeaders}=useContext(AuthContext)
-
   const [anchorElArray, setAnchorElArray] = useState(Array(rows?.length).fill(null));
+
   const handleClick = (event, index) => {
     const newAnchorElArray = [...anchorElArray];
     newAnchorElArray[index] = event.currentTarget;
