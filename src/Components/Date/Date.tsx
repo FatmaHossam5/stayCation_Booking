@@ -14,7 +14,7 @@ import banner from "../../assets/banner.png";
 export default function MyDate() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false)
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(1)
   const{startDate:initialStartDate,endDate:initialEndDate}=useParams();
   const [dateRange, setDateRange] = useState([{
     startDate:initialStartDate? new Date(initialStartDate):new Date() ,
@@ -152,7 +152,7 @@ export default function MyDate() {
           value={`${count} Person`}
           variant="outlined"
           style={{
-            borderRadius: "5px", width: "175px", height: "32px", border: "none", backgroundColor: "#f0f0f0", pointerEvents: "none", paddingLeft: "55PX", paddingRight: "55PX", textAlign: "center",
+            borderRadius: "5px", width: "275px", height: "32px", border: "none", backgroundColor: "#f0f0f0", pointerEvents: "none", paddingLeft: "55PX", paddingRight: "55PX", textAlign: "center",
             color: "black"
           }}
 
