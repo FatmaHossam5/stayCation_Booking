@@ -10,13 +10,15 @@ export default function MasterLayout() {
       <Box>
         <NavBar />
       </Box>
-      {/* sidebar */}
-      <Box>
-        <SideBar />
-      </Box>
-      {/* outlet */}
-      <Box>
-        <Outlet />
+      <Box sx={{ display: "flex" }}>
+        {/* sidebar */}
+        <Box>
+          <SideBar />
+        </Box>
+        {/* main content area */}
+        <Box component="main" sx={{ flexGrow: 1, p: 3,marginTop:"4rem", paddingLeft: "3rem" }}>
+          <Outlet />
+        </Box>
       </Box>
     </>
   );

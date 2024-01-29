@@ -1,0 +1,42 @@
+// signup.module.scss
+
+.signupContainer {
+    height: 100vh;
+    // justify-content: space-around;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.formContainer {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.signupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.signupImage {
+    // padding-left: 9rem;
+    // width: 80%;
+    text-align: end !important;
+}
+
+#filled-basic {
+    padding: 0 !important;
+}
+.test{
+    align-items: center;
+    justify-content: space-evenly;
+}
+.test2{
+    width: 40%;
+}
