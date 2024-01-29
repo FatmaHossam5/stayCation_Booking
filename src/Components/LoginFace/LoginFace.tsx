@@ -28,7 +28,7 @@ const FacebookLoginButton = () => {
 
   return (
     <FacebookLogin
-      appId="YOUR_FACEBOOK_APP_ID" 
+      appId="1503450150434613" 
       autoLoad={false}
       fields="name,email"
       callback={handleFacebookLogin}

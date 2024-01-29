@@ -15,8 +15,8 @@ export default function FavoriteList() {
     axios
       .get(`${baseUrl}/portal/favorite-rooms`, { headers: reqHeaders })
       .then((response) => {
-        console.log(response.data);
-        setFavList(response.data);
+        console.log(response?.data?.data?.favoriteRooms[0].rooms);
+        setFavList(response?.data?.data?.favoriteRooms[0].rooms);
       })
       .catch((error) => {
         console.log(error);
@@ -74,8 +74,19 @@ export default function FavoriteList() {
   ))
 }
 
+
+
       
     </>
 
 
   ) }
+
+
+
+
+
+
+
+
+
