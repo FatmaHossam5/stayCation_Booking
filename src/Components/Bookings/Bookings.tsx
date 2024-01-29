@@ -124,7 +124,7 @@ const handleShowDelete = (id) => {
 }
 console.log(itemID);
 useEffect(()=>{
-  getAllBookig(1)
+  getAllBookig(1)},[])
 
   return (
     <>

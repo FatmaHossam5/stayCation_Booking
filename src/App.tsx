@@ -54,7 +54,7 @@ const routes =createBrowserRouter([
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
       {path:"roomdetails",element:<RoomDetails/>},
-      {path:"change-pass",element:<ChangePassword/>}
+      {path:"change-pass",element:<ChangePassword/>},
       {path:"fav",element:<FavoriteList/>},
 
 
