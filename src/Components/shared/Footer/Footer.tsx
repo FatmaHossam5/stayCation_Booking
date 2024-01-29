@@ -23,7 +23,7 @@ export default function Footer() {
 
     <Box sx={{ width: '100%' }}>
       <Divider/>
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
         <Grid item xs={3}>
           <Item sx={{boxShadow:'none'}}><img src={fooPhoto} alt=''/></Item>
           <Item sx={{boxShadow:'none'}}>We kaboom your beauty holiday instantly and memorable.</Item>
@@ -52,7 +52,7 @@ export default function Footer() {
         </Grid>
       </Grid>
 
-      <Typography sx={{textAlign:'center',paddingTop:'25px',color:'#B0B0B0'}}>Copyright 2019 • All rights reserved • Staycation</Typography>
+      <Typography sx={{textAlign:'center',paddingTop:'5px',color:'#B0B0B0'}}>Copyright 2019 • All rights reserved • Staycation</Typography>
     </Box>
     </>
   );

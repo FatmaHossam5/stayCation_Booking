@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useContext } from 'react'
 import { AuthContext } from '../../Context/AuthContext';
 import './pay.css'
+import { toast } from 'react-toastify';
 const cardElementStyle = {
     base: {
       fontSize: '16px',
@@ -21,7 +22,7 @@ const cardElementStyle = {
 export default function Pay({bookingId}) {
     const strip=useStripe()
     const elements=useElements();
-    const {baseUrl,reqHeader}=useContext(AuthContext)
+    const {baseUrl,reqHeaders}=useContext(AuthContext)
     
     const handleSubmit = async (event) => {
        
@@ -43,7 +44,8 @@ export default function Pay({bookingId}) {
         } else {
         
           console.log(token?.id);
-          const tokenId = token?.id;     
+          const tokenId = token?.id;  
+          handlePayment(tokenId)   
        
         }
     
@@ -54,11 +56,14 @@ export default function Pay({bookingId}) {
           const response = await axios
           .post(`${baseUrl}/portal/booking/${bookingId}/pay`,
             {token},
-            {headers: reqHeader,}
+            {headers: reqHeaders}
           )
+      
+        toast.success(response.data.message)
         
         }catch (error) {
-          console.error(error);
+        
+          toast.error(error?.response?.data?.message)
       
         }
   

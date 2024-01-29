@@ -30,6 +30,7 @@ import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
 import AddAds from './Components/AddAds/AddAds'
 import AvilableRooms from './Components/AvilableRooms/AvilableRooms'
 import MyDate from './Components/Date/Date'
+import UserLayout from './Components/shared/UserLayout/UserLayout'
 import BookingInfo from './Components/BookingInfo/BookingInfo'
 
 import Pay from './Components/Pay/Pay'
@@ -39,16 +40,14 @@ import PaymentWrapper from './Components/Pay/PaymentWrapper'
 function App() {
  
   let {userData,saveUserData,role}:any=useContext(AuthContext)
-  const [count, setCount] = useState(0);
+  
 
-  const handleCountChange = (newCount) => {
-    setCount(newCount);
-  };
+ 
 const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
-      {index:true,element:<SignIn saveUserData={saveUserData}/>},
+      {index:true,element:<LandingPage saveUserData={saveUserData}/>},
       {path:"signin",element:<SignIn saveUserData={saveUserData}/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
@@ -89,6 +88,7 @@ const routes =createBrowserRouter([
   },
   {
     path:"user",
+    element:<UserLayout/>,
     errorElement:<NotFound/>,
     children:[
       {index:true,element:<LandingPage />},
