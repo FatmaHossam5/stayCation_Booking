@@ -1,8 +1,12 @@
 .body{
     font-family: 'Poppins', sans-serif;
 }
+
+
 *{margin: 0;
 padding: 0;
+box-sizing: border-box;
+/* overflow-x: hidden; */
 }
  {/*SideBar Styles*/} 
 .css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
@@ -45,4 +49,36 @@ background-color:  #1A1B1E2B;
 } */
 .css-1sszw6i-MuiButtonBase-root-MuiButton-root{
     background-color: #203FC7!important;
+} {/*DatePicker Styles*/} 
+.pickDateStyle{
+    padding-top: 0.5rem;
+    text-align: center;
+    padding-bottom: 0.2rem;
+    padding-right: 4rem;
+    padding-left: 3.8rem;
+    background-color: #f0f0f0;
+    border: none;
+}
+.custom-date-range-picker {
+
+    width: 80px!important;
+    height: 30px!important;
+
+  }
+{/*Card Component*/}
+  .css-bhp9pd-MuiPaper-root-MuiCard-root{
+    width: 70%;
+    height: 85%;
+    transform: translateX(20%);
+  }
+  .css-1ftwddu-MuiGrid-root>.MuiGrid-item {
+    padding-left: 0px!important;
+}
+.css-6tloi9-MuiTypography-root{
+    text-align: right;
+    width: 50%!important;
+    left:54%;
+    background-color: #FF498B!important;
+    color: white;
+    
 }

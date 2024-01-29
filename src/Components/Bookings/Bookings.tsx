@@ -1,3 +1,4 @@
+
 import { Box, Button, FormControl, Grid, IconButton, Modal, TextField, Typography, MenuItem, TableContainer, Table, TableHead, TableRow, tableCellClasses, TableCell, Paper, TableBody, ButtonBase, TablePagination, Menu} from '@mui/material';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -10,14 +11,21 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { toast } from 'react-toastify';
 
+
+
+
+
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
+
   bgcolor: '#203FC7',
   borderRadius: "7px",
+
+
 
   boxShadow: 24,
   p: 4,
@@ -43,6 +51,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 export default function Bookig() {
+
 
  
   const[book,setBook]=useState([])
@@ -116,24 +125,31 @@ const handleShowDelete = (id) => {
 console.log(itemID);
 useEffect(()=>{
   getAllBookig(1)
-},[])
+
   return (
     <>
     
     <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
       <Modal
+
         open={showState === "delete-modal"}
+
+       
+
         onClose={handleClose}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
         <Box sx={style}>
           <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
+
             <IconButton onClick={handleClose} sx={{ color: "white" }} >
+
               < CancelOutlinedIcon />
             </IconButton>
           </Grid>
           
+
 
           <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ textAlign: "center", color: "white" }}>
             Delete This  Booking?
@@ -148,6 +164,8 @@ useEffect(()=>{
       </Modal>
    
        
+
+ 
       <Box>
         <Typography variant='h5'>Booking Table Details</Typography>
         <Typography variant='subtitle1'>You can check all details</Typography>
@@ -162,6 +180,7 @@ useEffect(()=>{
             <StyledTableCell align="right">price</StyledTableCell>
             <StyledTableCell align="right">Start Date</StyledTableCell>
             <StyledTableCell align="right">End Date</StyledTableCell>
+
             <StyledTableCell align="right" >Status</StyledTableCell>
             <StyledTableCell align="right">Actions</StyledTableCell>
           </TableRow>
@@ -208,11 +227,15 @@ useEffect(()=>{
                            
                           </Menu>
                         </div>
+
+         
+
               </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
       </Table>
+
       
       <TablePagination
                   rowsPerPageOptions={[5, 10, 25]}
@@ -223,6 +246,7 @@ useEffect(()=>{
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
+
     </TableContainer>
     </>
   )
