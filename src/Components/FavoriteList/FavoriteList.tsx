@@ -59,14 +59,14 @@ export default function FavoriteList() {
 <Container >
   
 
-      <Grid container spacing={1}>
+<Grid container spacing={1}>
   {favList?.length > 0 &&
-    Array.from({ length: 15 }).map((_, repeatIndex) => (
+    favList.slice(0, 15).map((item, repeatIndex) => ( // Use favList item instead of favList[0]
       <Grid item key={repeatIndex} xs={12} sm={6} md={4} lg={4}>
-        <Card sx={{ position: 'relative', overflow: 'hidden', borderRadius:5,width:'90%'}}>
-          {favList[0]?.images && favList[0]?.images.length > 0 ? (
-            <div className={Style.imageWrapper} >
-               <div
+        <Card sx={{ position: 'relative', overflow: 'hidden', borderRadius: 5, width: '90%' }}>
+          {item.images && item.images.length > 0 ? ( // Use item.images instead of favList[0].images
+            <div className={Style.imageWrapper}>
+              <div
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -76,14 +76,14 @@ export default function FavoriteList() {
                   padding: '8px',
                 }}
               >
-                <Typography variant="h6" className={Style.roomName} style={{ color: '#fff',paddingLeft:'15px' }}>
-                  $ {favList[0]?.discount} 
+                <Typography variant="h6" className={Style.roomName} style={{ color: '#fff', paddingLeft: '15px' }}>
+                  $ {item.discount}
                 </Typography>
               </div>
               <img
-                src={favList[0]?.images[0]}
+                src={item.images[0]} // Use item.images instead of favList[0].images
                 alt={`Image ${repeatIndex + 1}`}
-                style={{ width: '100%', }}
+                style={{ width: '100%' }}
               />
               <div
                 style={{
@@ -95,8 +95,8 @@ export default function FavoriteList() {
                   padding: '8px',
                 }}
               >
-                <Typography variant="h6" className={Style.roomName} style={{ color: '#fff',paddingLeft:'15px' }}>
-                  {favList[0]?.roomNumber}
+                <Typography variant="h6" className={Style.roomName} style={{ color: '#fff', paddingLeft: '15px' }}>
+                  {item.roomNumber}
                 </Typography>
               </div>
             </div>
@@ -113,7 +113,6 @@ export default function FavoriteList() {
       </Grid>
     ))}
 </Grid>
-
 </Container>
 <br></br>
 <Footer />
