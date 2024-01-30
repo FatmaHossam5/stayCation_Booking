@@ -46,7 +46,9 @@ export default function BookingInfo() {
     })
   }
 
-
+const handleCancle=()=>{
+  navigate(-1)
+}
   return (
     <>
       <Container maxWidth="lg">
@@ -86,7 +88,11 @@ export default function BookingInfo() {
 
   </Item>
 </Item>
-
+<Item  sx={{boxShadow:"none"}}>
+  <Button sx={{bgcolor:"#203FC7",color:"white"}} onClick={handleCancle}>
+    Cancle
+  </Button>
+</Item>
               </Item>
             </Grid>
 
@@ -95,9 +101,9 @@ export default function BookingInfo() {
           component="div"
           sx={{
             height: '100%',
-            width: 0.01, // Width of the vertical line
-            backgroundColor: 'rgba(0, 0, 0, 0.12)', // Color of the line
-            margin: '0 35px', // Adjust margin as needed
+            width: 0.01, 
+            backgroundColor: 'rgba(0, 0, 0, 0.12)', 
+            margin: '0 35px', 
           }}
         />
       </Grid>
@@ -116,9 +122,11 @@ export default function BookingInfo() {
                   <Item sx={{ boxShadow: "none" }}>
                     <TextField label="room" {...register('room', { value: roomId })} />
                   </Item>
-                  <Button type="submit">
-                    Pay Now
-                  </Button>
+                  <Item  sx={{boxShadow:"none", marginTop:2}}>
+  <Button type='submit' sx={{bgcolor:"#203FC7",color:"white"}}>
+    Pay Now
+  </Button>
+</Item>
                 </form>
               </Item>
             </Grid>

@@ -87,3 +87,11 @@ background-color:  #1A1B1E2B;
 .translate{
     transform: translateX(-5%);
 }
+.css-vx48k8-MuiPaper-root{
+    background-color: inherit!important;
+}
+
+.css-1b288s2-MuiPaper-root{
+    background-color: "inherit"!important;
+   
+}
