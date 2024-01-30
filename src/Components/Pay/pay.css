@@ -1,35 +1,43 @@
-.card-element-container {
-    margin-bottom: 16px;
-    width: 70%;
+
+.payBtn{
+  background-color:#203fc7b3!important;
+margin-top: 1rem!important;
+transform: translateX(50%);
+width: 50%;
+text-align: center!important;
+   padding: 0.5rem !important;
+  
+   border-radius: 30px;
+ 
+
+
+}
+  .payment-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%!important;
     margin: auto;
-    padding-top: 5rem!important;
-    /* background-color: #dc3545; */
-    height:50vh ;
+     margin-top: 2rem;
+     padding: 5%;
+     background-color:rgb(32, 63, 199,0.7) ;
+     border-radius: 30px;
+   
   }
-  
-  .card-element-label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 8px;
-    color: #333;
+ 
+  .formSTYLE{
+    margin: auto;
+ 
   }
-  
-  .StripeElement {
-    box-sizing: border-box;
-    height: 40px;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color:rgb(19, 179, 59);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    transition: box-shadow 0.3s ease;
-  
-    &.StripeElement--focus {
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    }
-  
-    &.StripeElement--invalid {
-      border-color: #dc3545;
-    }
+  .card-element-container {
+    margin-top: 2rem;
+    height: 3rem;
+    border-radius: 10px;
+
+    background-color: #f1f1f1;
   }
-  
+ 
+ 
+ 
+ 
+

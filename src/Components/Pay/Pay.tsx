@@ -1,49 +1,40 @@
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
+import { AddressElement, CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import axios from 'axios';
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../Context/AuthContext';
 import './pay.css'
 import { toast } from 'react-toastify';
-const cardElementStyle = {
-    base: {
-      fontSize: '16px',
-      color: '#424770',
-      
-      '::placeholder': {
-        color: '#aab7c4',
-      },
-      backgroundColor:"black"
-    },
-    invalid: {
-      color: '#9e2146',
-    },
-  };
+import { useNavigate } from 'react-router';
+import { Box, Button, Container } from '@mui/material';
+
 
 export default function Pay({bookingId}) {
-    const strip=useStripe()
+    const stripe=useStripe()
     const elements=useElements();
     const {baseUrl,reqHeaders}=useContext(AuthContext)
-    
+    const navigate=useNavigate();
+
     const handleSubmit = async (event) => {
        
         event.preventDefault();
     
-        if (!strip || !elements) {
+        if (!stripe || !elements) {
          
           return;
         }
         const cardElement = elements.getElement(CardElement);
         console.log(cardElement);
-        const {token, error} = await strip.createToken(cardElement);
+        const {token, error} = await stripe.createToken(cardElement);
     
         if (error) {
        
-          console.log(error.message);
+        
+          toast.error(error.message)
        
     
         } else {
         
-          console.log(token?.id);
+       
           const tokenId = token?.id;  
           handlePayment(tokenId)   
        
@@ -51,6 +42,7 @@ export default function Pay({bookingId}) {
     
     
       }
+  
     const handlePayment = async(token)=>{
         try{
           const response = await axios
@@ -60,6 +52,7 @@ export default function Pay({bookingId}) {
           )
       
         toast.success(response.data.message)
+        navigate(`/user/booking-details/${bookingId}`)
         
         }catch (error) {
         
@@ -71,30 +64,32 @@ export default function Pay({bookingId}) {
   return (
     <>
 
+<Container
+       
+        className="payment-container"
+        
+      >
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          className="formSTYLE"
+        >
+     <AddressElement options={{mode: 'shipping'}} className="address-element-container" />
+     <CardElement className="card-element-container"/>
 
-<form   onSubmit={handleSubmit}>
-
-<div className="card-element-container">
-      <label className="card-element-label">Card Details</label>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: '16px',
-              color: '#333',
-              '::placeholder': {
-                color: 'white',
-              },
-            },
-            invalid: {
-              color: '#dc3545',
-            },
-          },
-        }}
-      />
-    </div>
-
-    </form>
+     <Button
+           disabled={!stripe}
+            type="submit"
+            className="payBtn"
+            sx={{color:"white"}}
+        
+          >
+            Pay
+          </Button>
+        </Box>
+        </Container>
+ 
 
 
     

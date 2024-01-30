@@ -37,6 +37,7 @@ import Pay from './Components/Pay/Pay'
 import PaymentWrapper from './Components/Pay/PaymentWrapper'
 
 import FavoriteList from './Components/FavoriteList/FavoriteList'
+import BookingDetails from './Components/BookingDetails/BookingDetails'
 
 function App() {
  
@@ -101,6 +102,8 @@ const routes =createBrowserRouter([
       {path:"room-details/:roomId/",element:<RoomDetails/>},
       {path:"create-booking/:roomId/",element:<BookingInfo/>},
       {path:"pay-booking/:bookingId/",element:<PaymentWrapper/>},
+      {path:"booking-details/:bookingId/",element:<BookingDetails/>},
+
       {path:"fav",element:<FavoriteList/>},
 
 

@@ -20,14 +20,14 @@ export default function LandingPage() {
   return (
     <div>
      <Rate/>
-      <Navbar />
+  
       <Box sx={{width:'100%',height:"100vh", marginLeft:3}}>
       <Date/>
 
       </Box>
       
   
-      <Footer />
+     
     </div>
   );
 }

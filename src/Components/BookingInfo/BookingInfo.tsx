@@ -54,9 +54,9 @@ export default function BookingInfo() {
           <Grid
             container
             rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-            <Grid item xs={6} >
-              <Item sx={{boxShadow:"none"}}>
+            columnSpacing={{ xs: 1, sm: 2, md: 5 }}>
+            <Grid item xs={5} >
+              <Item sx={{boxShadow:"none",display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 <Typography>Transfer Payment</Typography>
                 <Typography variant="body1" color="initial" >Tax:10%</Typography>
                 <Typography variant="body1" color="initial">Sub total:{totalPrice}$</Typography>
@@ -67,7 +67,7 @@ export default function BookingInfo() {
 <img src={pay} alt="" width={'30%'}  />
   </Item>
   <Item sx={{boxShadow:"none"}}>
-    <Typography variant="body1" color="initial">Bank Msr</Typography>
+    <Typography variant="body1" color="initial">Bank </Typography>
     <Typography variant="body1" color="initial">257257</Typography>
     <Typography variant="body1" color="initial">Build</Typography>
 
@@ -79,7 +79,7 @@ export default function BookingInfo() {
 <img src={pay1} alt="" width={'30%'}  />
   </Item>
   <Item   sx={{boxShadow:"none"}}>
-    <Typography variant="body1" color="initial">Bank Msr</Typography>
+    <Typography variant="body1" color="initial">Bank </Typography>
     <Typography variant="body1" color="initial">257257</Typography>
     <Typography variant="body1" color="initial">Build</Typography>
     
@@ -89,8 +89,20 @@ export default function BookingInfo() {
 
               </Item>
             </Grid>
-            <Grid item xs={6}>
-              <Item  sx={{boxShadow:"none"}}>
+
+            <Grid item xs={false}>
+        <Box
+          component="div"
+          sx={{
+            height: '100%',
+            width: 0.01, // Width of the vertical line
+            backgroundColor: 'rgba(0, 0, 0, 0.12)', // Color of the line
+            margin: '0 35px', // Adjust margin as needed
+          }}
+        />
+      </Grid>
+            <Grid item xs={5}>
+              <Item  sx={{boxShadow:"none",display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 <form onSubmit={handleSubmit(creatBooking)}>
                   <Item sx={{ boxShadow: "none" }}>
                     <TextField label="Start Date" {...register('startDate', { value: startDate })} />
