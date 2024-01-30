@@ -16,7 +16,7 @@ export default function Rate() {
   const reqHeaders = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTlhMjAzNTYzODg0OGJjZTZmMDBmOTciLCJyb2xlIjoidXNlciIsInZlcmlmaWVkIjpmYWxzZSwiaWF0IjoxNzA1NjEyNDgwLCJleHAiOjE3MDY4MjIwODB9.3cdcgYBnwf4VNWPbMJcOn0sMPBtgPqY7_90Bmf5mxqw"
 
   const getReviews = () => {
-    axios.get("http://154.41.228.234:3000/api/v0/portal/room-reviews/65a995cca5d9953dd42d1152", {
+    axios.get("http://154.41.228.234:3000/api/v0/portal/room-reviews/65b3aea0e815336ace226828", {
       headers: {
         Authorization: reqHeaders
       }

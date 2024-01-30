@@ -78,7 +78,7 @@ const routes =createBrowserRouter([
     path:"user",
     errorElement:<NotFound/>,
     children:[
-      {index:true,element:<LandingPage/>},
+      {index:true,element:<LandingPage/>}
 
     ]
   }
