@@ -3,12 +3,15 @@ import { Box, Typography, TextField, Button, Grid, FormControl } from '@mui/mate
 import signin from "../../assets/bg-signin.png";
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
 export default function SignIn() {
   const {register,handleSubmit,formState:{errors}}=useForm();
 const {baseUrl}=useContext(AuthContext)
+const navigate = useNavigate();
   const signIn=(data)=>{
     axios.post(`${baseUrl}/admin/users/login`,data).then((response)=>{localStorage.setItem('userToken', response.data.data.token );
+    navigate('/dashboard');
     }).catch((error)=>{console.log(error);
     })
     
