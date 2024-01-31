@@ -55,7 +55,7 @@ export default function MostPickedSection() {
 
   const showDetails = (item: any) => {
     // console.log(item);
-    navigate(`/Home/details/${item}`)
+    navigate(`details/${item}`)
     // add this path in App.tsx : {path:"details/:id",element:<Details/>}
   }
 

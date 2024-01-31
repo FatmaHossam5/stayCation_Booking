@@ -27,6 +27,7 @@ import Facilities from './Components/Facilities/Facilities'
 import { ToastContainer } from 'react-toastify'
 import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
 import AddAds from './Components/AddAds/AddAds'
+import Review from './Components/LandingPage/sections/ReviewSection/Review'
 
 
 function App() {
@@ -78,7 +79,8 @@ const routes =createBrowserRouter([
     path:"user",
     errorElement:<NotFound/>,
     children:[
-      {index:true,element:<LandingPage/>}
+      {index:true,element:<LandingPage/>},
+      {path:"details/:id",element:<Review/>}
 
     ]
   }

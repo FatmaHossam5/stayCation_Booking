@@ -14,7 +14,7 @@ export default function Review() {
 
     let { id } = useParams()
     const [rating, setRating] = useState('')
-    const { reqHeaders }: any = useContext(AuthContext)
+    const { reqHeaders, role }: any = useContext(AuthContext)
 
     //start text area styles
     const blue = {
@@ -71,8 +71,8 @@ export default function Review() {
     );
     // end text area styles
 
-     //start send comment
-     const Comment = () => {
+    //start send comment
+    const Comment = () => {
 
         const {
             register,
@@ -83,24 +83,28 @@ export default function Review() {
         const sendComment = (data: any) => {
             console.log(data);
 
-            axios.post(`http://154.41.228.234:3000/api/v0/portal/room-comments`, {
+            if (role != "user") {
+                toast.warning(`you should login first`);
+            } else {
+                axios.post(`http://154.41.228.234:3000/api/v0/portal/room-comments`, {
 
-                roomId: id,
-                comment: data.comment
+                    roomId: id,
+                    comment: data.comment
 
-            }, {
-                headers: reqHeaders
-            })
-                .then((response) => {
-                    console.log(response);
-                    toast.success(response.data.message);
+                }, {
+                    headers: reqHeaders
                 })
-                .catch((error) => {
+                    .then((response) => {
+                        console.log(response);
+                        toast.success(response.data.message);
+                    })
+                    .catch((error) => {
 
-                    console.log(error);
-                    toast.error(error.response.data.message)
-                }
-                )
+                        console.log(error);
+                        toast.error(error.response.data.message)
+                    }
+                    )
+            }
         }
 
         return (
@@ -140,11 +144,9 @@ export default function Review() {
 
         const sendReview = (data: any) => {
             let dataWithRating = { ...data, rating: rating }
-            console.log(dataWithRating);
-            console.log(dataWithRating.review.length);
-            console.log(dataWithRating.rating.length);
-
-            if (dataWithRating.rating.length !== 0) {
+            if (role != "user") {
+                toast.warning(`you should login first`);
+            } else if (dataWithRating.rating.length !== 0) {
                 axios.post(`http://154.41.228.234:3000/api/v0/portal/room-reviews`, {
                     roomId: id,
                     rating: dataWithRating.rating,
