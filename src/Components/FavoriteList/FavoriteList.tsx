@@ -9,6 +9,7 @@ import { Style } from "@mui/icons-material";
 import { Skeleton, Container, Divider } from "@mui/material";
 import NavBar from "../shared/NavBar/NavBar";
 import Footer from "../shared/Footer/Footer";
+import Navbar from "../Navbar/Navbar";
 
 export default function FavoriteList() {
   const [favList, setFavList] = useState([]);
@@ -33,7 +34,7 @@ export default function FavoriteList() {
 
   return (
     <>
-    <NavBar/>
+   
       <Typography
         sx={{
           fontFamily: "Poppins",
@@ -115,7 +116,7 @@ export default function FavoriteList() {
 </Grid>
 </Container>
 <br></br>
-<Footer />
+
     </>
 
 

@@ -32,9 +32,9 @@ function AvailableRooms() {
   const { baseUrl, reqHeaders } = useContext(AuthContext)
   const count = location?.state?.count
   const dateRange = location?.state?.ranges
-  const startDate = `${format(dateRange[0].startDate, 'ddMMM')}`
-  const endDate = `${format(dateRange[0].endDate, 'ddMMM')}`
-
+  const startDate = `${format(dateRange[0]?.startDate, 'ddMMM')}`
+  const endDate = `${format(dateRange[0]?.endDate, 'ddMMM')}`
+const{role}=useContext(AuthContext)
 
   const fetchAvailableRooms = (page) => {
     axios
@@ -66,11 +66,17 @@ function AvailableRooms() {
 
       }, { headers: reqHeaders })
       .then((response) => {
-
+        if (role === 'user') {
         setFavoriteRooms((prevFavorites) => [...prevFavorites, roomId]);
 
-        toast.success(response?.data?.message)
+        toast.success(response?.data?.message)} 
+        else{
+
+          toast.error("You have to sign In  !")
+          navigate('/signin');
+        }
       })
+   
       .catch((error) => {
 
         toast.error(error?.response?.data?.message)
@@ -98,21 +104,20 @@ function AvailableRooms() {
         },
       })
       .then((response) => {
-
-   
-
-
-        navigate(`/user/room-details/${roomId}?startDate=${startDate}&endDate=${endDate}`, {
-          state: {
-            DetailsRoom: response.data, count, ranges: dateRange
-
-
-          },
-
-        });
-
-
-
+ 
+        
+        if (role === 'user') {
+          navigate(`/user/room-details/${roomId}?startDate=${startDate}&endDate=${endDate}`, {
+            state: {
+              DetailsRoom: response.data,
+              count,
+              ranges: dateRange
+            }
+          });
+        } else {
+          toast.error("You have to sign In  !")
+          navigate('/signin');
+        }
       })
       .catch((error) => {
         console.error("Error fetching room details:", error);

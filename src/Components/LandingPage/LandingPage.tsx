@@ -15,18 +15,20 @@ import {
 import Date from '../Date/Date.tsx';
 
 
+
 export default function LandingPage() {
 
   return (
     <div>
-     <Rate/>
-  
+     {/* <Rate/> */}
+ 
       <Box sx={{width:'100%',height:"100vh", marginLeft:3}}>
+      {/* <Navbar/> */}
       <Date/>
-
+      <Footer/>
       </Box>
       
-  
+
      
     </div>
   );

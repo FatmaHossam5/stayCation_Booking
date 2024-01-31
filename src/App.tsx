@@ -49,7 +49,10 @@ const routes =createBrowserRouter([
   {
     path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
-      {index:true,element:<LandingPage saveUserData={saveUserData}/>},
+      {index:true,element:<>
+       <LandingPage saveUserData={saveUserData}/>
+      </>
+   },
       {path:"signin",element:<SignIn saveUserData={saveUserData}/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
@@ -91,7 +94,7 @@ const routes =createBrowserRouter([
   },
   {
     path:"user",
-    element:<UserLayout/>,
+    element:<UserLayout userData={userData}/>,
     errorElement:<NotFound/>,
     children:[
       {index:true,element:<LandingPage />},

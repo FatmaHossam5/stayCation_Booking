@@ -20,8 +20,10 @@ export default function AuthContextProvider(props:any){
     const encodedToken:any = localStorage.getItem("userToken");
     const decodedToken=jwtDecode(encodedToken)
     const userName=localStorage.getItem('userName')
+    const role=localStorage.getItem("role")
 setUserData(decodedToken)
 setUserName(userName)
+setRole(role)
 
 
 
