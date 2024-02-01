@@ -2,18 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import { AuthContext } from "../../Context/AuthContext";
 import axios from "axios";
-import { Style } from "@mui/icons-material";
-import { Skeleton, Container, Divider } from "@mui/material";
-import NavBar from "../shared/NavBar/NavBar";
-import Footer from "../shared/Footer/Footer";
-import Navbar from "../Navbar/Navbar";
+import { Skeleton, Container, Divider, CardActionArea, CardMedia, IconButton } from "@mui/material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 export default function FavoriteList() {
   const [favList, setFavList] = useState([]);
   const { baseUrl, reqHeaders } = useContext(AuthContext);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   //call api
   const getAllFav = () => {
@@ -21,13 +18,32 @@ export default function FavoriteList() {
       .get(`${baseUrl}/portal/favorite-rooms`, { headers: reqHeaders })
       .then((response) => {
         // console.log(response?.data?.data?.favoriteRooms[0].rooms);
+        console.log(response);
+        
         setFavList(response?.data?.data?.favoriteRooms[0].rooms);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
+ 
+  
+  const removeRoomFromFavorites = (roomId) => {
+    console.log(roomId);
+    
+    axios
+   
+      .delete(`${baseUrl}/portal/favorite-rooms/${roomId}`,{headers:reqHeaders,data:{roomId}})
+      .then((response) => {
+        // Remove the room from the favList state
+        setFavList((prevList) => prevList.filter((room) => room?._id !== roomId));
+        console.log(response);
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
     getAllFav();
   }, []);
@@ -44,49 +60,31 @@ export default function FavoriteList() {
           textAlign: "center",
         }}
       >
-        Your Favorites
+        Your Favorites Rooms
       </Typography>
 
-      <Typography
-        sx={{
-          fontFamily: "Poppins",
-          fontWeight: 400,
-          fontSize: "25px",
-          color: "#152C5B",
-        }}
-      >
-        Your Rooms
-      </Typography>
-<Container >
   
-
-<Grid container spacing={1}>
-  {favList?.length > 0 &&
-    favList.slice(0, 15).map((item, repeatIndex) => ( // Use favList item instead of favList[0]
-      <Grid item key={repeatIndex} xs={12} sm={6} md={4} lg={4}>
-        <Card sx={{ position: 'relative', overflow: 'hidden', borderRadius: 5, width: '90%' }}>
-          {item.images && item.images.length > 0 ? ( // Use item.images instead of favList[0].images
-            <div className={Style.imageWrapper}>
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  width: '30%',
-                  backgroundColor: '#FF498B',
-                  padding: '8px',
-                }}
+      <Container sx={{ width: '90%' }}>
+        <Grid container spacing={2} sx={{ margin: "auto" }}>
+        {(favList.length === 0 ? Array.from({ length: favList.length }) : favList).map((fav, index) => (
+            
+            <Grid item xs={12} sm={6} md={4} key={index} >
+                {fav ? (
+              <Card
+               
               >
-                <Typography variant="h6" className={Style.roomName} style={{ color: '#fff', paddingLeft: '15px' }}>
-                  $ {item.discount}
-                </Typography>
-              </div>
-              <img
-                src={item.images[0]} // Use item.images instead of favList[0].images
-                alt={`Image ${repeatIndex + 1}`}
-                style={{ width: '100%' }}
-              />
-              <div
+                <CardActionArea >
+                  <CardMedia
+                    component="img"
+                    alt={`Image ${index + 1}`}
+                    height="140"
+                    width="100%"
+                    image={fav?.images[0]}
+                    sx={{
+                      objectFit: 'cover',
+                    }}
+                  />
+                         <div
                 style={{
                   position: 'absolute',
                   bottom: 0,
@@ -96,26 +94,62 @@ export default function FavoriteList() {
                   padding: '8px',
                 }}
               >
-                <Typography variant="h6" className={Style.roomName} style={{ color: '#fff', paddingLeft: '15px' }}>
-                  {item.roomNumber}
+                <Typography variant="h6"style={{ color: '#fff', paddingLeft: '15px' }}>
+                  {fav?.roomNumber}
                 </Typography>
               </div>
-            </div>
-          ) : (
-            <Skeleton
-              variant="rectangular"
-              width="100%"
-              height="100%"
-              animation="wave"
-              style={{ backgroundColor: '#E0E0E0', borderRadius: '15px' }}
-            />
-          )}
-        </Card>
-      </Grid>
-    ))}
-</Grid>
-</Container>
-<br></br>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+
+
+                      }}
+                    >
+                      <IconButton sx={{ color: "red" }} onClick={() =>removeRoomFromFavorites(fav?._id)}
+                        aria-label="Add to favorites">
+
+                        
+                          <FavoriteIcon  />
+                       
+                      
+                      </IconButton>
+                   
+                    </div>
+                  
+                </CardActionArea>
+                <Typography
+                  variant="body2"
+                  component="div"
+                  sx={{
+                    position: 'relative',
+                    top: -140,
+                  
+
+                    textAlign: 'center',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                  }}
+                >
+                  {fav?.price} $ per night
+                </Typography>
+              </Card>):( <Skeleton variant="rounded" height={180} animation="wave" />
+        )}
+            </Grid>
+          ))}
+       
+        </Grid>
+      </Container>
+
+
 
     </>
 

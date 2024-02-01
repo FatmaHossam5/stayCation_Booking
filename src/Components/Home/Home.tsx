@@ -13,10 +13,12 @@ export default function Home() {
   const[complete,setComplete]=useState(0)
   const[users,setUsers]=useState(0)
   const[admin,setAdmin]=useState(0)
+
+  
   useEffect(()=>{
 axios.get(`${baseUrl}/admin/dashboard`,{headers:reqHeaders}).then((response)=>{
-  console.log(response);
-  const data=response?.data?.data
+  
+const data=response?.data?.data
 setAds(data?.ads);
 setRooms(data.rooms);
 setFacilities(data.facilities)
