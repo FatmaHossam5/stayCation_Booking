@@ -64,7 +64,7 @@ toast.success('logIn SuccessFully')
   </Grid>
 </Grid>
 </FormControl>
-<LoginFace/>
+
     </>
   )
 }
