@@ -32,7 +32,7 @@ axios.get(`${baseUrl}/portal/booking/${bookingId}`,{headers:reqHeaders}).then((r
     },[])
     console.log(bookingDetails);
    const handleExit=()=>{
-    navigate('/user')
+    navigate('/')
    }
   return (
     <>

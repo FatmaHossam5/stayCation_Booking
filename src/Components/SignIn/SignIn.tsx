@@ -25,7 +25,7 @@ const navigate=useNavigate()
       
  
     saveUserData();
-    {role==='admin'?navigate('/dashboard'):navigate('/user')}
+    {role==='admin'?navigate('/dashboard'):navigate('/')}
 
 toast.success('logIn SuccessFully')
     

@@ -19,7 +19,7 @@ export default function Navbar() {
     localStorage.removeItem('userToken')
     localStorage.removeItem('role')
     setAuthState(false)
-    navigate('/user')
+    navigate('/')
    }
   return (
   <>
@@ -51,7 +51,7 @@ export default function Navbar() {
           <Button sx={{color:'#152C5B',px:"1rem",fontFamily:'cairo'}}>Home</Button>
           </Link>
        
-          <Link to='/signin'>
+          <Link to='/auth/signin'>
           <Button>Sign In</Button>
           </Link>
           </>)}

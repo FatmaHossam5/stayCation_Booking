@@ -71,7 +71,7 @@ export default function SideBar() {
   const logOut = ()=>{
     localStorage.removeItem('userToken')
     localStorage.removeItem('role')
-navigate('/signin')
+navigate('/auth/signin')
   }
   const theme = useTheme();
   const itemsList=[
@@ -81,7 +81,7 @@ navigate('/signin')
     {text:"Ads",icon:<CalendarMonthIcon/>,onClick:()=>navigate('/dashboard/ads')},
     {text:"Booking",icon:<PeopleOutlineIcon/>,onClick:()=>navigate('/dashboard/book')},
     {text:"Facilities",icon:<DryCleaningIcon/>,onClick:()=>navigate('/dashboard/facilities')},
-    {text:"ChangePassword",icon:<LockOpenIcon/>,onClick:()=>navigate('/forget-pass')},
+    {text:"ChangePassword",icon:<LockOpenIcon/>,onClick:()=>navigate('/auth/forget-pass')},
     {text:"LogOut",icon:<LogoutIcon/>,onClick:()=>logOut()}]
  const navigate=useNavigate();
  const open=useAppStore((state)=>state.dopen)

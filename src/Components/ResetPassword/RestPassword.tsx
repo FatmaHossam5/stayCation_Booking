@@ -4,10 +4,13 @@ import signUpImage from "../../assets/Rectangle 8.png"
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../../Context/AuthContext';
 
 export default function RestPassword() {
 
   const navigate = useNavigate()
+  const{baseUrl,reqHeaders}=useContext(AuthContext)
 
   const {
     register,
@@ -15,17 +18,16 @@ export default function RestPassword() {
     handleSubmit
   } = useForm({ mode: "all" })
   
-  const reqHeaders = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NThhMTgyYjQ3ZWUyYjE0Zjk1NDY5OTAiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNDk3MTU4MSwiZXhwIjoxNzA2MTgxMTgxfQ.GNEwSislg2H1QrSh5o6qwWeex9TjICFe8v5gZwDcqo0"
 
   const onSubmit = (data:any) => {
     console.log(data);
     
-    axios.post("http://154.41.228.234:3000/api/v0/admin/users/reset-password", data, { 
-      headers: { Authorization: reqHeaders }
+    axios.post(`${baseUrl}/admin/users/reset-password`, data, { 
+      headers: reqHeaders 
     }
     ).then(response => {
-      console.log(response.data);
-      navigate("/signin")
+     
+      navigate("/auth/signin")
     })
       .catch(error => {
         console.error(error.data.data.message);
@@ -45,7 +47,7 @@ export default function RestPassword() {
           If you already have an account register
         </Typography>
         <Typography variant="body1" sx={{ marginBottom: '10px' }}>
-          You can <Link to={"/signin"} style={{ color: '#EB5148', fontWeight: 'bold' }}>Login here!</Link>
+          You can <Link to={"/auth/signin"} style={{ color: '#EB5148', fontWeight: 'bold' }}>Login here!</Link>
         </Typography>
 
         <form className={styles.signupForm} onSubmit={handleSubmit(onSubmit)} style={{marginTop: "7rem"}}>

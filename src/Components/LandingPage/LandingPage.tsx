@@ -23,7 +23,7 @@ export default function LandingPage() {
      {/* <Rate/> */}
  
       <Box sx={{width:'100%',height:"100vh", marginLeft:3}}>
-      {/* <Navbar/> */}
+      <Navbar/>
       <Date/>
       <Footer/>
       </Box>

@@ -47,7 +47,11 @@ function App() {
  
 const routes =createBrowserRouter([
   {
-    path:"/",element:<AuthLayout/>,errorElement:<NotFound/>,
+    path:"/",element:<LandingPage/>,errorElement:<NotFound/>
+  },
+  
+  {
+    path:"/auth",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
       {index:true,element:<>
        <LandingPage saveUserData={saveUserData}/>
@@ -97,7 +101,7 @@ const routes =createBrowserRouter([
     element:<UserLayout userData={userData}/>,
     errorElement:<NotFound/>,
     children:[
-      {index:true,element:<LandingPage />},
+     
   
       
 
