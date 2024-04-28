@@ -47,7 +47,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function Ads() {
   const [modalState, setModalState] = useState('close')
-  const {  handleSubmit, formState: { errors }, setValue, control } = useForm();
+  const { handleSubmit, formState: { errors }, setValue, control } = useForm();
   const handleClose = () => setModalState("close");
   const [ads, setAds] = useState([])
   const { baseUrl, reqHeaders } = useContext(AuthContext)
@@ -87,15 +87,17 @@ export default function Ads() {
 
   {/*Get All Ads */ }
   const getAllAds = () => {
-    axios.get(`${baseUrl}/admin/ads?page=${currentPage}&size=${rowsPerPage}`, { headers: reqHeaders }).then((response) => {
+    axios.get(`${baseUrl}/admin/ads?page=${currentPage}&size=${rowsPerPage}`,
+      { headers: reqHeaders })
+      .then((response) => {
 
 
 
-      setAds(response.data.data.ads)
-      setTotalPages(response.data.data.totalCount)
-    }).catch((error) => {
-      toast.error(error?.response?.message);
-    })
+        setAds(response.data.data.ads)
+        setTotalPages(response.data.data.totalCount)
+      }).catch((error) => {
+        toast.error(error?.response?.message);
+      })
   }
 
   const showDeleteModal = (id) => {
@@ -176,10 +178,10 @@ export default function Ads() {
               <img src={trash} alt="trash" />
             </Grid>
 
-            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ textAlign: "center",color:"white" }}>
+            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ textAlign: "center", color: "white" }}>
               Delete This Room?
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2, textAlign: "center" ,color:"white"}}>
+            <Typography id="modal-modal-description" sx={{ mt: 2, textAlign: "center", color: "white" }}>
               are you sure you want to delete this item ? if you are sure just click on delete it
             </Typography>
             <Grid sx={{ textAlign: 'right', mt: 3 }}>
@@ -214,61 +216,61 @@ export default function Ads() {
 
 
 
-                 
-                            <FormControl fullWidth sx={{ mt: 2 }}>
-                    <Controller
-                      name="discount"
-                      control={control}
-                      defaultValue=""
-                      render={({ field }) => (
-                        <TextField
-                          {...field}
-                          InputLabelProps={{
-                            style: { color: 'white' },
-                          }}
-                          sx={{
-                            bgcolor: '#203FC7',
-                            mb: 1,
-                            display: 'flex',
-                            justifyContent: 'flex-start',
-                            borderRadius: '7px',
-                            borderBottom: 'none',
-                          }}
-                          variant="filled"
-                          label="Discount"
-                          error={Boolean(errors.discount)}
-                          helperText={errors.discount && errors.discount.type === 'required' && 'Discount is required'}
-                        />
+
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                      <Controller
+                        name="discount"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            InputLabelProps={{
+                              style: { color: 'white' },
+                            }}
+                            sx={{
+                              bgcolor: '#203FC7',
+                              mb: 1,
+                              display: 'flex',
+                              justifyContent: 'flex-start',
+                              borderRadius: '7px',
+                              borderBottom: 'none',
+                            }}
+                            variant="filled"
+                            label="Discount"
+                            error={Boolean(errors.discount)}
+                            helperText={errors.discount && errors.discount.type === 'required' && 'Discount is required'}
+                          />
+                        )}
+                      />
+                    </FormControl>
+
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                      <InputLabel htmlFor="isActive" sx={{ color: 'white' }}>
+                        Active
+                      </InputLabel>
+                      <Controller
+                        name="isActive"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <Select
+                            {...field}
+                            error={Boolean(errors.isActive)}
+                          >
+                            <MenuItem value="" disabled>
+                              Active
+                            </MenuItem>
+                            <MenuItem value={true}>Yes</MenuItem>
+                            <MenuItem value={false}>No</MenuItem>
+                          </Select>
+                        )}
+                      />
+                      {errors.isActive && (
+                        <Typography color="error">This Field is required</Typography>
                       )}
-                    />
-                  </FormControl>
-                 
-                      <FormControl fullWidth sx={{ mt: 2 }}>
-                    <InputLabel htmlFor="isActive" sx={{ color: 'white' }}>
-                      Active
-                    </InputLabel>
-                    <Controller
-                      name="isActive"
-                      control={control}
-                      defaultValue=""
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          error={Boolean(errors.isActive)}
-                        >
-                          <MenuItem value="" disabled>
-                            Active
-                          </MenuItem>
-                          <MenuItem value={true}>Yes</MenuItem>
-                          <MenuItem value={false}>No</MenuItem>
-                        </Select>
-                      )}
-                    />
-                    {errors.isActive && (
-                      <Typography color="error">This Field is required</Typography>
-                    )}
-                  </FormControl>
-                  
+                    </FormControl>
+
 
                     <Grid item sx={{ textAlign: 'right', mt: 3 }}>
                       <Button type="submit" variant="contained" sx={{ bgcolor: " #203FC7" }} className="addAds">
@@ -352,7 +354,7 @@ export default function Ads() {
 
                       <MenuItem onClick={() => { handleClose(); showDeleteModal(ad?._id) }}>
                         <IconButton aria-label="delete" >
-                          < DeleteOutlineOutlinedIcon  />
+                          < DeleteOutlineOutlinedIcon />
                         </IconButton>
                         Delete
                       </MenuItem>

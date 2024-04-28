@@ -1,6 +1,5 @@
-import Rate from './sections/RateSection'
-import Navbar from "../Navbar/Navbar";
 import Footer from "../shared/Footer/Footer";
+import RateSection from './sections/RateSection'
 import {
   Grid,
   Typography,
@@ -8,28 +7,25 @@ import {
   Button,
   Container,
   Box,
- 
+
 } from "@mui/material";
-
-
 import Date from '../Date/Date.tsx';
-
-
+import MostPickedSection from "./sections/MostPicked/MostPickedSection.tsx";
 
 export default function LandingPage() {
 
   return (
     <div>
-     {/* <Rate/> */}
- 
-      <Box sx={{width:'100%',height:"100vh", marginLeft:3}}>
-      {/* <Navbar/> */}
-      <Date/>
-      <Footer/>
-      </Box>
-      
 
-     
+      <Box sx={{ height: "100vh", marginLeft: 3 }}>
+        <Date />
+        <MostPickedSection />
+        <RateSection />
+        <Footer />
+      </Box>
+
+
+
     </div>
   );
 }

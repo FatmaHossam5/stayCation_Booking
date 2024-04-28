@@ -18,6 +18,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { AuthContext } from "../../Context/AuthContext";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
+import Footer from "../shared/Footer/Footer";
 
 function AvailableRooms() {
 
@@ -225,6 +226,7 @@ const{role}=useContext(AuthContext)
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
       </Box>
+      <Footer />
     </>
   );
 }

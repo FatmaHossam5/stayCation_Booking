@@ -11,6 +11,8 @@ import { format } from "date-fns";
 import { toast } from "react-toastify";
 import PunchClockIcon from '@mui/icons-material/PunchClock';
 import { AuthContext } from "../../Context/AuthContext";
+import Footer from "../shared/Footer/Footer";
+import Review from "../LandingPage/sections/ReviewSection/Review";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -29,25 +31,25 @@ export default function DetailsRoom() {
   const startDate = `${format(dateRange[0]?.startDate, 'ddMMM')}`
   const endDate = `${format(dateRange[0]?.endDate, 'ddMMM')}`
   const { baseUrl } = useContext(AuthContext)
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
- // Navigate to the new component for creating a booking
- const handleCreateBooking = () => {
-  const totalPrice=roomDetails?.price * count
-  navigate(`/user/create-booking/${roomId}`, {
-    state: {
-      dateRange,
-      startDate,
-      endDate,
-      totalPrice,
-
-
+  // Navigate to the new component for creating a booking
+  const handleCreateBooking = () => {
+    const totalPrice = roomDetails?.price * count
+    navigate(`/user/create-booking/${roomId}`, {
+      state: {
+        dateRange,
+        startDate,
+        endDate,
+        totalPrice,
 
 
 
-    },
-  });
-};
+
+
+      },
+    });
+  };
 
 
 
@@ -88,7 +90,7 @@ export default function DetailsRoom() {
     <>
 
 
-  
+
       <Typography
         sx={{
           color: "#152C5B",
@@ -115,7 +117,7 @@ export default function DetailsRoom() {
         Bogor, Indonesia
       </Typography>
 
-      <Box sx={{ width: "100%", display: "flex", marginLeft: 5 }}>
+      <Box sx={{ display: "flex", marginLeft: 5 }}>
         {roomDetails && roomDetails?.images?.map((img, index) => (
           <img src={img} width={"30%"} style={{
             marginRight: '10px',
@@ -127,11 +129,6 @@ export default function DetailsRoom() {
         }
 
       </Box>
-
-
-
-
-
 
       <Container maxWidth="lg">
         <Box sx={{ width: "100%" }}>
@@ -203,7 +200,7 @@ export default function DetailsRoom() {
 
 
               </Grid>
-              
+
             </Grid>
 
             {/* data picker */}
@@ -270,6 +267,9 @@ export default function DetailsRoom() {
         </Box>
       </Container>
 
+      <Review />
+
+      <Footer />
     </>
   );
 }

@@ -45,7 +45,7 @@ export default function MyDate() {
   }
   return (
     <>
-    <Box sx={{display:"flex",justifyContent:"space-between",height:"100vh"}}>
+    <Box sx={{display:"flex",justifyContent:"space-around"}}>
     <Box>
       {/* Title and Description */}
     <Grid item xs={12} sx={{marginTop:3}} >

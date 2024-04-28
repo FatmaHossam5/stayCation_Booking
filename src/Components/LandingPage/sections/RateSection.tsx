@@ -12,18 +12,18 @@ import { AuthContext } from '../../../Context/AuthContext';
 export default function Rate() {
 
   const [rate, setRate] = useState()
-  // const { reqHeaders }: any = useContext(AuthContext)
-  const reqHeaders = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTlhMjAzNTYzODg0OGJjZTZmMDBmOTciLCJyb2xlIjoidXNlciIsInZlcmlmaWVkIjpmYWxzZSwiaWF0IjoxNzA1NjEyNDgwLCJleHAiOjE3MDY4MjIwODB9.3cdcgYBnwf4VNWPbMJcOn0sMPBtgPqY7_90Bmf5mxqw"
+  const { reqHeaders }: any = useContext(AuthContext)
+  // const reqHeaders = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWExNGIxYTI4M2I1NmY1NjgyMTMyNGYiLCJyb2xlIjoiYWRtaW4iLCJ2ZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwNjkzNjA2NCwiZXhwIjoxNzA4MTQ1NjY0fQ.PGglo-84cQAt_9lepJG5QIKunB_VSP-rLPwAwXJjnNw"
 
   const getReviews = () => {
-    axios.get("http://154.41.228.234:3000/api/v0/portal/room-reviews/65a995cca5d9953dd42d1152", {
+    axios.get("http://154.41.228.234:3000/api/v0/portal/room-reviews/65b997afecb3729b692d2e73", {
       headers: {
         Authorization: reqHeaders
       }
     })
       .then((response) => {
-        console.log(response.data.data.roomReviews);
-        setRate(response.data.data.roomReviews)
+        console.log(response);
+        setRate(response?.data?.data?.roomReviews)
       })
       .catch((error) => console.log(error))
   }

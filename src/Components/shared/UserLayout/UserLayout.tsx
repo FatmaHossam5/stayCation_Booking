@@ -6,21 +6,17 @@ import Footer from '../Footer/Footer'
 
 export default function UserLayout() {
   return (
-   
-    
+
+
     <Box >
-<Navbar/>
-<Box sx={{marginTop:3}}>
+      <Navbar />
+      <Box sx={{ marginTop: 3 }}>
 
-<Outlet/>
+        <Outlet />
 
-</Box>
-<Box>
-
-<Footer/>
-</Box>
+      </Box>
 
     </Box>
- 
+
   )
 }
