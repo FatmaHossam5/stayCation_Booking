@@ -14,7 +14,7 @@ export default function AuthContextProvider(props:any){
   let reqHeaders={
     Authorization:` ${localStorage.getItem("userToken")}`
   }
-  const baseUrl = "http://upskilling-egypt.com:3000/api/v0";
+  const baseUrl = "https://upskilling-egypt.com:3000/api/v0";
 
   const saveUserData = () => {
     const encodedToken:any = localStorage.getItem("userToken");

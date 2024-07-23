@@ -19,21 +19,17 @@ import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
 import AddRoom from './Components/AddRoom/AddRoom'
-import Navbar from './Components/Navbar/Navbar'
 import { AuthContext } from './Context/AuthContext'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import RoomDetails from './Components/RoomDetails/RoomDetails'
 import ChangePassword from './Components/ChangePassword/ChangePassword'
 import Facilities from './Components/Facilities/Facilities'
-import { ToastContainer } from 'react-toastify'
 import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
 import AddAds from './Components/AddAds/AddAds'
 import AvilableRooms from './Components/AvilableRooms/AvilableRooms'
-import MyDate from './Components/Date/Date'
 import UserLayout from './Components/shared/UserLayout/UserLayout'
 import BookingInfo from './Components/BookingInfo/BookingInfo'
 
-import Pay from './Components/Pay/Pay'
 import PaymentWrapper from './Components/Pay/PaymentWrapper'
 
 import FavoriteList from './Components/FavoriteList/FavoriteList'
@@ -41,7 +37,7 @@ import BookingDetails from './Components/BookingDetails/BookingDetails'
 
 function App() {
  
-  let {userData,saveUserData,role}:any=useContext(AuthContext)
+  let {userData,saveUserData}:any=useContext(AuthContext)
   
 
  
@@ -54,10 +50,10 @@ const routes =createBrowserRouter([
     path:"/auth",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
       {index:true,element:<>
-       <LandingPage saveUserData={saveUserData}/>
+       <LandingPage saveUserData:any={saveUserData}/>
       </>
    },
-      {path:"signin",element:<SignIn saveUserData={saveUserData}/>},
+      {path:"signin",element:<SignIn saveUserData:any={saveUserData}/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
