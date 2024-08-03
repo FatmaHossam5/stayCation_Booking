@@ -23,14 +23,15 @@ export default function Navbar() {
    }
   return (
   <>
+     <Box >
+      <AppBar position="static" sx={{bgcolor:'#FFFF',boxShadow:'none'}}>
+        <Toolbar sx={{display:'flex',justifyContent:'space-between'}}>
+          <Box sx={{paddingLeft:'90px'}} >
+          <img src={NavPhoto} alt="logo"  />
+          </Box>
+      
      <Box>
-      <AppBar position="static" sx={{bgcolor:'#FFFFFF',boxShadow:'none'}}>
-        <Toolbar className='fonts'>
-        <img src={NavPhoto} alt="logo"  />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-  
-          </Typography>
-          {isAuthenticated||role==='user'?(
+     {isAuthenticated||role==='user'?(
             <>
                <Link to ='/user'>
           <Button sx={{color:'#152C5B',px:"1rem",fontFamily:'cairo'}}>Home</Button>
@@ -55,6 +56,8 @@ export default function Navbar() {
           <Button>Sign In</Button>
           </Link>
           </>)}
+     </Box>
+
        
         </Toolbar>
       </AppBar>

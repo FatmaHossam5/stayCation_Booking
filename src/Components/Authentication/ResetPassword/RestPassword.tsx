@@ -1,11 +1,12 @@
 import { Typography, TextField, Button, Grid } from '@mui/material';
 import styles from '../SignUp/SignUp.module.scss';
-import signUpImage from "../../assets/Rectangle 8.png"
+import signUpImage from "../../../assets/Rectangle 8.png"
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useContext } from 'react';
-import { AuthContext } from '../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
+
 
 export default function RestPassword() {
 

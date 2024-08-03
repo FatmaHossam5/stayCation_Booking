@@ -1,34 +1,33 @@
-// import React from 'react';
-// import Slider from 'react-slick';
-// import 'slick-carousel/slick/slick.css';
-// import 'slick-carousel/slick/slick-theme.css';
+import React, { useEffect, useRef, useState } from 'react';
+import {motion} from 'framer-motion';
+import images from './images';
+import './Carousel.css';
 
-// import image1 from '../../assets/1.png';
-// import image2 from '../../assets/2.png';
-// import image3 from '../../assets/3.png';
+const Carousel = () =>{
+const [width,setWidth]=useState(0);
+const CarouselRef=useRef();
+useEffect(()=>{
+    console.log(CarouselRef.current.scrollWidth);
+    console.log(CarouselRef.current.offsetWidth);
 
-// const Carousel = () => {
-//   const settings = {
-//     dots: true,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 1,
-//     slidesToScroll: 1,
-//   };
+    
+    setWidth(CarouselRef.current.scrollWidth-CarouselRef.current.offsetWidth)
+},[])
 
-//   return (
-//     <Slider {...settings}>
-//       <div>
-//         <img src={image1} alt="Image 1" />
-//       </div>
-//       <div>
-//         <img src={image2} alt="Image 2" />
-//       </div>
-//       <div>
-//         <img src={image3} alt="Image 3" />
-//       </div>
-//     </Slider>
-//   );
-// };
+  return (
+<>
+<motion.div className='carousel' ref={CarouselRef}>
+    <motion.div drag='x' dragConstraints={{right:0,left:-width}} className='inner-carousel'>
+{images.map((image)=>(
+    <motion.div className='item'>
+        <img src={image} alt="pic" />
+    </motion.div>
+))}
 
-// export default Carousel;
+    </motion.div>
+</motion.div>
+</>
+  )
+};
+
+export default Carousel;

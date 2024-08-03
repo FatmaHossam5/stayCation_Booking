@@ -26,8 +26,8 @@ export default function DetailsRoom() {
   const location = useLocation();
   const count = location?.state?.count;
   const dateRange = location?.state?.ranges
-  const startDate = `${format(dateRange[0]?.startDate, 'ddMMM')}`
-  const endDate = `${format(dateRange[0]?.endDate, 'ddMMM')}`
+  const startDate = dateRange[0]?.format('YYYY-MM-DD');
+            const endDate = dateRange[1]?.format('YYYY-MM-DD');
   const { baseUrl } = useContext(AuthContext)
   const navigate=useNavigate();
 

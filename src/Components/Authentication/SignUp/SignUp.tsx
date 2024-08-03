@@ -1,6 +1,6 @@
 import { Typography, TextField, Button, Grid, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import styles from './SignUp.module.scss';
-import signUpImage from "../../assets/Rectangle 7.png"
+import signUpImage from "../../../assets/Rectangle 7.png"
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';

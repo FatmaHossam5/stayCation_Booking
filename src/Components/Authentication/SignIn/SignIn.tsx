@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import { Box, Typography, TextField, Button, Grid, FormControl } from '@mui/material';
-import signin from "../../assets/bg-signin.png";
+import signin from "../../../assets/bg-signin.png";
 import { useForm } from 'react-hook-form';
-import LoginFace from "../LoginFace/LoginFace";
+
 import axios from 'axios';
-import { AuthContext } from '../../Context/AuthContext';
+import { AuthContext } from '../../../Context/AuthContext';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 export default function SignIn() {

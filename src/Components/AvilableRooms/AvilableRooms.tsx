@@ -32,8 +32,8 @@ function AvailableRooms() {
   const { baseUrl, reqHeaders } = useContext(AuthContext)
   const count = location?.state?.count
   const dateRange = location?.state?.ranges
-  const startDate = `${format(dateRange[0]?.startDate, 'ddMMM')}`
-  const endDate = `${format(dateRange[0]?.endDate, 'ddMMM')}`
+  const startDate = dateRange && dateRange[0] ? format(new Date(dateRange[0]), 'dd MMM') : 'Invalid Date';
+  const endDate = dateRange && dateRange[1] ? format(new Date(dateRange[1]), 'dd MMM') : 'Invalid Date';
 const{role}=useContext(AuthContext)
 
   const fetchAvailableRooms = (page) => {
@@ -116,7 +116,7 @@ const{role}=useContext(AuthContext)
           });
         } else {
           toast.error("You have to sign In  !")
-          navigate('/signin');
+          navigate('/auth/signin');
         }
       })
       .catch((error) => {

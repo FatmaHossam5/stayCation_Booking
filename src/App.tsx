@@ -5,10 +5,7 @@ import './App.css'
 import AuthLayout from './Components/shared/AuthLayout/AuthLayout'
 import NotFound from './Components/shared/NotFound/NotFound'
 import LandingPage from './Components/LandingPage/LandingPage'
-import SignIn from './Components/SignIn/SignIn'
-import SignUp from './Components/SignUp/SignUp'
-import ForgetPassword from './Components/ForgetPassword/ForgetPassword'
-import RestPassword from './Components/ResetPassword/RestPassword'
+
 import MasterLayout from './Components/shared/MasterLayout/MasterLayout'
 import Home from './Components/Home/Home'
 import ContactInfo from './Components/ContactInfo/ContactInfo'
@@ -22,7 +19,7 @@ import AddRoom from './Components/AddRoom/AddRoom'
 import { AuthContext } from './Context/AuthContext'
 import { useContext } from 'react'
 import RoomDetails from './Components/RoomDetails/RoomDetails'
-import ChangePassword from './Components/ChangePassword/ChangePassword'
+
 import Facilities from './Components/Facilities/Facilities'
 import ProtectedRoute from './Components/shared/ProtectedRoute/ProtectedRoute'
 import AddAds from './Components/AddAds/AddAds'
@@ -34,6 +31,11 @@ import PaymentWrapper from './Components/Pay/PaymentWrapper'
 
 import FavoriteList from './Components/FavoriteList/FavoriteList'
 import BookingDetails from './Components/BookingDetails/BookingDetails'
+import ChangePassword from './Components/Authentication/ChangePassword/ChangePassword'
+import SignIn from './Components/Authentication/SignIn/SignIn'
+import SignUp from './Components/Authentication/SignUp/SignUp'
+import ForgetPassword from './Components/Authentication/ForgetPassword/ForgetPassword'
+import RestPassword from './Components/Authentication/ResetPassword/RestPassword'
 
 function App() {
  

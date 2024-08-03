@@ -1,30 +1,34 @@
-import Rate from './sections/RateSection'
-import Navbar from "../Navbar/Navbar";
-import Footer from "../shared/Footer/Footer";
 import {
-  Grid,
-  Typography,
-  Card,
-  Button,
-  Container,
-  Box,
- 
+  Box
 } from "@mui/material";
+import Navbar from "../Navbar/Navbar";
 
 
-import Date from '../Date/Date.tsx';
+import Carousel from '../Carousel/Carousel.tsx';
+import BookingSelector from './sections/BookingSelector.tsx';
+import RateSection from "./sections/RateSection.tsx";
+import Footer from "../shared/Footer/Footer.tsx";
 
 
 
 export default function LandingPage() {
 
+
+
+
+
+ 
+  
+
   return (
     <div>
      {/* <Rate/> */}
  
-      <Box sx={{width:'100%',height:"100vh", marginLeft:3}}>
+      <Box >
       <Navbar/>
-      <Date/>
+      <BookingSelector/>
+       <Carousel/>
+       <RateSection/>
       <Footer/>
       </Box>
       
