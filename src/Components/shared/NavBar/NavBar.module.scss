@@ -1,0 +1,111 @@
+// NavBar enhanced styles
+.navbar {
+  backdrop-filter: blur(8px);
+  background: rgba(226, 229, 235, 0.95);
+  transition: all 0.3s ease-in-out;
+  
+  &:hover {
+    background: rgba(226, 229, 235, 1);
+  }
+}
+
+// Enhanced search bar styles
+.searchContainer {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+// Improved button hover effects
+.actionButton {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+}
+
+// Enhanced avatar styles
+.userAvatar {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+}
+
+// Responsive improvements
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.5rem 1rem;
+  }
+  
+  .searchContainer {
+    margin: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.25rem 0.75rem;
+  }
+}
+
+// Loading animation for search
+.searchLoading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+// Enhanced menu styles
+.menuItem {
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    background: linear-gradient(135deg, rgba(25, 118, 210, 0.08), rgba(25, 118, 210, 0.12));
+    transform: translateX(4px);
+  }
+}
+
+// Notification badge enhancement
+.notificationBadge {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(-1px);
+  }
+}

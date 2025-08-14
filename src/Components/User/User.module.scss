@@ -1,0 +1,391 @@
+// User Component Enhanced Styles
+
+.userContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 1.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    padding: 2rem;
+  }
+}
+
+.header {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: #152C5B;
+  margin-bottom: 1rem;
+  
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.searchSection {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.searchField {
+  flex: 1;
+  min-width: 250px;
+  
+  .MuiOutlinedInput-root {
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: #e9ecef;
+    }
+    
+    &.Mui-focused {
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(21, 44, 91, 0.1);
+    }
+  }
+}
+
+.filterButton {
+  border-radius: 12px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.refreshButton {
+  border-radius: 12px !important;
+  background-color: #f8f9fa !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    background-color: #e9ecef !important;
+    transform: rotate(180deg);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.contentCard {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+// Table Styles
+.tableContainer {
+  .MuiTable-root {
+    .MuiTableHead-root {
+      .MuiTableRow-root {
+        .MuiTableCell-head {
+          background: linear-gradient(135deg, #152C5B 0%, #1e3a8a 100%);
+          color: white;
+          font-weight: 600;
+          font-size: 0.875rem;
+          padding: 1rem 1.5rem;
+          border-bottom: 2px solid #0f1f3d;
+        }
+      }
+    }
+    
+    .MuiTableBody-root {
+      .MuiTableRow-root {
+        transition: all 0.2s ease;
+        
+        &:nth-of-type(even) {
+          background-color: #f8f9fa;
+        }
+        
+        &:hover {
+          background-color: #e3f2fd;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .MuiTableCell-body {
+          padding: 1rem 1.5rem;
+          border-bottom: 1px solid #e0e0e0;
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}
+
+// Mobile Card Styles
+.mobileCard {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    
+    .avatar {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #152C5B 0%, #1e3a8a 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+    
+    .userDetails {
+      .userName {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #152C5B;
+        margin-bottom: 0.25rem;
+      }
+      
+      .roleChip {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-weight: 500;
+      }
+    }
+  }
+  
+  .cardContent {
+    padding: 1rem;
+    
+    .infoGrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .infoItem {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      
+      .icon {
+        color: #6c757d;
+        font-size: 1rem;
+      }
+      
+      .text {
+        font-size: 0.875rem;
+        color: #495057;
+        word-break: break-word;
+      }
+    }
+  }
+}
+
+// Loading States
+.loadingContainer {
+  padding: 2rem;
+  
+  .skeletonCard {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Empty State
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #6c757d;
+  
+  .icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #495057;
+  }
+  
+  .description {
+    font-size: 1rem;
+    color: #6c757d;
+  }
+}
+
+// Action Buttons
+.actionButton {
+  border-radius: 8px !important;
+  padding: 0.5rem !important;
+  transition: all 0.2s ease !important;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+  
+  &.viewButton {
+    color: #152C5B !important;
+  }
+  
+  &.editButton {
+    color: #ff9800 !important;
+  }
+  
+  &.deleteButton {
+    color: #f44336 !important;
+  }
+}
+
+// Pagination
+.pagination {
+  border-top: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+  
+  .MuiTablePagination-root {
+    .MuiTablePagination-selectLabel,
+    .MuiTablePagination-displayedRows {
+      font-size: 0.875rem;
+      color: #495057;
+    }
+  }
+}
+
+// Responsive Utilities
+.hideMobile {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+
+.showMobile {
+  @media (min-width: 769px) {
+    display: none !important;
+  }
+}
+
+// Accessibility
+.focusVisible {
+  &:focus-visible {
+    outline: 2px solid #152C5B;
+    outline-offset: 2px;
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: high) {
+  .contentCard {
+    border: 2px solid #152C5B;
+  }
+  
+  .mobileCard {
+    border: 2px solid #152C5B;
+  }
+  
+  .actionButton {
+    border: 1px solid currentColor;
+  }
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  .contentCard,
+  .mobileCard,
+  .actionButton,
+  .refreshButton,
+  .filterButton {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .refreshButton:hover {
+    transform: none !important;
+  }
+}
+
+// Dark Mode Support (if needed)
+@media (prefers-color-scheme: dark) {
+  .userContainer {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+  
+  .header,
+  .contentCard,
+  .mobileCard {
+    background: #2d2d2d;
+    color: #ffffff;
+  }
+  
+  .searchField .MuiOutlinedInput-root {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+}

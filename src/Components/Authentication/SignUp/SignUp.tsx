@@ -1,190 +1,384 @@
-import { Typography, TextField, Button, Grid, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
-import styles from './SignUp.module.scss';
-import signUpImage from "../../../assets/Rectangle 7.png"
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { 
+  Box, 
+  MenuItem, 
+  FormControl, 
+  InputLabel, 
+  Select,
+  Divider,
+  Grid
+} from '@mui/material';
+import { CloudUpload } from '@mui/icons-material';
+import signUpImage from "../../../assets/Rectangle 7.png";
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import { userService, handleApiError } from '../../../services/api';
+import { 
+  AuthLayout, 
+  FormContainer, 
+  ErrorAlert, 
+  SuccessSnackbar, 
+  LinkText,
+  EmailField,
+  PasswordField,
+  ConfirmPasswordField,
+  SubmitButton,
+  CustomField
+} from '../../shared/common';
+
+interface SignUpForm {
+  userName: string;
+  phoneNumber: string;
+  email: string;
+  country: string;
+  password: string;
+  confirmPassword: string;
+  role: string;
+  profileImage: File | null;
+}
 
 export default function SignUp() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const {
+    control,
     register,
-    formState: { errors },
-    handleSubmit
-  } = useForm({
-    userName: null,
-    phoneNumber: null,
-    email: null,
-    country: null,
-    password: null,
-    confirmPassword: null,
-    role: "admin"
-  }, { mode: "all" })
+    formState: { errors, isValid },
+    handleSubmit,
+    watch
+  } = useForm<SignUpForm>({
+    mode: "onBlur",
+    defaultValues: {
+      userName: '',
+      phoneNumber: '',
+      email: '',
+      country: '',
+      password: '',
+      confirmPassword: '',
+      role: "user",
+      profileImage: null
+    }
+  });
 
-  const reqHeaders = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTkyYWU3N2U1ZDI5NDhiOGJmMjAyZjciLCJyb2xlIjoidXNlciIsInZlcmlmaWVkIjpmYWxzZSwiaWF0IjoxNzA0OTg4MjExLCJleHAiOjE3MDYxOTc4MTF9.7ifBQJbVy2W2crDEQphbdhh1Coia-Z10nCbnBbb__LU"
-  
-  const onSubmit = (data:any) => {
+  const password = watch("password");
 
-    const formData = new FormData()
-    formData.append('userName', data.userName)
-    formData.append('email', data.email)
-    formData.append('password', data.password)
-    formData.append('confirmPassword', data.confirmPassword)
-    formData.append('phoneNumber', data.phoneNumber)
-    formData.append('country', data.country)
-    formData.append('role', data.role)
-    formData.append('profileImage', data.profileImage[0])
+  const onSubmit = async (data: SignUpForm) => {
+    setIsLoading(true);
+    setSubmitError('');
 
-    axios.post("http://154.41.228.234:3000/api/v0/admin/users", formData
-    , { 
-      headers: { Authorization: reqHeaders }
-    } 
-    ).then(response => {
-      console.log(response.data.data.userCreated);
-    })
-      .catch(error => {
-        console.error(error.response.data.message);
-      });
-  }
+    // Validate profile image
+    if (!selectedFile) {
+      setSubmitError('Profile image is required');
+      setIsLoading(false);
+      return;
+    }
+
+    // Validate file type
+    if (!selectedFile.type.startsWith('image/')) {
+      setSubmitError('Please select a valid image file');
+      setIsLoading(false);
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (selectedFile.size > 5 * 1024 * 1024) {
+      setSubmitError('Image file size must be less than 5MB');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('userName', data.userName);
+      formData.append('email', data.email);
+      formData.append('password', data.password);
+      formData.append('confirmPassword', data.confirmPassword);
+      formData.append('phoneNumber', data.phoneNumber);
+      formData.append('country', data.country);
+      formData.append('role', data.role);
+      formData.append('profileImage', selectedFile);
+
+      const response = await userService.register(formData);
+      
+      setSuccessMessage('Registration successful! Redirecting to login...');
+      setShowSuccess(true);
+      
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        window.location.href = '/auth/signin';
+      }, 2000);
+      
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      setSubmitError(handleApiError(error));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setSubmitError('Please select a valid image file');
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setSubmitError('Image file size must be less than 5MB');
+        return;
+      }
+
+      setSelectedFile(file);
+      setSubmitError(''); // Clear any previous errors
+    }
+  };
 
   return (
-    <Grid container sx={{ position: "relative" }} className={styles.signupContainer} >
+    <AuthLayout
+      title="Create Account"
+      subtitle="Join StayCation and start your journey with us. Please fill in your details to create your account."
+      image={signUpImage}
+      imageAlt="Sign Up"
+    >
+      {/* Error Alert */}
+      <ErrorAlert error={submitError} />
 
+      {/* Form */}
+      <FormContainer onSubmit={handleSubmit(onSubmit)}>
+        {/* Personal Information Section */}
+        <Box sx={{ mb: 1.5 }}>
+          <Box sx={{ 
+            fontSize: '15px', 
+            fontWeight: 600, 
+            color: '#333', 
+            mb: 1,
+            fontFamily: 'Poppins, sans-serif'
+          }}>
+            Personal Information
+          </Box>
+          
+                     <Grid container spacing={3}>
+             <Grid item xs={12} sm={6}>
+               <CustomField
+                 control={control}
+                 errors={errors}
+                 name="userName"
+                 label="Username"
+                 placeholder="Enter your username"
+                 validation={{
+                   required: 'Username is required',
+                   minLength: {
+                     value: 3,
+                     message: 'Username must be at least 3 characters'
+                   }
+                 }}
+               />
+             </Grid>
+             <Grid item xs={12} sm={6}>
+               <CustomField
+                 control={control}
+                 errors={errors}
+                 name="phoneNumber"
+                 label="Phone Number"
+                 type="tel"
+                 placeholder="Enter your phone number"
+                 validation={{
+                   required: 'Phone number is required',
+                   pattern: {
+                     value: /^[+]?[\d\s\-\(\)]+$/,
+                     message: 'Please enter a valid phone number'
+                   }
+                 }}
+               />
+             </Grid>
+           </Grid>
 
-      <Grid item sm={1}>
-        <Typography variant="h4" sx={{ position: "absolute", top: "30px" }}>
-          <span style={{ color: '#3252DF' }}>Stay</span>cation.</Typography>
-      </Grid>
+           <Grid container spacing={3}>
+             <Grid item xs={12} sm={6}>
+               <EmailField
+                 control={control}
+                 errors={errors}
+                 placeholder="Enter your email address"
+               />
+             </Grid>
+             <Grid item xs={12} sm={6}>
+               <CustomField
+                 control={control}
+                 errors={errors}
+                 name="country"
+                 label="Country"
+                 placeholder="Enter your country"
+                 validation={{
+                   required: 'Country is required'
+                 }}
+               />
+             </Grid>
+           </Grid>
 
-      <Grid item xs={12} sm={4} >
-        <Typography variant="h5">Sign Up</Typography>
-        <Typography variant="body1" sx={{ marginTop: '10px' }}>
-          If you already have an account register
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: '10px' }}>
-          You can <Link to={"/signin"} style={{ color: '#EB5148', fontWeight: 'bold' }}>Login here!</Link>
-        </Typography>
-
-        <form className={styles.signupForm} onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor=""> Username </label>
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            placeholder='Please type here ...'
-            sx={{ '& input': { padding: '10px' } }}
-            type='text'
-            {...register("userName", { required: true })}
-          />
-          {errors.userName && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
-
-          <Grid container >
-            <Grid item sm={6} >
-              <Grid alignItems="center">
-                <Grid item>
-                  <label>Phone Number</label>
-                </Grid>
-                <Grid item>
-                  <TextField
-                    id="filled-basic"
-                    variant="filled"
-                    placeholder='Please type here'
-                    sx={{ width: "90%", '& input': { padding: '10px' } }}
-                    type='tel'
-                   
-                    {...register("phoneNumber", { required: true,
-                    pattern: /^[0-9+ -]*$/ })}
-                  />
-                </Grid>
+           <Grid container spacing={3}>
+             <Grid item xs={12} sm={6}>
+               <CustomField
+                 control={control}
+                 errors={errors}
+                 name="role"
+                 label="Role"
+                 validation={{
+                   required: 'Role is required'
+                 }}
+                 startIcon={<CloudUpload />}
+                 endIcon={
+                   <FormControl fullWidth>
+                     <Select
+                       defaultValue="user"
+                       sx={{
+                         '& .MuiSelect-select': {
+                           padding: '12px 16px',
+                           backgroundColor: '#F8F9FA',
+                           borderRadius: 1.5,
+                           '&:hover': {
+                             backgroundColor: '#F1F3F4'
+                           },
+                           '&.Mui-focused': {
+                             backgroundColor: '#FFFFFF'
+                           }
+                         }
+                       }}
+                     >
+                       <MenuItem value="user">User</MenuItem>
+                       <MenuItem value="admin">Admin</MenuItem>
+                     </Select>
+                   </FormControl>
+                 }
+               />
+             </Grid>
+                           <Grid item xs={12} sm={6}>
+                <Box>
+                  <Box sx={{ 
+                    fontSize: '13px', 
+                    fontWeight: 500, 
+                    color: '#333333', 
+                    mb: 0.25,
+                    fontFamily: 'Poppins, sans-serif'
+                  }}>
+                    Profile Image *
+                  </Box>
+                  <Box
+                    sx={{
+                      border: '2px dashed #ddd',
+                      borderRadius: 1.5,
+                      p: 2,
+                      textAlign: 'center',
+                      cursor: 'pointer',
+                      backgroundColor: '#F8F9FA',
+                      '&:hover': {
+                        backgroundColor: '#F1F3F4',
+                        borderColor: '#999'
+                      }
+                    }}
+                    onClick={() => document.getElementById('profile-image-input')?.click()}
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      style={{ display: 'none' }}
+                      id="profile-image-input"
+                      required
+                    />
+                    <CloudUpload sx={{ fontSize: 40, color: '#666', mb: 1 }} />
+                    <Box sx={{ color: '#666', fontSize: '14px' }}>
+                      {selectedFile ? selectedFile.name : 'Click to upload profile image'}
+                    </Box>
+                    {selectedFile && (
+                      <Box sx={{ color: '#999', fontSize: '12px', mt: 0.5 }}>
+                        {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                      </Box>
+                    )}
+                  </Box>
+                  {errors.profileImage && (
+                    <Box sx={{ color: 'error.main', fontSize: '12px', mt: 0.5 }}>
+                      {errors.profileImage.message}
+                    </Box>
+                  )}
+                </Box>
               </Grid>
-              {errors.phoneNumber && (
-                <Typography sx={{ margin: "0px", color: "red" }}>Field is required</Typography>
-              )}
-            </Grid>
+           </Grid>
+        </Box>
 
-            <Grid item sm={6} >
-              <Grid spacing={1} alignItems="center">
-                <Grid item>
-                  <label >country</label>
-                </Grid>
-                <Grid item>
-                  <TextField
-                    id="filled-basic"
-                    variant="filled"
-                    placeholder='Please type here'
-                    sx={{ width: "100%", '& input': { padding: '10px' } }}
-                    type='text'
-                    {...register("country", { required: true })}
-                  />
-                </Grid>
-              </Grid>
-              {errors.country && (
-                <Typography sx={{ margin: "0px", color: "red" }}>Field is required</Typography>
-              )}
-            </Grid>
-          </Grid>
+        <Divider sx={{ my: 1.5 }} />
 
-          <label htmlFor=""> Email </label>
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            placeholder='Please type here '
-            sx={{ '& input': { padding: '10px' } }}
-            type="email"
-            {...register("email", { required: true })} />
-          {errors.email && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
+        {/* Security Section */}
+        <Box sx={{ mb: 1.5 }}>
+          <Box sx={{ 
+            fontSize: '15px', 
+            fontWeight: 600, 
+            color: '#333', 
+            mb: 1,
+            fontFamily: 'Poppins, sans-serif'
+          }}>
+            Security
+          </Box>
+          
+                     <Grid container spacing={3}>
+             <Grid item xs={12} sm={6}>
+               <PasswordField
+                 control={control}
+                 errors={errors}
+                 showPassword={showPassword}
+                 onTogglePassword={() => setShowPassword(!showPassword)}
+                 label="Password"
+                 placeholder="Create a strong password"
+               />
+             </Grid>
+             <Grid item xs={12} sm={6}>
+               <ConfirmPasswordField
+                 control={control}
+                 errors={errors}
+                 showConfirmPassword={showConfirmPassword}
+                 onToggleConfirmPassword={() => setShowConfirmPassword(!showConfirmPassword)}
+                 password={password}
+                 label="Confirm Password"
+                 placeholder="Confirm your password"
+               />
+             </Grid>
+           </Grid>
+        </Box>
 
-          <label htmlFor=""> Password </label>
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            placeholder='Please type here '
-            sx={{ '& input': { padding: '10px' } }}
-            type='password'
-            {...register("password", { required: true })} />
-          {errors.password && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
+        {/* Submit Button */}
+        <SubmitButton
+          isLoading={isLoading}
+          isValid={isValid}
+        >
+          {isLoading ? 'Creating Account...' : 'Create Account'}
+        </SubmitButton>
+      </FormContainer>
 
-          <label htmlFor=""> Confirm Password </label>
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            placeholder='Please type here '
-            sx={{ '& input': { padding: '10px' } }}
-            type='password'
-            {...register("confirmPassword", { required: true })} />
-          {errors.confirmPassword && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
+      {/* Links to Sign In and Forgot Password */}
+      <Box sx={{ mt: 1.5, textAlign: 'center' }}>
+        <LinkText to="/auth/signin" linkText="Sign in here">
+          Already have an account?
+        </LinkText>
+                 <Box sx={{ mt: 1 }}>
+           <LinkText to="/auth/forget-pass" linkText="Forgot your password?">
+             Having trouble signing in?
+           </LinkText>
+         </Box>
+      </Box>
 
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            sx={{ '& input': { padding: '5px' }, display:"none" }}
-            {...register("role", { required: true })}
-            value={"user"}
-          />
-
-          <label htmlFor=""> profile image </label>
-          <TextField
-            type='file'
-            id="filled-basic"
-            variant="filled"
-            sx={{ width: "100%", '& input': { padding: '5px' }, marginBottom: "5px" }}
-            {...register("profileImage", { required: true })}
-          />
-
-          {errors.profileImage && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
-
-          <Button variant="contained" color="primary" type="submit">
-            Sign Up
-          </Button>
-        </form>
-      </Grid>
-
-      {/* <Grid item sm={1}></Grid> */}
-
-
-      <Grid item xs={12} sm={6} sx={{ textAlign: 'end' }}>
-        <img src={signUpImage} alt="Signup" />
-      </Grid>
-
-    </Grid >
+      {/* Success Snackbar */}
+      <SuccessSnackbar
+        open={showSuccess}
+        message={successMessage}
+        onClose={() => setShowSuccess(false)}
+      />
+    </AuthLayout>
   );
 }

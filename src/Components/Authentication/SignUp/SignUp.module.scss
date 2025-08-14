@@ -1,42 +1,37 @@
 // signup.module.scss
 
 .signupContainer {
-    height: 100vh;
-    // justify-content: space-around;
-    align-items: center;
-    justify-content: space-evenly;
-}
-
-.formContainer {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-family: Poppins;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .signupForm {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
 }
 
-.signupImage {
-    // padding-left: 9rem;
-    // width: 80%;
-    text-align: end !important;
+// Responsive adjustments
+@media (max-width: 768px) {
+  .signupContainer {
+    padding: 16px;
+  }
+  
+  .signupForm {
+    gap: 12px;
+  }
 }
 
-#filled-basic {
-    padding: 0 !important;
-}
-.test{
-    align-items: center;
-    justify-content: space-evenly;
-}
-.test2{
-    width: 40%;
+@media (max-width: 480px) {
+  .signupContainer {
+    padding: 12px;
+  }
+  
+  .signupForm {
+    gap: 10px;
+  }
 }

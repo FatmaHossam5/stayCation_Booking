@@ -1,21 +1,222 @@
-.inner-carousel {
-    display: flex;
-}
-
+/* Enhanced Carousel Styles */
 .carousel {
     overflow: hidden;
     cursor: grab;
+    position: relative;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.carousel:active {
+    cursor: grabbing;
+}
+
+.inner-carousel {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .item {
-    min-height: 25rem;
-    min-width: 20rem;
-    padding: 40px 20px;
+    min-height: 460px;
+    min-width: 320px;
+    padding: 24px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.item:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(21, 44, 91, 0.2);
+}
+
+.item:focus-visible {
+    outline: 2px solid #152C5B;
+    outline-offset: 2px;
 }
 
 .item img {
     width: 100%;
-    height: 100%;
-    border-radius: 2rem;
+    height: 220px;
+    border-radius: 12px;
     pointer-events: none;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 16px;
+}
+
+.item:hover img {
+    transform: scale(1.08);
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 1400px) {
+    .inner-carousel {
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .item {
+        min-height: 440px;
+        min-width: 300px;
+        padding: 20px;
+    }
+    
+    .item img {
+        height: 200px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .inner-carousel {
+        gap: 18px;
+        padding: 18px;
+    }
+    
+    .item {
+        min-height: 420px;
+        min-width: 280px;
+        padding: 18px;
+    }
+    
+    .item img {
+        height: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .inner-carousel {
+        gap: 16px;
+        padding: 16px;
+    }
+    
+    .item {
+        min-height: 400px;
+        min-width: 260px;
+        padding: 16px;
+    }
+    
+    .item img {
+        height: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .inner-carousel {
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .item {
+        min-height: 380px;
+        min-width: 240px;
+        padding: 12px;
+    }
+    
+    .item img {
+        height: 140px;
+    }
+}
+
+/* Smooth scrolling for better UX */
+.inner-carousel {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar for webkit browsers */
+.carousel::-webkit-scrollbar {
+    height: 8px;
+}
+
+.carousel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.carousel::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Animation enhancements */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.item {
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus states for accessibility */
+.item:focus-within {
+    box-shadow: 0 0 0 3px rgba(21, 44, 91, 0.2);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .item {
+        border: 2px solid #152C5B;
+    }
+    
+    .item:hover {
+        border-color: #152C5B;
+        box-shadow: 0 12px 40px rgba(21, 44, 91, 0.3);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .item,
+    .item img,
+    .inner-carousel {
+        transition: none;
+        animation: none;
+    }
+    
+    .item:hover {
+        transform: none;
+    }
+    
+    .item:hover img {
+        transform: none;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .item:hover {
+        transform: none;
+    }
+    
+    .item:hover img {
+        transform: none;
+    }
+    
+    .item:active {
+        transform: scale(0.98);
+    }
 }

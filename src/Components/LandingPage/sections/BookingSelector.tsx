@@ -1,42 +1,16 @@
-import { Box, Button, Grid, IconButton, TextField, Typography, createTheme, useTheme } from '@mui/material';
-import React, { useState } from 'react';
-import Date from '../../Date/Date';
-import { Add, Remove } from "@mui/icons-material";
-import { useNavigate } from 'react-router';
+import { Add, Remove, Search, Star } from "@mui/icons-material";
+import { Box, Button, Chip, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { Dayjs } from 'dayjs';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import bannar from '../../../assets/banner.png';
+import Date from '../../Date/Date';
 
 interface BookingSelectorProps {
-    selectedDateRange: [Dayjs | null, Dayjs | null];
+    selectedDateRange?: [Dayjs | null, Dayjs | null];
 }
 
-export const Theme = createTheme({
-    typography: {
-        
-        h3: {
-            fontSize: '2rem',
-            fontWeight:'500'
-
-            
-        },
-        h5:{
-            fontWeight:'500'
-        },
-        body1:{
-            fontWeight:'500'
-        },
-        caption: {
-            fontSize:'1rem',
-            display: '-webkit-box',
-            WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 2,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-        }
-    }
-});
-
-export default function BookingSelector({ selectedDateRange }: BookingSelectorProps) {
+export default function BookingSelector({ selectedDateRange = [null, null] }: BookingSelectorProps) {
     const [bookingGuestCount, setBookingGuestCount] = useState(1);
     const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>(selectedDateRange);
     const navigate = useNavigate();
@@ -72,94 +46,211 @@ export default function BookingSelector({ selectedDateRange }: BookingSelectorPr
     };
 
     return (
-        <>
-            <Grid container  spacing={2} sx={{display:'flex'}}>
-                <Grid item sm={12} md={5} lg={5} sx={{ marginTop:'20px',marginLeft:'55px' }} >
-                    <Typography sx={{paddingLeft:'60px', paddingBottom:'10px'}} variant="h3" color="darkblue">
-                        Forget Busy Work, Start Next Vacation
-                    </Typography>
-                    <Typography   variant="caption" color="GrayText" sx={{ paddingLeft:'60px',paddingBottom:'10px' }}>
-                        We provide what you need to enjoy your holiday with family. Time to make another memorable moments.
-                    </Typography>
-
-                    <Typography sx={{paddingLeft:'60px',paddingBottom:'10px'}} variant="h5" color="darkblue">
-                        Start Booking
-                    </Typography>
-                    <Box sx={{paddingLeft:'60px',paddingBottom:'10px'}} >
-                        <Typography sx={{paddingBottom:'10px'}} variant="h5" color="Highlight">
-                            Pick a Date
+        <Box sx={{ py: { xs: 4, md: 8 } }}>
+            <Grid container spacing={{ xs: 3, md: 6 }} alignItems="flex-start">
+                {/* Content Column */}
+                <Grid item xs={12} md={6} lg={5}>
+                    <Box sx={{ 
+                        maxWidth: { md: '500px' },
+                        mx: 'auto',
+                        textAlign: { xs: 'center', md: 'left' }
+                    }}>
+                        <Typography 
+                            variant="h2" 
+                            color="primary"
+                            sx={{ 
+                                mb: 2,
+                                fontWeight: 'bold',
+                                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                                lineHeight: 1.2
+                            }}
+                        >
+                            Forget Busy Work, Start Next Vacation
                         </Typography>
-                        <Date onDateRangeChange={handleDateRangeChange} />
-                        <Box sx={{paddingLeft:'7px',paddingTop:'20px'}} >
-                            <IconButton     sx={{
-                     backgroundColor: theme.palette.primary.main,
-                     color:"white",
-         fontSize: { xs: "1px", sm: "1px", md: "1px" },
-          padding: { xs: "8px 16px", sm: "10px 20px", md: "12px 24px" },
-          width: { xs: "15rem", sm: "50px" },
-          height: { xs: "40px", sm: "50px" },
-          borderRadius: "12px",
-          p: "8px",
-          mr: { xs: "5px", sm: "10px" },
-          ml: "5px",
-          "&:hover": {
-            backgroundColor: theme.palette.primary.main, 
-            color: theme.palette.secondary.contrastText, 
-            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)', 
-            transform: 'scale(1.05)', 
-        }
-        }} aria-label="increase" onClick={handleIncrease}  >
-                                <Add />
-                            </IconButton>
-                            <TextField
-                                id="person"
-                                label="Capacity"
-                                value={`${bookingGuestCount} person`}
-                                sx={
-                                    {
-                                        marginLeft:'6px'
-                                    }
-                                }
-                            />
-                            <IconButton   sx={{
-                                backgroundColor:theme.palette.error.main,
-                                color:'white'
-,          fontSize: { xs: "1px", sm: "1px", md: "1px" },
-          padding: { xs: "8px 16px", sm: "10px 20px", md: "12px 24px" },
-          width: { xs: "15rem", sm: "50px" },
-          height: { xs: "40px", sm: "50px" },
-          borderRadius: "12px",
-          p: "8px",
-          mr: { xs: "5px", sm: "10px" },
-          ml: "12px",
-          "&:hover": {
-            backgroundColor: theme.palette.error.main, 
-            color: theme.palette.secondary.contrastText, 
-            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)', 
-            transform: 'scale(1.05)', 
-        },
-        }} aria-label="decrease" onClick={handleDecrease}>
-                                <Remove />
-                            </IconButton>
-                        </Box>
-                    
-                        <Button onClick={handleExplore} variant='contained' sx={{
-                            marginTop:"20px",
-                            padding:"12px 140px",
-                            marginLeft:'12px'
-                         
-                          
+                        
+                        <Typography 
+                            variant="h6" 
+                            sx={{ 
+                                mb: 4,
+                                color: 'text.secondary',
+                                lineHeight: 1.5,
+                                fontSize: { xs: '1rem', md: '1.1rem' }
+                            }}
+                        >
+                            We provide what you need to enjoy your holiday with family. Time to make another memorable moments.
+                        </Typography>
+
+                        {/* Compact Stats Section */}
+                        <Box sx={{ 
+                            display: 'flex', 
+                            gap: { xs: 2, md: 3 }, 
+                            mb: 4,
+                            justifyContent: { xs: 'center', md: 'flex-start' },
+                            flexWrap: 'wrap'
                         }}>
-                            Explore
-                        </Button>
-             
-               
+                            <Chip 
+                                icon={<Star sx={{ color: '#FFD700' }} />}
+                                label="4.8★ Rating"
+                                variant="filled"
+                                sx={{ 
+                                    fontSize: { xs: '0.9rem', md: '1rem' },
+                                    fontWeight: '600',
+                                    backgroundColor: '#FFF3E0',
+                                    color: '#E65100',
+                                    border: '1px solid #FFB74D',
+                                    '&:hover': {
+                                        backgroundColor: '#FFE0B2'
+                                    }
+                                }}
+                            />
+                            <Chip 
+                                label="1000+ Happy Guests"
+                                variant="filled"
+                                sx={{ 
+                                    fontSize: { xs: '0.9rem', md: '1rem' },
+                                    fontWeight: '600',
+                                    backgroundColor: '#E8F5E8',
+                                    color: '#2E7D32',
+                                    border: '1px solid #81C784',
+                                    '&:hover': {
+                                        backgroundColor: '#C8E6C9'
+                                    }
+                                }}
+                            />
+                            <Chip 
+                                label="50+ Luxury Rooms"
+                                variant="filled"
+                                sx={{ 
+                                    fontSize: { xs: '0.9rem', md: '1rem' },
+                                    fontWeight: '600',
+                                    backgroundColor: '#F3E5F5',
+                                    color: '#7B1FA2',
+                                    border: '1px solid #BA68C8',
+                                    '&:hover': {
+                                        backgroundColor: '#E1BEE7'
+                                    }
+                                }}
+                            />
+                        </Box>
+
+                        {/* Booking Form */}
+                        <Box sx={{ 
+                            p: { xs: 3, md: 4 },
+                            border: '1px solid',
+                            borderColor: 'grey.200',
+                            borderRadius: 2,
+                            backgroundColor: 'background.paper',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                        }}>
+                            <Typography 
+                                variant="h5" 
+                                sx={{ 
+                                    mb: 3,
+                                    textAlign: 'center',
+                                    fontSize: { xs: '1.2rem', md: '1.4rem' },
+                                    fontWeight: '600'
+                                }}
+                            >
+                                Find Your Perfect Stay
+                            </Typography>
+                            
+                            <Date onDateRangeChange={handleDateRangeChange} />
+                            
+                            {/* Guest Counter */}
+                            <Box sx={{ 
+                                mt: 3,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 2,
+                                justifyContent: 'space-between'
+                            }}>
+                                <Typography variant="body1" sx={{ fontWeight: '500' }}>
+                                    Number of Guests
+                                </Typography>
+                                
+                                <Box sx={{ 
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    border: '1px solid',
+                                    borderColor: 'grey.300',
+                                    borderRadius: 1,
+                                    p: 1
+                                }}>
+                                    <IconButton
+                                        onClick={handleDecrease}
+                                        disabled={bookingGuestCount <= 1}
+                                        size="small"
+                                        sx={{ width: 32, height: 32 }}
+                                    >
+                                        <Remove fontSize="small" />
+                                    </IconButton>
+                                    
+                                    <Typography sx={{ 
+                                        minWidth: '60px',
+                                        textAlign: 'center',
+                                        fontSize: '0.9rem',
+                                        fontWeight: '500'
+                                    }}>
+                                        {bookingGuestCount}
+                                    </Typography>
+                                    
+                                    <IconButton
+                                        onClick={handleIncrease}
+                                        size="small"
+                                        sx={{ width: 32, height: 32 }}
+                                    >
+                                        <Add fontSize="small" />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+
+                            {/* Search Button */}
+                            <Button 
+                                onClick={handleExplore} 
+                                variant="contained" 
+                                size="large"
+                                fullWidth
+                                startIcon={<Search />}
+                                sx={{
+                                    mt: 3,
+                                    py: 1.5,
+                                    fontSize: { xs: '1rem', md: '1.1rem' },
+                                    fontWeight: '600',
+                                    borderRadius: 2
+                                }}
+                                disabled={!dateRange[0] || !dateRange[1]}
+                            >
+                                Search Available Rooms
+                            </Button>
+                        </Box>
                     </Box>
                 </Grid>
-                <Grid item sx={{margin:{sm:'20px'},marginLeft:{lg:'100px'}}} sm={12} md={5} lg={5} >
-                    <img src={bannar} alt="pic" />
+
+                {/* Image Column */}
+                <Grid item xs={12} md={6} lg={7}>
+                    <Box sx={{ 
+                        display: 'flex',
+                        justifyContent: { xs: 'center', md: 'flex-end' },
+                        alignItems: 'flex-start',
+                        pt: { xs: 2, md: 0 }
+                    }}>
+                        <Box
+                            component="img"
+                            src={bannar}
+                            alt="Vacation destination"
+                            sx={{
+                                width: { xs: '100%', md: '90%', lg: '85%' },
+                                height: 'auto',
+                                transition: 'all 0.3s ease-in-out',
+                                '&:hover': {
+                                    transform: 'scale(1.02)'
+                                }
+                            }}
+                        />
+                    </Box>
                 </Grid>
             </Grid>
-        </>
+        </Box>
     );
 }

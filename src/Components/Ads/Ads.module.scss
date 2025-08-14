@@ -1,0 +1,751 @@
+
+// Container and Layout
+.adsContainer {
+  padding: 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 1.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    padding: 2rem;
+  }
+}
+
+// Header Section
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .headerContent {
+    .title {
+      font-size: clamp(1.5rem, 4vw, 2.125rem);
+      font-weight: 600;
+      color: #152C5B;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    
+    .subtitle {
+      color: #6c757d;
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      line-height: 1.5;
+    }
+  }
+  
+  .headerActions {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    width: 100%;
+    
+    @media (min-width: 768px) {
+      width: auto;
+    }
+    
+    .actionButton {
+      min-width: auto;
+      padding: 0.75rem 1.5rem;
+      
+      @media (min-width: 768px) {
+        min-width: 120px;
+        padding: 0.75rem 1.5rem;
+      }
+      
+      &.primary {
+        background-color: #203FC7;
+        color: white;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background-color: #152C5B;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(32, 63, 199, 0.3);
+        }
+        
+        &:active {
+          transform: translateY(0);
+        }
+      }
+      
+      &.secondary {
+        border-color: #203FC7;
+        color: #203FC7;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background-color: rgba(32, 63, 199, 0.1);
+          border-color: #152C5B;
+          color: #152C5B;
+        }
+      }
+    }
+  }
+}
+
+// Table Styles
+.tableContainer {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background: white;
+  
+  .table {
+    min-width: 700px;
+    
+    .tableHead {
+      background-color: #E2E5EB;
+      
+      .tableCell {
+        color: #152C5B;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 1rem 0.75rem;
+        border-bottom: 2px solid #152C5B;
+      }
+    }
+    
+    .tableBody {
+      .tableRow {
+        transition: background-color 0.2s ease;
+        
+        &:nth-of-type(even) {
+          background-color: #f8f9fa;
+        }
+        
+        &:hover {
+          background-color: #e3f2fd;
+        }
+        
+        .tableCell {
+          font-size: 0.875rem;
+          padding: 0.75rem;
+          border-bottom: 1px solid #e0e0e0;
+          
+          &.roomNumber {
+            font-weight: 500;
+          }
+          
+          &.price {
+            color: #203FC7;
+            font-weight: 500;
+          }
+          
+          &.actions {
+            .actionButtons {
+              display: flex;
+              justify-content: center;
+              gap: 0.5rem;
+              
+              .actionButton {
+                padding: 0.5rem;
+                transition: all 0.2s ease;
+                
+                &:hover {
+                  transform: scale(1.1);
+                }
+                
+                &.view {
+                  color: #203FC7;
+                }
+                
+                &.edit {
+                  color: #ff9800;
+                }
+                
+                &.delete {
+                  color: #f44336;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Mobile Card Styles
+.mobileCard {
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background: white;
+  
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+  
+  .cardContent {
+    padding: 1.5rem;
+    
+    .cardHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      
+      .roomInfo {
+        .roomNumber {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #203FC7;
+          margin-bottom: 0.25rem;
+        }
+        
+        .capacity {
+          font-size: 0.875rem;
+          color: #6c757d;
+        }
+      }
+      
+      .menuButton {
+        color: #6c757d;
+        padding: 0.5rem;
+        
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.04);
+        }
+      }
+    }
+    
+    .cardDetails {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      
+      .detailItem {
+        .label {
+          font-size: 0.75rem;
+          color: #6c757d;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 0.25rem;
+        }
+        
+        .value {
+          font-size: 1rem;
+          font-weight: 500;
+          
+          &.price {
+            color: #203FC7;
+          }
+          
+          &.discount {
+            color: #4caf50;
+          }
+        }
+      }
+    }
+    
+    .cardFooter {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .statusChip {
+        &.active {
+          color: #4caf50;
+          border-color: #4caf50;
+        }
+        
+        &.inactive {
+          color: #6c757d;
+          border-color: #6c757d;
+        }
+      }
+      
+      .actionButtons {
+        display: flex;
+        gap: 0.5rem;
+        
+        .actionButton {
+          padding: 0.5rem;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Modal Styles
+.modal {
+  .modalContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #203FC7;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: none;
+    overflow: auto;
+    
+    @media (max-width: 768px) {
+      width: 95vw;
+      max-width: 500px;
+      padding: 1.5rem;
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+      width: 80vw;
+      max-width: 600px;
+      padding: 2rem;
+    }
+    
+    @media (min-width: 1025px) {
+      width: 500px;
+      max-width: 600px;
+      padding: 2rem;
+    }
+    
+    .modalHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      
+      .modalTitle {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      
+      .closeButton {
+        color: white;
+        padding: 0.5rem;
+        
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+    
+    .formField {
+      margin-bottom: 1.5rem;
+      
+      .inputField {
+        .MuiFilledInput-root {
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+          }
+          
+          &.Mui-focused {
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+        }
+        
+        .MuiFilledInput-underline {
+          &:before,
+          &:after {
+            border-bottom: none;
+          }
+        }
+        
+        .MuiInputLabel-root {
+          color: white;
+        }
+        
+        .MuiInputBase-input {
+          color: white;
+        }
+      }
+      
+      .selectField {
+        .MuiSelect-select {
+          color: white;
+        }
+        
+        .MuiSelect-icon {
+          color: white;
+        }
+        
+        .MuiOutlinedInput-notchedOutline {
+          border-color: rgba(255, 255, 255, 0.3);
+        }
+      }
+      
+      .errorText {
+        color: #ff6b6b;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+      }
+    }
+    
+    .submitButton {
+      background-color: white;
+      color: #203FC7;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.9);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+      
+      &:disabled {
+        opacity: 0.6;
+        transform: none;
+      }
+    }
+  }
+}
+
+// Dialog Styles
+.dialog {
+  .dialogPaper {
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90vw;
+    
+    .dialogTitle {
+      text-align: center;
+      color: #152C5B;
+      font-weight: 600;
+      padding-bottom: 0.5rem;
+    }
+    
+    .dialogContent {
+      text-align: center;
+      padding: 1rem 0;
+      
+      .deleteIcon {
+        width: 80px;
+        height: 80px;
+        opacity: 0.7;
+        margin-bottom: 1rem;
+      }
+      
+      .dialogText {
+        color: #6c757d;
+        margin-bottom: 1rem;
+      }
+    }
+    
+    .dialogActions {
+      padding: 1.5rem;
+      padding-top: 0;
+      gap: 1rem;
+      
+      .dialogButton {
+        min-width: 100px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        
+        &.cancel {
+          border-color: #6c757d;
+          color: #6c757d;
+          
+          &:hover {
+            background-color: rgba(108, 117, 125, 0.1);
+          }
+        }
+        
+        &.delete {
+          background-color: #f44336;
+          color: white;
+          
+          &:hover {
+            background-color: #d32f2f;
+            transform: translateY(-1px);
+          }
+          
+          &:disabled {
+            opacity: 0.6;
+            transform: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+// View Modal Styles
+.viewModal {
+  .viewDialogPaper {
+    border-radius: 12px;
+    max-height: 90vh;
+    
+    .viewDialogTitle {
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 1rem;
+      
+      .viewDialogTitleText {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #152C5B;
+      }
+    }
+    
+    .viewDialogContent {
+      padding-top: 1.5rem;
+      
+      .detailGrid {
+        .detailItem {
+          .detailLabel {
+            font-size: 0.875rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+          }
+          
+          .detailValue {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #203FC7;
+            
+            &.capacity {
+              font-size: 1rem;
+              color: #495057;
+            }
+          }
+          
+          .detailChip {
+            &.discount {
+              color: #4caf50;
+              border-color: #4caf50;
+            }
+            
+            &.status {
+              &.active {
+                color: #4caf50;
+                background-color: rgba(76, 175, 80, 0.1);
+              }
+              
+              &.inactive {
+                color: #6c757d;
+                background-color: rgba(108, 117, 125, 0.1);
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    .viewDialogActions {
+      padding: 1.5rem;
+      padding-top: 0;
+      
+      .viewDialogButton {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        
+        &.close {
+          border-color: #6c757d;
+          color: #6c757d;
+          
+          &:hover {
+            background-color: rgba(108, 117, 125, 0.1);
+          }
+        }
+        
+        &.edit {
+          background-color: #203FC7;
+          color: white;
+          
+          &:hover {
+            background-color: #152C5B;
+            transform: translateY(-1px);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Loading States
+.loadingContainer {
+  .skeletonCard {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .skeletonTable {
+    .skeletonRow {
+      .skeletonCell {
+        padding: 0.75rem;
+      }
+    }
+  }
+}
+
+// Empty State
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #6c757d;
+  
+  .emptyIcon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  .emptyTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #495057;
+  }
+  
+  .emptyDescription {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 2rem;
+  }
+  
+  .emptyAction {
+    background-color: #203FC7;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: #152C5B;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+// Pagination
+.pagination {
+  border-top: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  
+  .paginationContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .paginationInfo {
+      font-size: 0.875rem;
+      color: #495057;
+    }
+    
+    .paginationControls {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      
+      .pageButton {
+        min-width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          background-color: rgba(32, 63, 199, 0.1);
+        }
+        
+        &.active {
+          background-color: #203FC7;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+// Responsive Utilities
+.hideMobile {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+
+.showMobile {
+  @media (min-width: 769px) {
+    display: none !important;
+  }
+}
+
+// Accessibility
+.focusVisible {
+  &:focus-visible {
+    outline: 2px solid #203FC7;
+    outline-offset: 2px;
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: high) {
+  .tableContainer {
+    border: 2px solid #152C5B;
+  }
+  
+  .mobileCard {
+    border: 2px solid #152C5B;
+  }
+  
+  .actionButton {
+    border: 1px solid currentColor;
+  }
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  .mobileCard,
+  .actionButton,
+  .submitButton,
+  .dialogButton,
+  .viewDialogButton,
+  .emptyAction {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .tableRow {
+    transition: none !important;
+  }
+}
+
+// Print Styles
+@media print {
+  .headerActions,
+  .actionButtons,
+  .pagination {
+    display: none !important;
+  }
+  
+  .tableContainer {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .mobileCard {
+    box-shadow: none;
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+}

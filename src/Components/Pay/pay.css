@@ -1,41 +1,153 @@
-
-.payBtn{
-  background-color:#203fc7b3!important;
-margin-top: 1rem!important;
-transform: translateX(50%);
-width: 50%;
-text-align: center!important;
-   padding: 0.5rem !important;
-  
-   border-radius: 30px;
- 
-
-
+/* Payment Form Styles */
+.payment-container {
+  width: 100% !important;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0;
 }
-  .payment-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50%!important;
-    margin: auto;
-     margin-top: 2rem;
-     padding: 5%;
-     background-color:rgb(32, 63, 199,0.7) ;
-     border-radius: 30px;
-   
-  }
- 
-  .formSTYLE{
-    margin: auto;
- 
-  }
-  .card-element-container {
-    margin-top: 2rem;
-    height: 3rem;
-    border-radius: 10px;
 
-    background-color: #f1f1f1;
+.formSTYLE {
+  width: 100%;
+  margin: 0;
+}
+
+/* Address Element Styling */
+.address-element-container {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.address-element-container:focus-within {
+  border-color: #203fc7;
+  box-shadow: 0 0 0 2px rgba(32, 63, 199, 0.1);
+}
+
+/* Card Element Styling */
+.card-element-container {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
+  min-height: 3rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-element-container:focus-within {
+  border-color: #203fc7;
+  box-shadow: 0 0 0 2px rgba(32, 63, 199, 0.1);
+}
+
+/* Payment Button */
+.payBtn {
+  background-color: #203fc7 !important;
+  color: white !important;
+  margin-top: 1.5rem !important;
+  width: 100% !important;
+  text-align: center !important;
+  padding: 1rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  font-size: 1.1rem !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 4px rgba(32, 63, 199, 0.2) !important;
+}
+
+.payBtn:hover {
+  background-color: #1a2f9e !important;
+  box-shadow: 0 4px 8px rgba(32, 63, 199, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+.payBtn:disabled {
+  background-color: #cccccc !important;
+  color: #666666 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-container {
+    padding: 0 1rem;
   }
+  
+  .address-element-container,
+  .card-element-container {
+    padding: 0.75rem;
+  }
+  
+  .payBtn {
+    padding: 0.875rem !important;
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-container {
+    padding: 0 0.5rem;
+  }
+  
+  .address-element-container,
+  .card-element-container {
+    padding: 0.5rem;
+  }
+  
+  .payBtn {
+    padding: 0.75rem !important;
+    font-size: 0.95rem !important;
+  }
+}
+
+/* Loading State */
+.payBtn.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Error State */
+.address-element-container.error,
+.card-element-container.error {
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.1);
+}
+
+/* Success State */
+.address-element-container.success,
+.card-element-container.success {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+}
+
+/* Focus States for Accessibility */
+.address-element-container:focus,
+.card-element-container:focus {
+  outline: none;
+}
+
+/* Animation for form elements */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.address-element-container,
+.card-element-container {
+  animation: fadeIn 0.3s ease-out;
+}
  
  
  

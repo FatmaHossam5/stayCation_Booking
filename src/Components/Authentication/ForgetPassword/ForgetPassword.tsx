@@ -1,79 +1,115 @@
-import { Typography, TextField, Button, Grid } from '@mui/material';
-import styles from '../SignUp/SignUp.module.scss';
-import signUpImage from "../../../assets/Rectangle 8.png"
+import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useContext } from 'react';
 import { AuthContext } from '../../../Context/AuthContext';
+import signUpImage from "../../../assets/Rectangle 8.png";
+import { 
+  AuthLayout, 
+  FormContainer, 
+  ErrorAlert, 
+  SuccessSnackbar, 
+  LinkText,
+  EmailField,
+  SubmitButton
+} from '../../shared/common';
+import { Box } from '@mui/material';
 
+interface ForgetPasswordForm {
+  email: string;
+}
 
 export default function ForgetPassword() {
+  const navigate = useNavigate();
+  const { baseUrl } = useContext(AuthContext);
+  
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const navigate = useNavigate()
   const {
+    control,
     register,
-    formState: { errors },
-    handleSubmit
-  } = useForm( { mode: "all" })
-  const{baseUrl,reqHeaders}=useContext(AuthContext)
-
-  const onSubmit = (data:any) => {
-    console.log(data);
-    axios.post(`${baseUrl}/portal/users/forgot-password`, data, { 
-      headers:  reqHeaders 
+    handleSubmit,
+    formState: { errors, isValid },
+    watch
+  } = useForm<ForgetPasswordForm>({ 
+    mode: "onChange",
+    defaultValues: {
+      email: ''
     }
-    ).then(response => {
-      console.log(response.data.message);
-      navigate("/auth/reset-pass")
-    })
-      .catch(error => {
-        console.error(error.response.data.message);
+  });
+
+  const email = watch('email');
+
+  const onSubmit = async (data: ForgetPasswordForm) => {
+    setIsLoading(true);
+    setErrorMessage('');
+    
+    try {
+      await axios.post(`${baseUrl}/portal/users/forgot-password`, data, {
+        headers: { Authorization: `${localStorage.getItem('token')}` }
       });
       
-  }
+      setSuccessMessage('Password reset email sent successfully! Check your inbox.');
+      setShowSuccess(true);
+      
+      // Redirect after a short delay to show success message
+      setTimeout(() => {
+        navigate("/auth/reset-pass");
+      }, 2000);
+      
+    } catch (error: any) {
+      const message = error.response?.data?.message || 'Failed to send reset email. Please try again.';
+      setErrorMessage(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
+    <AuthLayout
+      title="Forgot Password"
+      subtitle="Don't worry! Enter your email address and we'll send you a link to reset your password."
+      image={signUpImage}
+      imageAlt="Forgot Password"
+    >
+      {/* Error Alert */}
+      <ErrorAlert error={errorMessage} />
 
-    <Grid container sx={{ position: "relative" }} className={styles.signupContainer} >
+      {/* Form */}
+      <FormContainer onSubmit={handleSubmit(onSubmit)}>
+        {/* Email Field */}
+        <EmailField
+          control={control}
+          errors={errors}
+          placeholder="Enter your email address"
+        />
 
-      <Grid item sm={1}>
-        <Typography variant="h4" sx={{ position: "absolute", top: "30px" }}>
-           <span style={{ color: '#3252DF' }}>Stay</span>cation.</Typography>
-      </Grid>
+        {/* Submit Button */}
+        <SubmitButton
+          isLoading={isLoading}
+          isValid={isValid}
+          disabled={!email}
+        >
+          {isLoading ? 'Sending...' : 'Send Reset Link'}
+        </SubmitButton>
+      </FormContainer>
 
-      <Grid item xs={12} sm={4} >
-        <Typography variant="h5" sx={{marginBottom:"2rem"}}>Forgot password</Typography>
-        <Typography variant="body1" sx={{ marginTop: '10px' }}>
-          If you already have an account register
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: '10px' }}>
-          You can <Link to={"/auth/signin"} style={{ color: '#EB5148', fontWeight: 'bold' }}>Login here!</Link>
-        </Typography>
+      {/* Link to Sign In */}
+      <Box sx={{ mt: 3, textAlign: 'center' }}>
+        <LinkText to="/auth/signin" linkText="Sign in here">
+          Remember your password?
+        </LinkText>
+      </Box>
 
-        <form className={styles.signupForm} style={{marginTop: "7rem"}} onSubmit={handleSubmit(onSubmit)}>
-        
-          <label htmlFor=""> Email </label>
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            placeholder='Please type here '
-            sx={{ '& input': { padding: '10px' } }}
-            type="email"
-            {...register("email", { required: true })} />
-          {errors.email && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
-
-          <Button variant="contained" color="primary" type="submit" sx={{marginTop: "2rem"}}>
-          Send mail
-          </Button>
-        </form>
-      </Grid>
-
-      <Grid item xs={12} sm={6} sx={{ textAlign: 'end' }}>
-        <img src={signUpImage} alt="Signup" />
-      </Grid>
-
-    </Grid >
-  //
-   );
+      {/* Success Snackbar */}
+      <SuccessSnackbar
+        open={showSuccess}
+        message={successMessage}
+        onClose={() => setShowSuccess(false)}
+      />
+    </AuthLayout>
+  );
 }

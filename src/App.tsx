@@ -37,9 +37,10 @@ import SignUp from './Components/Authentication/SignUp/SignUp'
 import ForgetPassword from './Components/Authentication/ForgetPassword/ForgetPassword'
 import RestPassword from './Components/Authentication/ResetPassword/RestPassword'
 
+
 function App() {
  
-  let {userData,saveUserData}:any=useContext(AuthContext)
+  let {userData}:any=useContext(AuthContext)
   
 
  
@@ -51,24 +52,20 @@ const routes =createBrowserRouter([
   {
     path:"/auth",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
-      {index:true,element:<>
-       <LandingPage saveUserData:any={saveUserData}/>
-      </>
-   },
-      {path:"signin",element:<SignIn saveUserData:any={saveUserData}/>},
+      {index:true,element:<LandingPage/>},
+      {path:"signin",element:<SignIn/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
       {path:"reset-pass",element:<RestPassword/>},
       {path:"roomdetails",element:<RoomDetails/>},
       {path:"change-pass",element:<ChangePassword/>},
-
-
     ]
   },
+  // Admin routes - only accessible by admin users
   {
     path:"dashboard",
-    element:<ProtectedRoute userData={userData} >
-    <MasterLayout userData={userData}/>
+    element:<ProtectedRoute userData={userData} allowedRoles={["admin"]}>
+      <MasterLayout/>
     </ProtectedRoute>,
     errorElement:<NotFound/>,
     children:[
@@ -79,43 +76,27 @@ const routes =createBrowserRouter([
       {path:"user",element:<User/>},
       {path:"ads",element:<Ads/>},
       {path:"ads/add-ads",element:<AddAds/>},
-  
-
       {path:"book",element:<Bookings/>},
       {path:"facilities",element:<Facilities/>},
       {path:"rooms",element:<Rooms/>},
       {path:"rooms/add-room",element:<AddRoom/>},
-
-
-
-
-
-
-
     ]
   },
+  // User routes - only accessible by regular users
   {
     path:"user",
-    element:<UserLayout userData={userData}/>,
+    element:<ProtectedRoute userData={userData} allowedRoles={["user"]}>
+      <UserLayout/>
+    </ProtectedRoute>,
     errorElement:<NotFound/>,
     children:[
-     
-  
-      
-
       {path:"available-rooms",element:<AvilableRooms/>},
       {path:"room-details/:roomId/",element:<RoomDetails/>},
       {path:"create-booking/:roomId/",element:<BookingInfo/>},
       {path:"pay-booking/:bookingId/",element:<PaymentWrapper/>},
       {path:"booking-details/:bookingId/",element:<BookingDetails/>},
-
+      {path:"bookings",element:<Bookings/>},
       {path:"fav",element:<FavoriteList/>},
-
-
-
-
-
-
     ]
   }
 ])

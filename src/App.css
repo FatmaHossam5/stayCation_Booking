@@ -1,97 +1,434 @@
-.body{
+/* Global Styles */
+body {
     font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-*{margin: 0;
-padding: 0;
-box-sizing: border-box;
-/* overflow-x: hidden; */
-box-sizing: border-box;
-/* overflow-x: hidden; */
-}
- {/*SideBar Styles*/} 
-.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
-    background-color: #203FC7!important;
-    color: white!important;
-}
-.css-cveggr-MuiListItemIcon-root{
+/* SideBar Styles */
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
+    background-color: #203FC7 !important;
     color: white !important;
 }
 
-
- {/*Select DropDown Styles*/} 
-
-.css-wmy1p7-ReactDropdownSelect{
-    min-height: 55px!important;
-    border-radius: 4px!important;
-    width: 100%!important;
-    background-color:#e6e5e5!important;
-    display: flex!important;
-    justify-content: flex-end!important;
-   
+.css-cveggr-MuiListItemIcon-root {
+    color: white !important;
 }
-.css-wd28pw-MuiGrid-root>.MuiGrid-item{
-    padding-top: 0px!important;
-}
-.Select::placeholder{color: black!important;}
 
-.css-1p823my-MuiListItem-root{
+/* Select DropDown Styles */
+.css-wmy1p7-ReactDropdownSelect {
+    min-height: 55px !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    background-color: #f8f9fa !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    border: 1px solid #e0e0e0 !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.css-wmy1p7-ReactDropdownSelect:hover {
+    border-color: #203FC7 !important;
+    box-shadow: 0 2px 8px rgba(32, 63, 199, 0.1) !important;
+}
+
+.css-wd28pw-MuiGrid-root > .MuiGrid-item {
+    padding-top: 0px !important;
+}
+
+.Select::placeholder {
+    color: #666 !important;
+}
+
+/* List Item Styles */
+.css-1p823my-MuiListItem-root {
     cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
-.css-1p823my-MuiListItem-root:hover{
-background-color:  #1A1B1E2B;
 
+.css-1p823my-MuiListItem-root:hover {
+    background-color: rgba(32, 63, 199, 0.1) !important;
+    transform: translateX(4px);
 }
-/* .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
-    color: white!important;
+
+/* Button Styles */
+.css-1sszw6i-MuiButtonBase-root-MuiButton-root {
+    background-color: #203FC7 !important;
+    transition: all 0.3s ease-in-out !important;
 }
-.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
-    color: white!important;
-} */
-.css-1sszw6i-MuiButtonBase-root-MuiButton-root{
-    background-color: #203FC7!important;
-} {/*DatePicker Styles*/} 
-.pickDateStyle{
-    padding-top: 0.5rem;
+
+.css-1sszw6i-MuiButtonBase-root-MuiButton-root:hover {
+    background-color: #1a2f9e !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(32, 63, 199, 0.3) !important;
+}
+
+/* DatePicker Styles */
+.pickDateStyle {
+    padding: 12px 16px !important;
     text-align: center;
-    padding-bottom: 0.2rem;
-    padding-right: 4rem;
-    padding-left: 3.8rem;
-    background-color: #f0f0f0;
-    border: none;
+    background-color: #f8f9fa !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease-in-out !important;
 }
+
+.pickDateStyle:hover {
+    border-color: #203FC7 !important;
+    box-shadow: 0 2px 8px rgba(32, 63, 199, 0.1) !important;
+}
+
 .custom-date-range-picker {
-
-    width: 80px!important;
-    height: 30px!important;
-
-  }
-{/*Card Component*/}
-  .css-bhp9pd-MuiPaper-root-MuiCard-root{
-    width: 70%;
-    height: 85%;
-    transform: translateX(20%);
-  }
-  .css-1ftwddu-MuiGrid-root>.MuiGrid-item {
-    padding-left: 0px!important;
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 8px !important;
 }
-.css-6tloi9-MuiTypography-root{
-    text-align: right;
-    width: 50%!important;
-    left:54%;
-    background-color: #FF498B!important;
-    color: white;
+
+/* Card Component Styles */
+.css-bhp9pd-MuiPaper-root-MuiCard-root {
+    width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease-in-out !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.css-bhp9pd-MuiPaper-root-MuiCard-root:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.css-1ftwddu-MuiGrid-root > .MuiGrid-item {
+    padding-left: 0px !important;
+}
+
+/* Typography Styles */
+.css-6tloi9-MuiTypography-root {
+    text-align: center !important;
+    width: auto !important;
+    left: auto !important;
+    background-color: #FF498B !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+}
+
+/* Utility Classes */
+.translate {
+    transform: translateX(0) !important;
+}
+
+/* Paper Styles */
+.css-vx48k8-MuiPaper-root {
+    background-color: inherit !important;
+}
+
+.css-1b288s2-MuiPaper-root {
+    background-color: inherit !important;
+}
+
+/* Enhanced Search Styles */
+.search-container {
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-container:hover {
+    transform: translateY(-2px);
+}
+
+/* Enhanced Button Hover Effects */
+.enhanced-button {
+    transition: all 0.3s ease-in-out !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.enhanced-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.enhanced-button:hover::before {
+    left: 100%;
+}
+
+/* Responsive Design Improvements */
+@media (max-width: 768px) {
+    .css-bhp9pd-MuiPaper-root-MuiCard-root {
+        margin: 0 8px !important;
+    }
     
-}
-.translate{
-    transform: translateX(-5%);
-}
-.css-vx48k8-MuiPaper-root{
-    background-color: inherit!important;
+    .css-6tloi9-MuiTypography-root {
+        font-size: 0.875rem !important;
+        padding: 6px 12px !important;
+    }
 }
 
-.css-1b288s2-MuiPaper-root{
-    background-color: "inherit"!important;
-   
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus Styles for Accessibility */
+*:focus {
+    outline: 2px solid #203FC7 !important;
+    outline-offset: 2px !important;
+}
+
+/* Loading States */
+.loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Enhanced Modal Animations */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    40%, 43% {
+        transform: translate3d(0, -8px, 0);
+    }
+    70% {
+        transform: translate3d(0, -4px, 0);
+    }
+    90% {
+        transform: translate3d(0, -2px, 0);
+    }
+}
+
+/* Modal Backdrop Enhancements */
+.modal-backdrop {
+    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+/* Enhanced Form Field Animations */
+.form-field-enhanced {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-field-enhanced:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-field-enhanced:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
+}
+
+/* Button Animation Enhancements */
+.button-enhanced {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.button-enhanced:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.button-enhanced:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Hover Effects */
+.card-enhanced {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-enhanced:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Status Indicator Animations */
+.status-indicator {
+    animation: pulse 2s infinite;
+}
+
+.status-indicator.active {
+    animation: pulse 2s infinite;
+}
+
+.status-indicator.inactive {
+    animation: none;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+/* Success Animation */
+.success-animation {
+    animation: bounce 0.6s ease-in-out;
+}
+
+/* Error Shake Animation */
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-2px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(2px);
+    }
+}
+
+.error-shake {
+    animation: shake 0.6s ease-in-out;
+}
+
+/* Gradient Text Animation */
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Enhanced Focus States */
+.focus-enhanced:focus-visible {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .loading-spinner,
+    .status-indicator,
+    .success-animation,
+    .error-shake,
+    .gradient-text {
+        animation: none !important;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .button-enhanced:hover {
+        border: 2px solid currentColor;
+    }
+    
+    .card-enhanced:hover {
+        border: 2px solid #000;
+    }
+    
+    .form-field-enhanced:focus-within {
+        border: 2px solid #000;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .modal-backdrop,
+    .button-enhanced,
+    .card-enhanced:hover {
+        display: none !important;
+    }
+    
+    .form-field-enhanced {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
 }

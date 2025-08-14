@@ -5,21 +5,34 @@ import { Outlet } from "react-router-dom";
 
 export default function MasterLayout() {
   return (
-    <>
-      {/* navbar */}
-      <Box>
+    <Box sx={{ display: "flex", minHeight: "100vh" }}>
+      {/* Sidebar */}
+      <SideBar />
+      
+      {/* Main content area with navbar */}
+      <Box sx={{ 
+        flexGrow: 1, 
+        display: "flex", 
+        flexDirection: "column",
+      }}>
+        {/* Navbar */}
         <NavBar />
-      </Box>
-      <Box sx={{ display: "flex" }}>
-        {/* sidebar */}
-        <Box>
-          <SideBar />
-        </Box>
-        {/* main content area */}
-        <Box component="main" sx={{ flexGrow: 1, p: 3,marginTop:"4rem", paddingLeft: "3rem" }}>
+        
+        {/* Main content */}
+        <Box 
+          component="main" 
+          sx={{ 
+            flexGrow: 1, 
+            p: 3,
+            mt: { xs: "64px", md: "72px" }, // Account for navbar height
+            minHeight: "calc(100vh - 72px)", // Full height minus navbar
+            backgroundColor: "#f5f5f5",
+          }}
+        >
           <Outlet />
         </Box>
       </Box>
-    </>
+    </Box>
   );
 }
+

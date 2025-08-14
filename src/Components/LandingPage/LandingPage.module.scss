@@ -1,0 +1,286 @@
+// LandingPage Module Styles
+.landingPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  &--hero {
+    padding: 4rem 0 6rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    
+    @media (max-width: 768px) {
+      padding: 2rem 0 4rem;
+    }
+  }
+  
+  &--carousel {
+    padding: 4rem 0;
+    background-color: #ffffff;
+    
+    @media (max-width: 768px) {
+      padding: 2rem 0;
+    }
+  }
+  
+  &--testimonials {
+    padding: 4rem 0 6rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    
+    @media (max-width: 768px) {
+      padding: 2rem 0 4rem;
+    }
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 0 2rem;
+  }
+  
+  @media (min-width: 1024px) {
+    padding: 0 3rem;
+  }
+}
+
+// Typography enhancements
+.heading {
+  &--primary {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: #152C5B;
+  }
+  
+  &--secondary {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #152C5B;
+  }
+  
+  &--section {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #152C5B;
+  }
+}
+
+.text {
+  &--body {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    line-height: 1.6;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+  }
+  
+  &--caption {
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    color: #6c757d;
+    font-weight: 500;
+  }
+}
+
+// Button styles
+.button {
+  &--primary {
+    background: linear-gradient(135deg, #152C5B 0%, #1e3a8a 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(21, 44, 91, 0.2);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(21, 44, 91, 0.3);
+      background: linear-gradient(135deg, #1e3a8a 0%, #152C5B 100%);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+  
+  &--secondary {
+    background: transparent;
+    color: #152C5B;
+    border: 2px solid #152C5B;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: none;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: #152C5B;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(21, 44, 91, 0.2);
+    }
+  }
+}
+
+// Card styles
+.card {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+}
+
+// Form elements
+.form {
+  &--group {
+    margin-bottom: 1.5rem;
+  }
+  
+  &--label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #152C5B;
+    font-size: 0.9rem;
+  }
+  
+  &--input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: #152C5B;
+      box-shadow: 0 0 0 3px rgba(21, 44, 91, 0.1);
+    }
+  }
+}
+
+// Utility classes
+.textCenter {
+  text-align: center;
+}
+
+.textLeft {
+  text-align: left;
+}
+
+.textRight {
+  text-align: right;
+}
+
+.mb1 { margin-bottom: 0.5rem; }
+.mb2 { margin-bottom: 1rem; }
+.mb3 { margin-bottom: 1.5rem; }
+.mb4 { margin-bottom: 2rem; }
+
+.mt1 { margin-top: 0.5rem; }
+.mt2 { margin-top: 1rem; }
+.mt3 { margin-top: 1.5rem; }
+.mt4 { margin-top: 2rem; }
+
+.p1 { padding: 0.5rem; }
+.p2 { padding: 1rem; }
+.p3 { padding: 1.5rem; }
+.p4 { padding: 2rem; }
+
+// Responsive utilities
+.hideMobile {
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.showMobile {
+  @media (min-width: 769px) {
+    display: none;
+  }
+}
+
+// Animation classes
+.fadeIn {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.slideUp {
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Focus states for accessibility
+.focusVisible {
+  &:focus-visible {
+    outline: 2px solid #152C5B;
+    outline-offset: 2px;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .button--primary {
+    border: 2px solid #152C5B;
+  }
+  
+  .card {
+    border: 1px solid #152C5B;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .button--primary,
+  .button--secondary,
+  .card {
+    transition: none;
+  }
+  
+  .fadeIn,
+  .slideUp {
+    animation: none;
+  }
+}

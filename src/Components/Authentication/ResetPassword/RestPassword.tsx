@@ -1,111 +1,164 @@
-import { Typography, TextField, Button, Grid } from '@mui/material';
-import styles from '../SignUp/SignUp.module.scss';
-import signUpImage from "../../../assets/Rectangle 8.png"
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useContext } from 'react';
 import { AuthContext } from '../../../Context/AuthContext';
+import { 
+  AuthLayout, 
+  FormContainer, 
+  ErrorAlert, 
+  SuccessSnackbar, 
+  LinkText,
+  EmailField,
+  PasswordField,
+  ConfirmPasswordField,
+  CustomField,
+  SubmitButton
+} from '../../shared/common';
+import { Box } from '@mui/material';
+import { Security } from '@mui/icons-material';
+import resetPasswordImage from "../../../assets/Rectangle 8.png";
 
+interface ResetPasswordForm {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  seed: string;
+}
 
-export default function RestPassword() {
-
-  const navigate = useNavigate()
-  const{baseUrl,reqHeaders}=useContext(AuthContext)
-
-  const {
-    register,
-    formState: { errors },
-    handleSubmit
-  } = useForm({ mode: "all" })
+export default function ResetPassword() {
+  const navigate = useNavigate();
+  const { baseUrl, reqHeaders } = useContext(AuthContext);
   
+  // State management
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const onSubmit = (data:any) => {
-    console.log(data);
-    
-    axios.post(`${baseUrl}/admin/users/reset-password`, data, { 
-      headers: reqHeaders 
+  const { control, register, handleSubmit, formState: { errors, isValid }, watch } = useForm<ResetPasswordForm>({
+    mode: "onBlur",
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      seed: ''
     }
-    ).then(response => {
-     
-      navigate("/auth/signin")
-    })
-      .catch(error => {
-        console.error(error.data.data.message);
+  });
+
+  const password = watch('password');
+  const confirmPassword = watch('confirmPassword');
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+
+  const onSubmit = async (data: ResetPasswordForm) => {
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      await axios.post(`${baseUrl}/admin/users/reset-password`, data, {
+        headers: reqHeaders
       });
-  }
+      
+      setSuccessMessage('Password reset successfully! Redirecting to login...');
+      setShowSuccess(true);
+      
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        navigate("/auth/signin");
+      }, 2000);
+      
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || 'Password reset failed. Please try again.';
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Grid container sx={{ position: "relative" }} className={styles.signupContainer} >
+    <AuthLayout
+      title="Reset Password"
+      subtitle="Enter your email and new password to reset your account."
+      image={resetPasswordImage}
+      imageAlt="Reset Password"
+    >
+      {/* Error Alert */}
+      <ErrorAlert error={error} />
 
-      <Grid item sm={1}>
-        <Typography variant="h4" sx={{ position: "absolute", top: "30px" }}>
-          <span style={{ color: '#3252DF' }}>Stay</span>cation.</Typography>
-      </Grid>
+      {/* Form */}
+      <FormContainer onSubmit={handleSubmit(onSubmit)}>
+        {/* Email Field */}
+        <EmailField
+          control={control}
+          errors={errors}
+          placeholder="Enter your email address"
+        />
 
-      <Grid item xs={12} sm={4} >
-        <Typography variant="h5" style={{marginBottom: "2rem"}}>Reset Password</Typography>
-        <Typography variant="body1" sx={{ marginTop: '10px' }}>
-          If you already have an account register
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: '10px' }}>
-          You can <Link to={"/auth/signin"} style={{ color: '#EB5148', fontWeight: 'bold' }}>Login here!</Link>
-        </Typography>
+        {/* Password Field */}
+        <PasswordField
+          control={control}
+          errors={errors}
+          showPassword={showPassword}
+          onTogglePassword={handleClickShowPassword}
+          label="New Password"
+          placeholder="Enter your new password"
+        />
 
-        <form className={styles.signupForm} onSubmit={handleSubmit(onSubmit)} style={{marginTop: "7rem"}}>
+        {/* Confirm Password Field */}
+        <ConfirmPasswordField
+          control={control}
+          errors={errors}
+          showConfirmPassword={showConfirmPassword}
+          onToggleConfirmPassword={handleClickShowConfirmPassword}
+          password={password}
+          label="Confirm New Password"
+          placeholder="Confirm your new password"
+        />
 
-          <label htmlFor=""> Email </label>
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            placeholder='Please type here '
-            sx={{ '& input': { padding: '10px' } }}
-            type="email"
-            {...register("email", { required: true })} />
-          {errors.email && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
+        {/* Seed Field */}
+        <CustomField
+          control={control}
+          errors={errors}
+          name="seed"
+          label="Security Code"
+          type="text"
+          placeholder="Enter security code"
+          helperText="Enter the security code sent to your email"
+          validation={{
+            required: 'Security code is required',
+            minLength: {
+              value: 6,
+              message: 'Security code must be at least 6 characters'
+            }
+          }}
+          startIcon={<Security />}
+        />
 
-          <label htmlFor=""> Password </label>
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            placeholder='Please type here '
-            sx={{ '& input': { padding: '10px' } }}
-            type='password'
-            {...register("password", { required: true })} />
-          {errors.password && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
+        {/* Submit Button */}
+        <SubmitButton
+          isLoading={isLoading}
+          isValid={isValid}
+          disabled={!password || !confirmPassword}
+        >
+          {isLoading ? 'Resetting Password...' : 'Reset Password'}
+        </SubmitButton>
+      </FormContainer>
 
-          <label htmlFor=""> Confirm Password </label>
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            placeholder='Please type here '
-            sx={{ '& input': { padding: '10px' } }}
-            type='password'
-            {...register("confirmPassword", { required: true })} />
-          {errors.confirmPassword && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
+      {/* Link to Sign In */}
+      <LinkText to="/auth/signin" linkText="Sign in here">
+        Already have an account?
+      </LinkText>
 
-          <label htmlFor=""> seed </label>
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            placeholder='Please type here '
-            sx={{ '& input': { padding: '10px' } }}
-            type='text'
-            {...register("seed", { required: true })} />
-          {errors.seed && <Typography sx={{ margin: "0px", color: "red" }}>field is required</Typography>}
-
-          <Button variant="contained" color="primary" type="submit"  sx={{marginTop: "2rem"}}>
-            Reset
-          </Button>
-        </form>
-      </Grid>
-
-      {/* <Grid item sm={1}></Grid> */}
-
-
-      <Grid item xs={12} sm={6} sx={{ textAlign: 'end' }}>
-        <img src={signUpImage} alt="Signup" />
-      </Grid>
-
-    </Grid >
+      {/* Success Snackbar */}
+      <SuccessSnackbar
+        open={showSuccess}
+        message={successMessage}
+        onClose={() => setShowSuccess(false)}
+      />
+    </AuthLayout>
   );
 }

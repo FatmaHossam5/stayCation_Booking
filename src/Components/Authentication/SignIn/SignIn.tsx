@@ -1,72 +1,139 @@
-import React, { useContext } from 'react'
-import { Box, Typography, TextField, Button, Grid, FormControl } from '@mui/material';
-import signin from "../../../assets/bg-signin.png";
-import { useForm } from 'react-hook-form';
-
+import {
+  Box
+} from '@mui/material';
 import axios from 'axios';
-import { AuthContext } from '../../../Context/AuthContext';
+import { useContext, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import signin from "../../../assets/bg-signin.png";
+import { getDefaultRouteByRole } from '../../../config/routes';
+import { AuthContext } from '../../../Context/AuthContext';
+import {
+  AuthLayout,
+  EmailField,
+  ErrorAlert,
+  FormContainer,
+  LinkText,
+  PasswordField,
+  SubmitButton,
+  SuccessSnackbar
+} from '../../shared/common';
+
+interface SignInForm {
+  email: string;
+  password: string;
+}
+
 export default function SignIn() {
-  const {register,handleSubmit,formState:{errors}}=useForm();
-const {baseUrl,saveUserData,role}=useContext(AuthContext)
-const navigate=useNavigate()
+  const { control, handleSubmit, formState: { errors, isValid } } = useForm<SignInForm>({
+    mode: "onBlur",
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  });
+  
+  const { baseUrl, saveUserData } = useContext(AuthContext) as any;
+  const navigate = useNavigate();
 
-  const signIn=(data)=>{
-    axios.post(`${baseUrl}/admin/users/login`,data).then((response)=>
-    {
-   
-      const role=response?.data?.data?.user?.role
-      localStorage.setItem("userToken",response?.data?.data?.token)
-      localStorage.setItem("role",role)
-      localStorage.setItem("userName",response?.data?.data?.user?.userName)
-      
-     
-      
- 
-    saveUserData();
-    {role==='admin'?navigate('/dashboard'):navigate('/')}
+  // State management
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
-toast.success('logIn SuccessFully')
-    
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
-     
- 
-    
-    }).catch((error)=>{
-      console.log(error);
-      
-      toast.error(error?.response?.data?.message);
-     
-      
-    })
-    
-  }
+  const signIn = async (data: SignInForm) => {
+    setIsLoading(true);
+    setLoginError('');
+
+    try {
+      const response: any = await axios.post(`${baseUrl}/admin/users/login`, data);
+      const userRole = response?.data?.data?.user?.role;
+
+      localStorage.setItem("userToken", response?.data?.data?.token);
+      localStorage.setItem("role", userRole);
+      localStorage.setItem("userName", response?.data?.data?.user?.userName);
+
+      saveUserData();
+      setSuccessMessage('Login successful! Redirecting...');
+      setShowSuccess(true);
+
+      // Redirect to appropriate dashboard based on user role
+      setTimeout(() => {
+        const defaultRoute = getDefaultRouteByRole(userRole);
+        
+        // Force a page reload to ensure context is updated
+        window.location.href = defaultRoute;
+      }, 1500);
+
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || 'Login failed. Please try again.';
+      setLoginError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <>
-    <FormControl component="form"  onSubmit={handleSubmit(signIn)} >
-  <Grid container spacing={2} sx={{bgcolor:"#ffffff",display:'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' ,paddingLeft:"120px"}}>
-  <Grid item xs={6}>
-  <Typography sx={{color:'#000000',mr: 2,display:"flex",justifyContent:"flex-start",fontFamily:"Poppins",fontSize:'30px',fontWeight:500,marginBottom:'20px',}} >Sign in</Typography>
-  <Typography sx={{color:'#000000',mr: 2,display:"flex",justifyContent:"flex-start",fontFamily:"Poppins",fontSize:'20px',fontWeight:300,marginBottom:'20px'}} >If you don’t have an account registerYou can..</Typography>
-  <Typography sx={{color:'#000000',mr: 2,display:"flex",justifyContent:"flex-start",fontFamily:"Poppins",fontSize:'20px',fontWeight:300}} >Email Address</Typography>
-    <TextField {...register('email', { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/ })} label="Email" type="email" margin="normal" fullWidth sx={{bgcolor:"#F5F6F8",fontFamily:"Poppins",}}/>
-    {errors.email && errors.email.type === 'required' && (<Typography sx={{color:'red'}}>email is required</Typography>)}
-    <Typography sx={{color:'#000000',mr: 2,display:"flex",justifyContent:"flex-start",fontFamily:"Poppins",fontSize:'20px',fontWeight:300}} >Password</Typography>
-    <TextField {...register('password', { required: true })} label="Password" type="password" margin="normal" fullWidth sx={{bgcolor:"#F5F6F8",fontFamily:"Poppins",}}/>
-    {errors.password&&errors.password.type==='required'&&(<Typography sx={{color:"red"}}> password is required</Typography>)}
-    <Button type="submit" variant="contained" fullWidth sx={{bgcolor:'#3252DF', '&:hover': { bgcolor: '#2843CC' },marginTop:"60px",fontFamily:"Poppins",}}>
-      Sign In
-    </Button>
-  </Grid>
-  <Grid item xs={6} display="flex" alignItems="center">
-    <img src={signin} alt="google" width={'100%'} />
-  </Grid>
-</Grid>
-</FormControl>
+    <AuthLayout
+      title="Sign in"
+      subtitle="Welcome back! Please enter your details to access your account."
+      image={signin}
+      imageAlt="Sign In"
+    >
+      {/* Error Alert */}
+      <ErrorAlert error={loginError} />
 
-    </>
-  )
+      {/* Form */}
+      <FormContainer onSubmit={handleSubmit(signIn)}>
+        {/* Email Field */}
+        <EmailField
+          control={control}
+          errors={errors}
+          placeholder="Enter your email"
+        />
+
+        {/* Password Field */}
+        <PasswordField
+          control={control}
+          errors={errors}
+          showPassword={showPassword}
+          onTogglePassword={handleClickShowPassword}
+          label="Password"
+          placeholder="Enter your password"
+        />
+
+        {/* Submit Button */}
+        <SubmitButton
+          isLoading={isLoading}
+          isValid={isValid}
+        >
+          {isLoading ? 'Signing In...' : 'Sign In'}
+        </SubmitButton>
+      </FormContainer>
+
+      {/* Link to Sign Up */}
+      <Box sx={{ mt: 4, textAlign: 'center' }}>
+        <LinkText to="/auth/signup" linkText="Sign up here">
+          Don't have an account?
+        </LinkText>
+      </Box>
+
+      {/* Success Snackbar */}
+      <SuccessSnackbar
+        open={showSuccess}
+        message={successMessage}
+        onClose={() => setShowSuccess(false)}
+      />
+    </AuthLayout>
+  );
 }
 
 
