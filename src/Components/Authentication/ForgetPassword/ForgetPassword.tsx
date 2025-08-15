@@ -1,19 +1,18 @@
-import { useState, useContext } from 'react';
+import { Box } from '@mui/material';
+import axios from 'axios';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { AuthContext } from '../../../Context/AuthContext';
 import signUpImage from "../../../assets/Rectangle 8.png";
-import { 
-  AuthLayout, 
-  FormContainer, 
-  ErrorAlert, 
-  SuccessSnackbar, 
-  LinkText,
+import { AuthContext } from '../../../Context/AuthContext';
+import { useToast } from '../../../hooks/useToast';
+import {
+  AuthLayout,
   EmailField,
+  FormContainer,
+  LinkText,
   SubmitButton
 } from '../../shared/common';
-import { Box } from '@mui/material';
 
 interface ForgetPasswordForm {
   email: string;
@@ -22,15 +21,12 @@ interface ForgetPasswordForm {
 export default function ForgetPassword() {
   const navigate = useNavigate();
   const { baseUrl } = useContext(AuthContext);
+  const { showSuccess, showError } = useToast();
   
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
 
   const {
     control,
-    register,
     handleSubmit,
     formState: { errors, isValid },
     watch
@@ -45,28 +41,51 @@ export default function ForgetPassword() {
 
   const onSubmit = async (data: ForgetPasswordForm) => {
     setIsLoading(true);
-    setErrorMessage('');
     
     try {
+      // Show info toast while processing
+    
+      
       await axios.post(`${baseUrl}/portal/users/forgot-password`, data, {
         headers: { Authorization: `${localStorage.getItem('token')}` }
       });
       
-      setSuccessMessage('Password reset email sent successfully! Check your inbox.');
-      setShowSuccess(true);
+      // Show success toast
+      showSuccess('Password reset email sent successfully! Check your inbox for further instructions.', {
+        autoClose: 5000,
+        position: 'top-right'
+      });
       
       // Redirect after a short delay to show success message
       setTimeout(() => {
         navigate("/auth/reset-pass");
-      }, 2000);
+      }, 3000);
       
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Failed to send reset email. Please try again.';
-      setErrorMessage(message);
+      const message = error.response?.data?.message || 'Failed to send reset email. Please check your email address and try again.';
+      showError(message, {
+        autoClose: 6000,
+        position: 'top-center'
+      });
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Enhanced form submission with validation feedback
+  const handleFormSubmit = handleSubmit((data: ForgetPasswordForm) => {
+    if (!data.email) {
+      showError('Please enter your email address', { autoClose: 3000 });
+      return;
+    }
+    
+    if (!isValid) {
+      showError('Please enter a valid email address', { autoClose: 3000 });
+      return;
+    }
+    
+    onSubmit(data);
+  });
 
   return (
     <AuthLayout
@@ -75,11 +94,8 @@ export default function ForgetPassword() {
       image={signUpImage}
       imageAlt="Forgot Password"
     >
-      {/* Error Alert */}
-      <ErrorAlert error={errorMessage} />
-
       {/* Form */}
-      <FormContainer onSubmit={handleSubmit(onSubmit)}>
+      <FormContainer onSubmit={handleFormSubmit}>
         {/* Email Field */}
         <EmailField
           control={control}
@@ -103,13 +119,6 @@ export default function ForgetPassword() {
           Remember your password?
         </LinkText>
       </Box>
-
-      {/* Success Snackbar */}
-      <SuccessSnackbar
-        open={showSuccess}
-        message={successMessage}
-        onClose={() => setShowSuccess(false)}
-      />
     </AuthLayout>
   );
 }

@@ -114,6 +114,7 @@ export default function SignIn() {
           placeholder="Enter your password"
         />
 
+
         {/* Submit Button */}
         <SubmitButton
           isLoading={isLoading}
@@ -129,6 +130,13 @@ export default function SignIn() {
           Don't have an account?
         </LinkText>
       </Box>
+      
+        {/* Forgot Password Link */}
+        <Box sx={{ mt: 1, textAlign: 'right' }}>
+          <LinkText to="/auth/forget-pass" linkText="Forgot your password?">
+            Having trouble signing in?
+          </LinkText>
+        </Box>
 
       {/* Success Snackbar */}
       <SuccessSnackbar

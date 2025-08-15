@@ -311,7 +311,7 @@ export const SubmitButton: React.FC<{
   children: React.ReactNode;
   disabled?: boolean;
 }> = ({ isLoading, isValid, children, disabled = false }) => (
-  <Box sx={{ mt: 1 }}>
+  <Box sx={{ mt: 2}}>
     <EnhancedButton
       fullWidth
       variant="primary"

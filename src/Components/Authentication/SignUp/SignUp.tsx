@@ -6,17 +6,17 @@ import {
   InputLabel, 
   Select,
   Divider,
-  Grid
+  Grid,
+  FormHelperText
 } from '@mui/material';
 import { CloudUpload } from '@mui/icons-material';
 import signUpImage from "../../../assets/Rectangle 7.png";
-import { useForm } from 'react-hook-form';
-import { userService, handleApiError } from '../../../services/api';
+import { useForm, Controller } from 'react-hook-form';
+import { userService } from '../../../services/api';
+import { useToastMessages, handleApiError } from '../../../utils/toastUtils';
 import { 
   AuthLayout, 
   FormContainer, 
-  ErrorAlert, 
-  SuccessSnackbar, 
   LinkText,
   EmailField,
   PasswordField,
@@ -41,10 +41,9 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [submitError, setSubmitError] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  
+  const toastMessages = useToastMessages();
 
   const {
     control,
@@ -70,25 +69,24 @@ export default function SignUp() {
 
   const onSubmit = async (data: SignUpForm) => {
     setIsLoading(true);
-    setSubmitError('');
 
     // Validate profile image
     if (!selectedFile) {
-      setSubmitError('Profile image is required');
+      toastMessages.showError('Profile image is required');
       setIsLoading(false);
       return;
     }
 
     // Validate file type
     if (!selectedFile.type.startsWith('image/')) {
-      setSubmitError('Please select a valid image file');
+      toastMessages.showError('Please select a valid image file');
       setIsLoading(false);
       return;
     }
 
     // Validate file size (max 5MB)
     if (selectedFile.size > 5 * 1024 * 1024) {
-      setSubmitError('Image file size must be less than 5MB');
+      toastMessages.showError('Image file size must be less than 5MB');
       setIsLoading(false);
       return;
     }
@@ -106,8 +104,7 @@ export default function SignUp() {
 
       const response = await userService.register(formData);
       
-      setSuccessMessage('Registration successful! Redirecting to login...');
-      setShowSuccess(true);
+      toastMessages.showRegisterSuccess();
       
       // Redirect after 2 seconds
       setTimeout(() => {
@@ -116,7 +113,7 @@ export default function SignUp() {
       
     } catch (error: any) {
       console.error('Registration error:', error);
-      setSubmitError(handleApiError(error));
+      handleApiError(error, toastMessages);
     } finally {
       setIsLoading(false);
     }
@@ -127,18 +124,18 @@ export default function SignUp() {
     if (file) {
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        setSubmitError('Please select a valid image file');
+        toastMessages.showError('Please select a valid image file');
         return;
       }
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        setSubmitError('Image file size must be less than 5MB');
+        toastMessages.showError('Image file size must be less than 5MB');
         return;
       }
 
       setSelectedFile(file);
-      setSubmitError(''); // Clear any previous errors
+      toastMessages.showSuccess('Profile image uploaded successfully!');
     }
   };
 
@@ -150,24 +147,21 @@ export default function SignUp() {
       imageAlt="Sign Up"
       paddingTop={{ xs: 8, sm: 10, md:12 }}
     >
-      {/* Error Alert */}
-      <ErrorAlert error={submitError} />
-
-      {/* Form */}
+             {/* Form */}
       <FormContainer onSubmit={handleSubmit(onSubmit)}>
         {/* Personal Information Section */}
-        <Box sx={{ mb: 1.5 }}>
+        <Box sx={{ mb: 3 }}>
           <Box sx={{ 
             fontSize: '15px', 
             fontWeight: 600, 
             color: '#333', 
-            mb: 1,
+            mb: 2,
             fontFamily: 'Poppins, sans-serif'
           }}>
             Personal Information
           </Box>
           
-                     <Grid container spacing={3}>
+                     <Grid container spacing={4}>
              <Grid item xs={12} sm={6}>
                <CustomField
                  control={control}
@@ -193,7 +187,7 @@ export default function SignUp() {
              </Grid>
            </Grid>
 
-           <Grid container spacing={3}>
+           <Grid container spacing={4}>
              <Grid item xs={12} sm={6}>
                <EmailField
                  control={control}
@@ -215,43 +209,117 @@ export default function SignUp() {
              </Grid>
            </Grid>
 
-           <Grid container spacing={3}>
-             <Grid item xs={12} sm={6}>
-               <CustomField
-                 control={control}
-                 errors={errors}
-                 name="role"
-                 label="Role"
-                 validation={{
-                   required: 'Role is required'
-                 }}
-                 startIcon={<CloudUpload />}
-                 endIcon={
-                   <FormControl fullWidth>
-                     <Select
-                       defaultValue="user"
-                       sx={{
-                         '& .MuiSelect-select': {
-                           padding: '12px 16px',
-                           backgroundColor: '#F8F9FA',
-                           borderRadius: 1.5,
-                           '&:hover': {
-                             backgroundColor: '#F1F3F4'
-                           },
-                           '&.Mui-focused': {
-                             backgroundColor: '#FFFFFF'
-                           }
-                         }
-                       }}
-                     >
-                       <MenuItem value="user">User</MenuItem>
-                       <MenuItem value="admin">Admin</MenuItem>
-                     </Select>
-                   </FormControl>
-                 }
-               />
-             </Grid>
-                           <Grid item xs={12} sm={6}>
+                                                                                                                                                                                               <Grid container spacing={4}>
+                 <Grid item xs={12}>
+                   <Box sx={{ mt: 3, mb: 1}}>
+                     <Controller
+                    name="role"
+                    control={control}
+                    defaultValue="user"
+                    rules={{ required: 'Role is required' }}
+                    render={({ field, fieldState: { error } }) => (
+                      <FormControl fullWidth error={!!error}>
+                        <InputLabel id="role-select-label">Role</InputLabel>
+                        <Select
+                          {...field}
+                          labelId="role-select-label"
+                          label="Role"
+                          sx={{
+                                                         '& .MuiSelect-select': {
+                               padding: '12px 16px',
+                               backgroundColor: '#F8F9FA',
+                               borderRadius: 2,
+                               border: '1px solid #E0E0E0',
+                               fontSize: '15px',
+                               fontWeight: 500,
+                               color: '#333',
+                               transition: 'all 0.3s ease',
+                               minHeight: '48px',
+                               display: 'flex',
+                               alignItems: 'center',
+                              '&:hover': {
+                                backgroundColor: '#F1F3F4',
+                                borderColor: '#667eea',
+                                boxShadow: '0 2px 8px rgba(102, 126, 234, 0.1)'
+                              },
+                              '&.Mui-focused': {
+                                backgroundColor: '#FFFFFF',
+                                borderColor: '#667eea',
+                                boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)'
+                              }
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                              border: 'none'
+                            },
+                            '& .MuiSelect-icon': {
+                              color: '#667eea',
+                              fontSize: '24px',
+                              marginRight: '8px'
+                            }
+                          }}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                borderRadius: 2,
+                                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                                border: '1px solid #E0E0E0',
+                                                                 '& .MuiMenuItem-root': {
+                                   padding: '12px 16px',
+                                   fontSize: '15px',
+                                   fontWeight: 500,
+                                   minHeight: '40px',
+                                  '&:hover': {
+                                    backgroundColor: '#F8F9FA'
+                                  },
+                                  '&.Mui-selected': {
+                                    backgroundColor: '#667eea',
+                                    color: 'white',
+                                    '&:hover': {
+                                      backgroundColor: '#5a6fd8'
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }}
+                        >
+                          <MenuItem value="user">
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <Box sx={{ 
+                                width: 8, 
+                                height: 8, 
+                                borderRadius: '50%', 
+                                backgroundColor: '#4CAF50' 
+                              }} />
+                              User
+                            </Box>
+                          </MenuItem>
+                          <MenuItem value="admin">
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <Box sx={{ 
+                                width: 8, 
+                                height: 8, 
+                                borderRadius: '50%', 
+                                backgroundColor: '#FF9800' 
+                              }} />
+                              Admin
+                            </Box>
+                          </MenuItem>
+                        </Select>
+                        {error && (
+                          <FormHelperText>{error.message}</FormHelperText>
+                                                 )}
+                       </FormControl>
+                     )}
+                   />
+                     </Box>
+                 </Grid>
+               </Grid>
+
+            <Box sx={{ mt: 2 }}></Box>
+
+            <Grid container spacing={4}>
+              <Grid item xs={12}>
                 <Box>
                   <Box sx={{ 
                     fontSize: '13px', 
@@ -302,24 +370,24 @@ export default function SignUp() {
                   )}
                 </Box>
               </Grid>
-           </Grid>
+            </Grid>
         </Box>
 
-        <Divider sx={{ my: 1.5 }} />
+                 <Divider sx={{ my: 3 }} />
 
-        {/* Security Section */}
-        <Box sx={{ mb: 1.5 }}>
-          <Box sx={{ 
-            fontSize: '15px', 
-            fontWeight: 600, 
-            color: '#333', 
-            mb: 1,
-            fontFamily: 'Poppins, sans-serif'
-          }}>
-            Security
-          </Box>
-          
-                     <Grid container spacing={3}>
+                   {/* Security Section */}
+          <Box sx={{ mb: 2 }}>
+           <Box sx={{ 
+             fontSize: '15px', 
+             fontWeight: 600, 
+             color: '#333', 
+             mb: 1.5,
+             fontFamily: 'Poppins, sans-serif'
+           }}>
+             Security
+           </Box>
+           
+                      <Grid container spacing={3}>
              <Grid item xs={12} sm={6}>
                <PasswordField
                  control={control}
@@ -353,24 +421,12 @@ export default function SignUp() {
         </SubmitButton>
       </FormContainer>
 
-      {/* Links to Sign In and Forgot Password */}
-      <Box sx={{ mt: 1.5, textAlign: 'center' }}>
-        <LinkText to="/auth/signin" linkText="Sign in here">
-          Already have an account?
-        </LinkText>
-                 <Box sx={{ mt: 1 }}>
-           <LinkText to="/auth/forget-pass" linkText="Forgot your password?">
-             Having trouble signing in?
-           </LinkText>
-         </Box>
-      </Box>
-
-      {/* Success Snackbar */}
-      <SuccessSnackbar
-        open={showSuccess}
-        message={successMessage}
-        onClose={() => setShowSuccess(false)}
-      />
+             {/* Link to Sign In */}
+       <Box sx={{ mt: 3, textAlign: 'center' }}>
+         <LinkText to="/auth/signin" linkText="Sign in here">
+           Already have an account?
+         </LinkText>
+       </Box>
     </AuthLayout>
   );
 }
