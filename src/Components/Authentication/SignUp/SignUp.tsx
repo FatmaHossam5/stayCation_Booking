@@ -21,6 +21,7 @@ import {
   EmailField,
   PasswordField,
   ConfirmPasswordField,
+  PhoneNumberField,
   SubmitButton,
   CustomField
 } from '../../shared/common';
@@ -147,6 +148,7 @@ export default function SignUp() {
       subtitle="Join StayCation and start your journey with us. Please fill in your details to create your account."
       image={signUpImage}
       imageAlt="Sign Up"
+      paddingTop={{ xs: 8, sm: 10, md:12 }}
     >
       {/* Error Alert */}
       <ErrorAlert error={submitError} />
@@ -183,20 +185,10 @@ export default function SignUp() {
                />
              </Grid>
              <Grid item xs={12} sm={6}>
-               <CustomField
+               <PhoneNumberField
                  control={control}
                  errors={errors}
-                 name="phoneNumber"
-                 label="Phone Number"
-                 type="tel"
                  placeholder="Enter your phone number"
-                 validation={{
-                   required: 'Phone number is required',
-                   pattern: {
-                     value: /^[+]?[\d\s\-\(\)]+$/,
-                     message: 'Please enter a valid phone number'
-                   }
-                 }}
                />
              </Grid>
            </Grid>

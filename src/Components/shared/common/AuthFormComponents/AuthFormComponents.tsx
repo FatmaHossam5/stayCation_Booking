@@ -159,6 +159,7 @@ export const EmailField: React.FC<{
               backgroundColor: '#F8F9FA',
               '&:hover': {
                 backgroundColor: '#F1F3F4'
+
               },
               '&.Mui-focused': {
                 backgroundColor: '#FFFFFF'
@@ -202,10 +203,7 @@ export const PasswordField: React.FC<{
           value: 8,
           message: 'Password must be at least 8 characters'
         },
-        pattern: {
-          value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-          message: 'Password must contain uppercase, lowercase, number and special character'
-        }
+
       }}
       render={({ field }) => (
         <EnhancedTextField
@@ -328,6 +326,60 @@ export const SubmitButton: React.FC<{
       {children}
     </EnhancedButton>
   </Box>
+);
+
+// Phone Number Field Component
+export const PhoneNumberField: React.FC<{
+  control: any;
+  errors: any;
+  name?: string;
+  label?: string;
+  placeholder?: string;
+  validation?: any;
+}> = ({ 
+  control, 
+  errors, 
+  name = "phoneNumber",
+  label = "Phone Number",
+  placeholder = "Enter your phone number",
+  validation
+}) => (
+  <FieldContainer>
+    <FieldLabel>{label}</FieldLabel>
+    <Controller
+      name={name}
+      control={control}
+      rules={validation || {
+        required: 'Phone number is required',
+        pattern: {
+          value: /^[+]?[\d\s\-\(\)]+$/,
+          message: 'Please enter a valid phone number'
+        }
+      }}
+      render={({ field }) => (
+        <EnhancedTextField
+          {...field}
+          placeholder={placeholder}
+          type="tel"
+          fullWidth
+          variant="filled"
+          error={!!errors[name]}
+          helperText={errors[name]?.message}
+          sx={{
+            '& .MuiFilledInput-root': {
+              backgroundColor: '#F8F9FA',
+              '&:hover': {
+                backgroundColor: '#F1F3F4'
+              },
+              '&.Mui-focused': {
+                backgroundColor: '#FFFFFF'
+              }
+            }
+          }}
+        />
+      )}
+    />
+  </FieldContainer>
 );
 
 // Custom Field Component

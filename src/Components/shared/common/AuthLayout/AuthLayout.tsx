@@ -18,6 +18,13 @@ interface AuthLayoutProps {
   imageAlt?: string;
   showLogo?: boolean;
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  paddingTop?: {
+    xs?: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+  };
 }
 
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -155,7 +162,8 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
   image,
   imageAlt = 'Authentication',
   showLogo = true,
-  maxWidth = 'xl'
+  maxWidth = 'xl',
+  paddingTop = { xs: 8, sm: 10, md: 0 }
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
@@ -180,7 +188,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
            justifyContent: 'center',
            width: '100%',
            margin: 0,
-           pt: { xs: 8, sm: 10, md: 12 }
+           pt: paddingTop
          }}
        >
                  {/* Form Section */}

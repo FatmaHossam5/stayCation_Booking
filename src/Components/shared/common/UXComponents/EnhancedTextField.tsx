@@ -26,7 +26,7 @@ const StyledTextField = styled(TextField, {
     
     '&.Mui-focused': {
       backgroundColor: '#ffffff',
-      boxShadow: '0 0 0 3px rgba(50, 82, 223, 0.1)',
+      boxShadow: '0 0 0 2px rgba(50, 82, 223, 0.3)',
       transform: 'translateY(-1px)',
     },
     
@@ -50,7 +50,7 @@ const StyledTextField = styled(TextField, {
     
     '&.Mui-focused': {
       transform: 'translateY(-1px)',
-      boxShadow: '0 0 0 3px rgba(50, 82, 223, 0.1)',
+      boxShadow: '0 0 0 2px rgba(50, 82, 223, 0.3)',
     },
   },
   
@@ -90,13 +90,7 @@ const StyledTextField = styled(TextField, {
     },
   },
   
-  // Focus styles for accessibility
-  '& .MuiFocused': {
-    '& .MuiFilledInput-root': {
-      outline: `2px solid ${theme.palette.primary.main}`,
-      outlineOffset: '2px',
-    },
-  },
+
   
   // Mobile optimizations
   [theme.breakpoints.down('sm')]: {

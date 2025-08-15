@@ -6,10 +6,10 @@ import * as React from 'react';
 import Select from 'react-dropdown-select';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import { AuthContext } from '../../Context/AuthContext';
 import useFacilities from '../../custom Hook/useFacilities';
 import useRooms from '../../custom Hook/useRooms';
+import { useToastMessages, handleApiError } from '../../utils/toastUtils';
 
 // Enhanced form container styling
 const FormContainer = styled(Paper)(({ theme }) => ({
@@ -61,7 +61,8 @@ export default function AddRoom() {
   const navigate = useNavigate();
   const { formattedFacilities } = useFacilities();
   const { refetchRooms } = useRooms();
-  const{baseUrl}=React.useContext(AuthContext)
+  const { baseUrl } = React.useContext(AuthContext);
+  const toastMessages = useToastMessages();
 
   const theme = createTheme({
     components: {
@@ -101,18 +102,22 @@ export default function AddRoom() {
 
   {/*Add Room Function */ }
 
-  const AddNewRoom = (data: any) => {
-    const formattedSelected = selectedValue.map(({ value }) => value)
-    axios.post(`${baseUrl}/admin/rooms`, { ...data, imgs: imgs, facilities: formattedSelected }, { headers: {
-      'Authorization': `${localStorage.getItem('userToken')}`,
-      'Content-Type': 'multipart/form-data'
-    } }).then((response) => {
-      toast.success("Added SuccessFully!")
-      navigate('/dashboard/rooms')
-      refetchRooms()
-    }).catch((error) => {
-      toast.error(error?.response?.data)
-    })
+  const AddNewRoom = async (data: any) => {
+    try {
+      const formattedSelected = selectedValue.map(({ value }) => value);
+      await axios.post(`${baseUrl}/admin/rooms`, { ...data, imgs: imgs, facilities: formattedSelected }, { 
+        headers: {
+          'Authorization': `${localStorage.getItem('userToken')}`,
+          'Content-Type': 'multipart/form-data'
+        } 
+      });
+      
+      toastMessages.showRoomCreateSuccess();
+      navigate('/dashboard/rooms');
+      refetchRooms();
+    } catch (error: any) {
+      handleApiError(error, toastMessages);
+    }
   }
 
   return (

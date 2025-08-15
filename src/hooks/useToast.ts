@@ -1,33 +1,16 @@
-import { useContext } from 'react';
-import { ToastContext } from '../Context/ToastContext';
-import { ToastMessage } from '../types';
+import { useToastContext } from '../Context/ToastContext';
 
 export const useToast = () => {
-  const { showToast, hideToast, clearToasts } = useContext(ToastContext);
-
-  const showSuccessToast = (message: string, duration?: number) => {
-    showToast(message, 'success', duration);
-  };
-
-  const showErrorToast = (message: string, duration?: number) => {
-    showToast(message, 'error', duration);
-  };
-
-  const showWarningToast = (message: string, duration?: number) => {
-    showToast(message, 'warning', duration);
-  };
-
-  const showInfoToast = (message: string, duration?: number) => {
-    showToast(message, 'info', duration);
-  };
+  const toastContext = useToastContext();
 
   return {
-    showToast,
-    showSuccessToast,
-    showErrorToast,
-    showWarningToast,
-    showInfoToast,
-    hideToast,
-    clearToasts,
+    ...toastContext,
+    // Aliases for backward compatibility
+    showSuccessToast: toastContext.showSuccess,
+    showErrorToast: toastContext.showError,
+    showWarningToast: toastContext.showWarning,
+    showInfoToast: toastContext.showInfo,
+    hideToast: toastContext.dismissToast,
+    clearToasts: toastContext.dismissAll,
   };
 };

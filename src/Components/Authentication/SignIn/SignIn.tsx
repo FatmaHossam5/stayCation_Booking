@@ -5,10 +5,10 @@ import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import signin from "../../../assets/bg-signin.png";
 import { getDefaultRouteByRole } from '../../../config/routes';
 import { AuthContext } from '../../../Context/AuthContext';
+import { useToastMessages, handleApiError } from '../../../utils/toastUtils';
 import {
   AuthLayout,
   EmailField,
@@ -36,12 +36,13 @@ export default function SignIn() {
   
   const { baseUrl, saveUserData } = useContext(AuthContext) as any;
   const navigate = useNavigate();
+  const toastMessages = useToastMessages();
 
   // State management
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleClickShowPassword = () => {
@@ -62,7 +63,10 @@ export default function SignIn() {
 
       saveUserData();
       setSuccessMessage('Login successful! Redirecting...');
-      setShowSuccess(true);
+      setShowSuccessSnackbar(true);
+      
+      // Show success toast
+      toastMessages.showLoginSuccess();
 
       // Redirect to appropriate dashboard based on user role
       setTimeout(() => {
@@ -75,7 +79,7 @@ export default function SignIn() {
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || 'Login failed. Please try again.';
       setLoginError(errorMessage);
-      toast.error(errorMessage);
+      handleApiError(error, toastMessages);
     } finally {
       setIsLoading(false);
     }
@@ -128,9 +132,9 @@ export default function SignIn() {
 
       {/* Success Snackbar */}
       <SuccessSnackbar
-        open={showSuccess}
+        open={showSuccessSnackbar}
         message={successMessage}
-        onClose={() => setShowSuccess(false)}
+        onClose={() => setShowSuccessSnackbar(false)}
       />
     </AuthLayout>
   );

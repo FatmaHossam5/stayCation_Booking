@@ -1,13 +1,14 @@
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
-import { toast } from "react-toastify"
 import { AuthContext } from "../Context/AuthContext"
+import { useToastMessages, handleApiError } from "../utils/toastUtils"
 
 
 const useFacilities = () => {
   const [facilities, setFacilities] = useState([])
   const [formattedFacilities, setFormattedFacilities] = useState<Array<{ value: string; label: string }>>([]);
    const {baseUrl,reqHeaders}=useContext(AuthContext)
+   const toastMessages = useToastMessages();
 
 
 
@@ -23,7 +24,7 @@ const useFacilities = () => {
       
     }).catch((error) => {
       console.error('Error fetching facilities:', error);
-      toast.error(error?.response?.data || 'Failed to fetch facilities');
+      handleApiError(error, toastMessages);
       setFormattedFacilities([]);
     })
   }

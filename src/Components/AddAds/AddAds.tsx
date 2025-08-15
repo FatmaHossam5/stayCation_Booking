@@ -42,7 +42,7 @@ import React, { useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
-import { ToastContext } from "../../Context/ToastContext";
+import { useToastMessages, handleApiError } from "../../utils/toastUtils";
 import useRooms from "../../custom Hook/useRooms";
 
 interface FormData {
@@ -54,7 +54,7 @@ interface FormData {
 const AddAds: React.FC = () => {
   const navigate = useNavigate();
   const { baseUrl} = useContext(AuthContext);
-  const { getToastValue } = useContext(ToastContext);
+  const toastMessages = useToastMessages();
   const { rooms} = useRooms();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -115,15 +115,15 @@ const AddAds: React.FC = () => {
       });
 
       if (response.ok) {
-        getToastValue("success", "Advertisement created successfully!");
+        toastMessages.showAdCreateSuccess();
         reset();
         navigate("/dashboard/ads");
       } else {
         const errorData = await response.json();
-        getToastValue("error", errorData.message || "Failed to create advertisement");
+        toastMessages.showAdCreateError(errorData.message);
       }
-    } catch (error) {
-      getToastValue("error", "Network error. Please try again.");
+    } catch (error: any) {
+      handleApiError(error, toastMessages);
     } finally {
       setLoading(false);
     }

@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
-import { toast } from "react-toastify"
 import { AuthContext } from "../Context/AuthContext"
+import { useToastMessages, handleApiError } from "../utils/toastUtils"
 
 interface Room {
   _id: string;
@@ -16,6 +16,7 @@ const useRooms = () => {
     const[rooms,setRooms]=useState<Room[]>([])
     const [fetchCount, setFetchCount] = useState(0);
     const{baseUrl,reqHeaders}=useContext(AuthContext)
+    const toastMessages = useToastMessages();
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -41,16 +42,7 @@ const useRooms = () => {
         setRooms(rooms);
         setTotalPages(totalCount);
       }).catch((error)=>{
-        // Check for specific error types
-        if (error?.response?.status === 401) {
-          toast.error('Authentication failed. Please login again.');
-        } else if (error?.response?.status === 404) {
-          toast.error('API endpoint not found. Please check the URL.');
-        } else if (error?.code === 'ERR_NETWORK') {
-          toast.error('Network error. Please check your internet connection.');
-        } else {
-          toast.error(error?.response?.data?.message || 'Error fetching rooms');
-        }
+        handleApiError(error, toastMessages);
       }).finally(() => {
         setLoading(false);
       })
