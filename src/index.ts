@@ -16,15 +16,15 @@ export { useToast } from './hooks/useToast';
 // Utils
 export * from './utils/validation';
 export * from './utils/helpers';
-export { useToastMessages, handleApiError, TOAST_MESSAGES } from './utils/toastUtils';
+export { useToastMessages, TOAST_MESSAGES } from './utils/toastUtils';
 
 // API
 export { apiClient, handleApiError } from './lib/api';
 
 // Shared Components
-export { default as ErrorBoundary } from './components/shared/ErrorBoundary';
-export { default as LoadingSpinner } from './components/shared/LoadingSpinner';
-export { default as EmptyState } from './components/shared/EmptyState';
+export { default as ErrorBoundary } from './Components/shared/ErrorBoundary';
+export { default as LoadingSpinner } from './Components/shared/LoadingSpinner';
+export { default as EmptyState } from './Components/shared/EmptyState';
 
 // Context
 export { AuthContext } from './Context/AuthContext';
