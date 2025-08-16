@@ -1,6 +1,6 @@
 
 
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createHashRouter } from 'react-router-dom'
 import './App.css'
 import AuthLayout from './Components/shared/AuthLayout/AuthLayout'
 import NotFound from './Components/shared/NotFound/NotFound'
@@ -44,7 +44,7 @@ function App() {
   
 
  
-const routes =createBrowserRouter([
+const routes =createHashRouter([
   {
     path:"/",element:<LandingPage/>,errorElement:<NotFound/>
   },
