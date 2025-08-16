@@ -1,28 +1,51 @@
-import { 
-  Container, 
-  Grid, 
-  Paper, 
-  styled, 
-  Typography, 
-  IconButton, 
-  Button, 
-  Box,
-  CircularProgress,
-  Alert,
-  Chip,
-  Divider
-} from '@mui/material'
-import React, { useContext, useEffect, useState } from 'react'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { AuthContext } from '../../Context/AuthContext'
-import { useNavigate, useParams } from 'react-router'
-import axios from 'axios'
-import { bookingService } from '../../services/bookingService'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import {
+  Alert,
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Container,
+  Divider,
+  Grid,
+  IconButton,
+  Paper,
+  styled,
+  Typography
+} from '@mui/material'
 import { format } from 'date-fns'
+import { useContext, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
+import { AuthContext } from '../../Context/AuthContext'
+import { bookingService } from '../../services/bookingService'
 
 // Type definitions
 interface BookingDetails {
+  data?: {
+    booking?: {
+      user?: {
+        userName?: string
+        name?: string
+        fullName?: string
+      }
+      room?: {
+        roomNumber?: string
+        number?: string
+        name?: string
+      }
+      totalPrice?: number
+      price?: number
+      amount?: number
+      startDate?: string
+      checkIn?: string
+      endDate?: string
+      checkOut?: string
+      status?: string
+      paymentStatus?: string
+      bookingStatus?: string
+    }
+  }
   user?: {
     userName?: string
     name?: string
@@ -85,7 +108,7 @@ const StatusChip = styled(Chip)(({ theme }) => ({
 }))
 
 export default function BookingDetails() {
-  const { baseUrl, reqHeaders, role } = useContext(AuthContext)
+  const { baseUrl, role } = useContext(AuthContext)
   const { bookingId } = useParams()
   const [bookingDetails, setBookingDetails] = useState<BookingDetails>({})
   const [loading, setLoading] = useState(true)
@@ -169,9 +192,9 @@ export default function BookingDetails() {
       <ConfirmationCard>
         {/* Header Section */}
         <Box textAlign="center" mb={4}>
-          <IconButton 
-            sx={{ 
-              color: '#4CAF50', 
+          <IconButton
+            sx={{
+              color: '#4CAF50',
               mb: 2,
               '&:hover': { transform: 'scale(1.1)' },
               transition: 'transform 0.2s ease-in-out'
@@ -179,11 +202,11 @@ export default function BookingDetails() {
           >
             <CheckCircleIcon sx={{ fontSize: { xs: '3rem', md: '4rem' } }} />
           </IconButton>
-          
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              color: 'white', 
+
+          <Typography
+            variant="h4"
+            sx={{
+              color: 'white',
               fontWeight: 600,
               mb: 1,
               fontSize: { xs: '1.5rem', md: '2rem' }
@@ -191,15 +214,15 @@ export default function BookingDetails() {
           >
             Booking Confirmed!
           </Typography>
-          
-          <Typography 
-            variant="h6" 
-            sx={{ 
+
+          <Typography
+            variant="h6"
+            sx={{
               color: 'rgba(255, 255, 255, 0.8)',
               fontSize: { xs: '1rem', md: '1.25rem' }
             }}
           >
-                         Thank you, {bookingDetails?.user?.userName || bookingDetails?.user?.name || bookingDetails?.user?.fullName || 'Guest'}
+            Thank you, {bookingDetails?.data?.booking?.user?.userName || 'Guest'}
           </Typography>
         </Box>
 
@@ -209,10 +232,10 @@ export default function BookingDetails() {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <InfoSection>
-              <Typography 
-                variant="body2" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.7)', 
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.7)',
                   mb: 1,
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
@@ -221,25 +244,25 @@ export default function BookingDetails() {
               >
                 Room Number
               </Typography>
-              <Typography 
-                variant="h6" 
-                sx={{ 
-                  color: 'white', 
+              <Typography
+                variant="h6"
+                sx={{
+                  color: 'white',
                   fontWeight: 600,
                   fontSize: { xs: '1rem', md: '1.25rem' }
                 }}
               >
-                                 {bookingDetails?.room?.roomNumber || bookingDetails?.room?.number || bookingDetails?.room?.name || 'N/A'}
+                {bookingDetails?.data?.booking?.room?.roomNumber || 'N/A'}
               </Typography>
             </InfoSection>
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <InfoSection>
-              <Typography 
-                variant="body2" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.7)', 
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.7)',
                   mb: 1,
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
@@ -248,25 +271,25 @@ export default function BookingDetails() {
               >
                 Total Amount
               </Typography>
-              <Typography 
-                variant="h6" 
-                sx={{ 
-                  color: 'white', 
+              <Typography
+                variant="h6"
+                sx={{
+                  color: 'white',
                   fontWeight: 600,
                   fontSize: { xs: '1rem', md: '1.25rem' }
                 }}
               >
-                                 ${bookingDetails?.totalPrice || bookingDetails?.price || bookingDetails?.amount || '0'}
+                ${bookingDetails?.data?.booking?.totalPrice || '0'}
               </Typography>
             </InfoSection>
           </Grid>
 
           <Grid item xs={12}>
             <InfoSection>
-              <Typography 
-                variant="body2" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.7)', 
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.7)',
                   mb: 1,
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
@@ -275,25 +298,25 @@ export default function BookingDetails() {
               >
                 Booking Period
               </Typography>
-              <Typography 
-                variant="h6" 
-                sx={{ 
-                  color: 'white', 
+              <Typography
+                variant="h6"
+                sx={{
+                  color: 'white',
                   fontWeight: 600,
                   fontSize: { xs: '1rem', md: '1.25rem' }
                 }}
               >
-                                 {formatDate(bookingDetails?.startDate || bookingDetails?.checkIn)} - {formatDate(bookingDetails?.endDate || bookingDetails?.checkOut)}
+                {formatDate(bookingDetails?.data?.booking?.startDate || bookingDetails?.data?.booking?.checkIn)} - {formatDate(bookingDetails?.data?.booking?.endDate || bookingDetails?.data?.booking?.checkOut)}
               </Typography>
             </InfoSection>
           </Grid>
 
           <Grid item xs={12}>
             <InfoSection>
-              <Typography 
-                variant="body2" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.7)', 
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.7)',
                   mb: 2,
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
@@ -302,10 +325,10 @@ export default function BookingDetails() {
               >
                 Payment Status
               </Typography>
-                             <StatusChip 
-                 label={bookingDetails?.status || bookingDetails?.paymentStatus || bookingDetails?.bookingStatus || 'Unknown'} 
-                 color={getStatusColor(bookingDetails?.status || bookingDetails?.paymentStatus || bookingDetails?.bookingStatus)}
-                sx={{ 
+              <StatusChip
+                label={bookingDetails?.data?.booking?.status || bookingDetails?.data?.booking?.paymentStatus || bookingDetails?.data?.booking?.bookingStatus || 'Unknown'}
+                color={getStatusColor(bookingDetails?.data?.booking?.status || bookingDetails?.data?.booking?.paymentStatus || bookingDetails?.data?.booking?.bookingStatus)}
+                sx={{
                   fontSize: { xs: '0.75rem', md: '0.875rem' },
                   height: { xs: 28, md: 32 }
                 }}

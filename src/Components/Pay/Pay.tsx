@@ -94,7 +94,7 @@ export default function Pay({ bookingId }: PayProps) {
             {token},
             {
               headers: {
-                ...reqHeaders,
+              Authorization: `${localStorage.getItem("userToken")}`,
                 'Content-Type': 'application/json'
               }
             }

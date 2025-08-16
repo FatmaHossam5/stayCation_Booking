@@ -1,34 +1,29 @@
 
+import {
+  BookOnline as BookOnlineIcon,
+  MonetizationOn as MonetizationOnIcon,
+  Schedule as ScheduleIcon
+} from '@mui/icons-material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import HotelIcon from '@mui/icons-material/Hotel';
-import PendingIcon from '@mui/icons-material/Pending';
 import ReceiptIcon from '@mui/icons-material/Receipt';
-import { Box, Button, Card, CardContent, Chip, Divider, Grid, IconButton, Modal, Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography, tableCellClasses, useMediaQuery, useTheme } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import axios from 'axios';
+import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../Context/AuthContext';
+import { API_ENDPOINTS } from '../../constants';
 import { bookingService } from '../../services/bookingService';
-import DashboardLayout, { 
-  StyledTableCell, 
-  StyledTableRow, 
-  StatusChip, 
-  ActionMenu,
+import { roomService } from '../../services/roomService';
+import DashboardLayout, {
   EmptyState,
-  MobileCardSkeleton
+  StatusChip,
+  StyledTableCell,
+  StyledTableRow
 } from '../shared/common/DashboardLayout';
-import {
-  BookOnline as BookOnlineIcon,
-  TrendingUp as TrendingUpIcon,
-  Schedule as ScheduleIcon,
-  MonetizationOn as MonetizationOnIcon,
-} from '@mui/icons-material';
 
 // Enhanced modal styling
 const modalStyle = {
@@ -385,8 +380,6 @@ const BookingDetailsModal = ({ open, onClose, booking, roomInfo, isAdmin }: any)
 
 // Enhanced Mobile Card Component
 const BookingCard = ({ booking, roomInfo, index, onViewDetails }: any) => {
-  const theme = useTheme();
-  
   return (
     <Card
       sx={{
@@ -495,11 +488,8 @@ const BookingCard = ({ booking, roomInfo, index, onViewDetails }: any) => {
 };
 
 export default function Bookings() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
   const [book, setBook] = useState<any[]>([])
-  const { baseUrl, reqHeaders, role } = useContext(AuthContext)
+  const {role } = useContext(AuthContext)
   const [currentPage, setCurrentPage] = useState(1);
   const [pagesArray, setPagesArray] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -511,7 +501,10 @@ export default function Bookings() {
 
   // Determine if this is admin or user context
   const isAdmin = role === 'admin';
-  const isUser = role === 'user';
+  
+
+  
+
 
   const handleChangePage = (_event: any, newPage: number) => {
     setCurrentPage(newPage + 1);
@@ -525,11 +518,9 @@ export default function Bookings() {
   };
 
   const fetchRoomDetails = async (roomId: string) => {
-    console.log(roomId);
-    
+    console.log(roomId);    
     try {
-      const token = localStorage.getItem('userToken');
-      const roomData = await bookingService.getRoomDetails(roomId, role, token!, baseUrl);
+      const roomData = await roomService.getRoomById(roomId);
       return roomData;
     } catch (error) {
       // Silently handle room details fetch error - room info is optional
@@ -542,15 +533,62 @@ export default function Bookings() {
     setError(null);
 
     try {
-      const token = localStorage.getItem('userToken');
-      const { bookings, totalCount } = await bookingService.getBookings(role, page, rowsPerPage, token!, baseUrl);
+      let response;
+    
+      if (isAdmin) {
+        // Admin: use /api/v0/admin/booking
+        response = await bookingService.getAllBookings();
+      } else {
+        // User: use /api/v0/portal/booking/my
+        response = await bookingService.getUserBookings();
+        console.log('User bookings response:', response);
+      }
       
-      setBook(bookings);
-      setPagesArray(totalCount);
+      // Handle the response structure correctly
+      if (response) {
+        console.log('Raw response:', response);
+        
+        // The API response structure varies - handle different cases
+        let bookingsData = [];
+        let totalCount = 0;
+        
+        if (response.data && response.data.myBooking) {
+          // Case 1: {data: {myBooking: Array, totalCount: number}}
+          bookingsData = response.data.myBooking;
+          totalCount = response.data.totalCount || 0;
+        } else if (response.myBooking) {
+          // Case 2: {myBooking: Array, totalCount: number}
+          bookingsData = response.myBooking;
+          totalCount = response.totalCount || 0;
+        } else if (response.data && Array.isArray(response.data)) {
+          // Case 3: {data: Array}
+          bookingsData = response.data;
+          totalCount = response.totalCount || response.data.length || 0;
+        } else if (Array.isArray(response)) {
+          // Case 4: Direct array
+          bookingsData = response;
+          totalCount = response.length;
+        } else {
+          // Fallback
+          bookingsData = [];
+          totalCount = 0;
+        }
+        
+        console.log('Processed bookings data:', bookingsData);
+        console.log('Total count:', totalCount);
+        
+        setBook(bookingsData);
+        setPagesArray(totalCount);
+      } else {
+        // Fallback for empty response
+        setBook([]);
+        setPagesArray(0);
+      }
 
       setLoading(false);
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || "Failed to fetch bookings";
+      console.error('Error fetching bookings:', error);
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to fetch bookings";
       setError(errorMessage);
       toast.error(errorMessage);
       setLoading(false);
@@ -579,14 +617,22 @@ export default function Bookings() {
   };
 
   useEffect(() => {
+    // Check if user is authenticated before fetching bookings
+    const token = localStorage.getItem('userToken');
+    if (!token) {
+      setError('Authentication required. Please log in.');
+      return;
+    }
+    
     getAllBookig(1);
   }, [role]); // Re-fetch when role changes
 
-  // Calculate stats
-  const totalBookings = book.length;
-  const completedBookings = book.filter(b => b.status === 'completed').length;
-  const pendingBookings = book.filter(b => b.status === 'pending').length;
-  const totalRevenue = book.reduce((sum, booking) => sum + (booking.totalPrice || 0), 0);
+  // Calculate stats - ensure book is always an array
+  const bookingsArray = Array.isArray(book) ? book : [];
+  const totalBookings = bookingsArray.length;
+  const completedBookings = bookingsArray.filter(b => b.status === 'completed').length;
+  const pendingBookings = bookingsArray.filter(b => b.status === 'pending').length;
+  const totalRevenue = bookingsArray.reduce((sum, booking) => sum + (booking.totalPrice || 0), 0);
 
   const stats = [
     {
@@ -618,8 +664,8 @@ export default function Bookings() {
   // Mobile view component
   const MobileView = () => (
     <Box sx={{ p: 2 }}>
-      {book && book.length > 0 ? (
-        book.map((booking, index) => (
+      {bookingsArray && bookingsArray.length > 0 ? (
+        bookingsArray.map((booking, index) => (
           <BookingCard
             key={booking._id}
             booking={booking}
@@ -674,8 +720,8 @@ export default function Bookings() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {book && book.length > 0 ? (
-              book.map((booking, index) => {
+            {bookingsArray && bookingsArray.length > 0 ? (
+              bookingsArray.map((booking, index) => {
                 const roomInfo = roomDetails[booking.room];
                 return (
                   <StyledTableRow key={booking._id}>

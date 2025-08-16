@@ -1,31 +1,29 @@
-import { 
-  Box, 
-  Button, 
-  TextField, 
-  Container, 
-  Grid, 
-  styled, 
-  Paper, 
-  Typography,
-  Divider,
-  Card,
-  CardContent,
-  Alert,
-  Stack,
-  useTheme,
-  useMediaQuery
-} from '@mui/material';
-import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router';
-import { AuthContext } from '../../Context/AuthContext';
-import { bookingService } from '../../services/bookingService';
-import { useForm } from 'react-hook-form';
-import pay from '../../assets/image 4.png'
-import pay1 from '../../assets/image 5.png'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PaymentIcon from '@mui/icons-material/Payment';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  styled,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
+import { useContext, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate, useParams } from 'react-router';
+import pay from '../../assets/image 4.png';
+import pay1 from '../../assets/image 5.png';
+import { AuthContext } from '../../Context/AuthContext';
+import { bookingService } from '../../services/bookingService';
 
 // Styled components for better organization
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -72,7 +70,14 @@ export default function BookingInfo() {
 
   const { baseUrl, reqHeaders } = useContext(AuthContext);
   const { roomId } = useParams();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      room: roomId,
+      startDate: startDate,
+      endDate: endDate,
+      totalPrice: totalPrice
+    }
+  });
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -93,13 +98,31 @@ export default function BookingInfo() {
       return;
     }
     
+    // Validate that room is present
+    if (!data.room) {
+      setError('Room ID is required. Please try refreshing the page.');
+      setIsLoading(false);
+      return;
+    }
+    
     // Log the data being sent
     console.log('Creating booking with data:', data);
+    console.log('Room ID from params:', roomId);
+    console.log('Room ID from form data:', data.room);
     console.log('Request headers:', reqHeaders);
     console.log('Token exists:', !!token);
     
           try {
-        const response = await bookingService.createBooking(data, token, baseUrl);
+        // Transform the data to match the service expectations
+        const bookingData = {
+          room: data.room, // API expects 'room' field, not 'roomId'
+          startDate: data.startDate,
+          endDate: data.endDate,
+          totalPrice: data.totalPrice
+        };
+        
+        console.log('Transformed booking data:', bookingData);
+        const response = await bookingService.createBooking(bookingData);
       
       // Check if the response contains an error message
       if (response.data?.message?.message === 'jwt malformed' || 
@@ -152,15 +175,17 @@ export default function BookingInfo() {
       
       setBookingId(bookingId);
       
-      // Navigate to payment page
-      try {
-        navigate(`/user/pay-booking/${bookingId}`, {
-          state: {
-            startDate: response?.data?.data?.booking?.startDate || response?.data?.booking?.startDate,
-            endDate: response?.data?.data?.booking?.endDate || response?.data?.booking?.endDate,
-            totalPrice: response?.data?.data?.booking?.totalPrice || response?.data?.booking?.totalPrice
-          }
-        });
+             // Navigate to payment page
+       try {
+         const navigationState = {
+           startDate: response?.data?.data?.booking?.startDate || response?.data?.booking?.startDate,
+           endDate: response?.data?.data?.booking?.endDate || response?.data?.booking?.endDate,
+           totalPrice: response?.data?.data?.booking?.totalPrice || response?.data?.booking?.totalPrice,
+           roomId: response?.data?.data?.booking?.roomId || response?.data?.booking?.roomId
+         };
+         
+         console.log('Navigation state:', navigationState);
+         navigate(`/user/pay-booking/${bookingId}`, { state: navigationState });
       } catch (navigationError) {
         console.error('Navigation failed:', navigationError);
         // Fallback: try to navigate without state
@@ -326,40 +351,37 @@ export default function BookingInfo() {
                   <TextField
                     label="Start Date"
                     {...register('startDate', { 
-                      value: startDate,
                       required: 'Start date is required' 
                     })}
                     fullWidth
                     disabled
                     variant="outlined"
-                                         error={!!errors.startDate}
-                     helperText={errors.startDate?.message as string}
+                    error={!!errors.startDate}
+                    helperText={errors.startDate?.message as string}
                   />
 
                   <TextField
                     label="End Date"
                     {...register('endDate', { 
-                      value: endDate,
                       required: 'End date is required' 
                     })}
                     fullWidth
                     disabled
                     variant="outlined"
-                                         error={!!errors.endDate}
-                     helperText={errors.endDate?.message as string}
+                    error={!!errors.endDate}
+                    helperText={errors.endDate?.message as string}
                   />
 
                   <TextField
                     label="Total Price"
                     {...register('totalPrice', { 
-                      value: totalPrice,
                       required: 'Total price is required' 
                     })}
                     fullWidth
                     disabled
                     variant="outlined"
-                                         error={!!errors.totalPrice}
-                     helperText={errors.totalPrice?.message as string}
+                    error={!!errors.totalPrice}
+                    helperText={errors.totalPrice?.message as string}
                     InputProps={{
                       startAdornment: <Typography variant="body1" sx={{ mr: 1 }}>$</Typography>,
                     }}
@@ -368,14 +390,13 @@ export default function BookingInfo() {
                   <TextField
                     label="Room ID"
                     {...register('room', { 
-                      value: roomId,
                       required: 'Room ID is required' 
                     })}
                     fullWidth
                     disabled
                     variant="outlined"
-                                         error={!!errors.room}
-                     helperText={errors.room?.message as string}
+                    error={!!errors.room}
+                    helperText={errors.room?.message as string}
                   />
 
                   <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>

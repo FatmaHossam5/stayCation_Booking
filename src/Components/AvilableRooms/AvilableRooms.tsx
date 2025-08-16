@@ -76,7 +76,7 @@ function AvailableRooms() {
       .post(`${baseUrl}/portal/favorite-rooms`, {
         roomId,
 
-      }, { headers: reqHeaders })
+      }, { headers: { Authorization: `${localStorage.getItem("userToken")}` } })
       .then((response) => {
         if (role === 'user') {
         setFavoriteRooms((prevFavorites) => [...prevFavorites, roomId]);

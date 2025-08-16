@@ -3,6 +3,7 @@ export const API_CONFIG = {
   BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://upskilling-egypt.com:3000/api/v0',
   TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT || '10000'),
   DEFAULT_HEADERS: {
+    Authorization: `Bearer ${localStorage.getItem('userToken')}`,
     'Content-Type': 'application/json',
   },
 } as const;
@@ -37,11 +38,12 @@ export const API_ENDPOINTS = {
   
   // Bookings
   BOOKINGS: {
-    BASE: '/admin/bookings',
-    USER_BOOKINGS: '/portal/bookings',
-    CREATE: '/portal/bookings',
-    UPDATE: (id: string) => `/admin/bookings/${id}`,
-    DELETE: (id: string) => `/admin/bookings/${id}`,
+    BASE: '/admin/booking',
+    USER_BOOKINGS: '/portal/booking/my',
+    CREATE: '/portal/booking',
+    DETAILS: (id: string) => `/portal/booking/${id}`,
+    UPDATE: (id: string) => `/admin/booking/${id}`,
+    DELETE: (id: string) => `/admin/booking/${id}`,
   },
   
   // Reviews

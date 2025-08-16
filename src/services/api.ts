@@ -121,10 +121,11 @@ export const userService = {
 export const reviewsService = {
   // Get all reviews for a room
   getRoomReviews: async (roomId: string) => {
+    const token = localStorage.getItem('userToken');
     try {
       const response = await api.get(`${API_ENDPOINTS.ROOM_REVIEWS}/${roomId}`,{
         headers: {
-          
+          Authorization: `${token}`,
           'Content-Type': 'application/json'
         }
       });

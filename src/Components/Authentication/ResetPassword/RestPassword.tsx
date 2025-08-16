@@ -1,23 +1,22 @@
-import React, { useContext, useState } from 'react';
+import { Security } from '@mui/icons-material';
+import axios from 'axios';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import resetPasswordImage from "../../../assets/Rectangle 8.png";
 import { AuthContext } from '../../../Context/AuthContext';
-import { 
-  AuthLayout, 
-  FormContainer, 
-  ErrorAlert, 
-  SuccessSnackbar, 
-  LinkText,
-  EmailField,
-  PasswordField,
+import {
+  AuthLayout,
   ConfirmPasswordField,
   CustomField,
-  SubmitButton
+  EmailField,
+  ErrorAlert,
+  FormContainer,
+  LinkText,
+  PasswordField,
+  SubmitButton,
+  SuccessSnackbar
 } from '../../shared/common';
-import { Box } from '@mui/material';
-import { Security } from '@mui/icons-material';
-import resetPasswordImage from "../../../assets/Rectangle 8.png";
 
 interface ResetPasswordForm {
   email: string;

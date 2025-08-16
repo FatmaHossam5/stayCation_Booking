@@ -21,7 +21,8 @@ interface Facility {
 }
 
 interface RoomDetails {
-  id?: string;
+  _id?: string;
+  roomNumber?: string;
   name?: string;
   price?: number;
   discount?: number;
@@ -142,12 +143,15 @@ export default function DetailsRoom() {
   };
 
   useEffect(() => {
-    if (roomId && startDate && endDate) {
+    if (roomId) {
+      const params: any = {};
+      if (startDate && endDate) {
+        params.startDate = startDate;
+        params.endDate = endDate;
+      }
+      
       axios.get(`${baseUrl}/portal/rooms/${roomId}`, {
-        params: {
-          startDate,
-          endDate,
-        },
+        params,
       })
         .then((response) => {
           setRoomDetails(response?.data?.data?.room);
@@ -174,7 +178,7 @@ export default function DetailsRoom() {
             },
           }}
         >
-          Village Angga
+          {roomDetails?.roomNumber ? `Room ${roomDetails.roomNumber}` : 'Room Details'}
         </Typography>
         <Typography
           variant="h6"
@@ -184,7 +188,7 @@ export default function DetailsRoom() {
             fontFamily: "Poppins",
           }}
         >
-          Bogor, Indonesia
+          {roomDetails?.name || 'Bogor, Indonesia'}
         </Typography>
       </Box>
 
@@ -440,7 +444,7 @@ export default function DetailsRoom() {
       {/* Reviews Section */}
       <ReviewsSection 
         roomId={roomId || ''} 
-        roomName={roomDetails?.name}
+        roomName={roomDetails?.roomNumber ? `Room ${roomDetails.roomNumber}` : roomDetails?.name}
       />
     </Container>
   );

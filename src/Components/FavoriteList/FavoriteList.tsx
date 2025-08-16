@@ -11,7 +11,6 @@ import {
   Container,
   Skeleton,
   Alert,
-  Snackbar,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -33,6 +32,7 @@ import {
 
 } from '@mui/icons-material';
 import { AuthContext } from "../../Context/AuthContext";
+import { useToastContext } from "../../Context/ToastContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -308,9 +308,9 @@ export default function FavoriteList() {
   const [confirmDialog, setConfirmDialog] = useState({ open: false, roomId: null as string | null });
   const [sortBy, setSortBy] = useState('name');
   const [filterBy] = useState('all');
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
   
   const { baseUrl, reqHeaders } = useContext(AuthContext);
+  const { showSuccess, showError } = useToastContext();
   const navigate = useNavigate();
 
   // Fetch favorite rooms
@@ -344,18 +344,10 @@ export default function FavoriteList() {
       });
       
       setFavList((prevList) => prevList.filter((room) => room?._id !== roomId));
-      setSnackbar({
-        open: true,
-        message: 'Room removed from favorites successfully!',
-        severity: 'success'
-      });
+      showSuccess('Room removed from favorites successfully!');
     } catch (error) {
       console.error('Error removing from favorites:', error);
-      setSnackbar({
-        open: true,
-        message: 'Failed to remove room from favorites. Please try again.',
-        severity: 'error'
-      });
+      showError('Failed to remove room from favorites. Please try again.');
     } finally {
       setRemovingId(null);
       setConfirmDialog({ open: false, roomId: null });
@@ -588,21 +580,6 @@ export default function FavoriteList() {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for notifications */}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert 
-          onClose={() => setSnackbar({ ...snackbar, open: false })} 
-          severity={snackbar.severity}
-          sx={{ width: '100%' }}
-        >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 }

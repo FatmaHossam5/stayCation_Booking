@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
-import { API_CONFIG, STORAGE_KEYS, ERROR_MESSAGES } from '../constants';
+import { API_CONFIG, STORAGE_KEYS, ERROR_MESSAGES } from '../constants/index';
 import { ApiError, ApiResponse } from '../types';
 
 // Create axios instance with default configuration
@@ -33,14 +33,24 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem(STORAGE_KEYS.USER_TOKEN);
     
-    if (token && token.trim() !== '' && validateToken(token)) {
-      config.headers.Authorization = `Bearer ${token}`;
-    } else if (token && !validateToken(token)) {
-      // Clear invalid token
-      localStorage.removeItem(STORAGE_KEYS.USER_TOKEN);
-      localStorage.removeItem(STORAGE_KEYS.USER_ROLE);
-      localStorage.removeItem(STORAGE_KEYS.USER_NAME);
+    if (token && token.trim() !== '') {
+      // Clean the token - remove any existing "Bearer " prefix
+      let cleanToken = token;
+      if (token.startsWith('Bearer ')) {
+        cleanToken = token.substring(7); // Remove "Bearer " prefix
+      }
+      
+      // Always add "Bearer " prefix
+      config.headers.Authorization = `Bearer ${cleanToken}`;
     }
+    
+    // Log the request for debugging
+    console.log('API Request:', {
+      url: config.url,
+      method: config.method,
+      hasToken: !!token,
+      tokenPrefix: token?.substring(0, 10) + '...'
+    });
     
     return config;
   },
@@ -55,7 +65,7 @@ api.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    let errorMessage = ERROR_MESSAGES.UNKNOWN_ERROR;
+    let errorMessage: string = ERROR_MESSAGES.UNKNOWN_ERROR;
     
     if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
       errorMessage = ERROR_MESSAGES.TIMEOUT_ERROR;
@@ -90,9 +100,8 @@ api.interceptors.response.use(
 // Generic API methods
 export const apiClient = {
   // GET request
-  get: async <T>(url: string, config?: any): Promise<ApiResponse<T>> => {
-    const response = await api.get<ApiResponse<T>>(url, config);
-    return response.data;
+  get: async <T>(url: string, config?: any): Promise<AxiosResponse<ApiResponse<T>>> => {
+    return api.get<ApiResponse<T>>(url, config);
   },
 
   // POST request

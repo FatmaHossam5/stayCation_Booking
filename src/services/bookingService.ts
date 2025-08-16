@@ -10,29 +10,23 @@ export const bookingService = {
     status?: string;
     paymentStatus?: string;
   }): Promise<PaginatedResponse<Booking>> => {
-    const queryParams = new URLSearchParams();
-    if (params?.page) queryParams.append('page', params.page.toString());
-    if (params?.limit) queryParams.append('limit', params.limit.toString());
-    if (params?.status) queryParams.append('status', params.status);
-    if (params?.paymentStatus) queryParams.append('paymentStatus', params.paymentStatus);
-
-    const url = `${API_ENDPOINTS.BOOKINGS.BASE}?${queryParams.toString()}`;
-    const response = await apiClient.get<PaginatedResponse<Booking>>(url);
-    return response.data;
+    const token = localStorage.getItem('userToken');
+    const response = await apiClient.get<PaginatedResponse<Booking>>(API_ENDPOINTS.BOOKINGS.BASE, {
+      headers: { Authorization: `${token}` }
+    });
+    return response.data.data;
   },
 
   // Get user bookings
-  getUserBookings: async (filters?: BookingFilters): Promise<PaginatedResponse<Booking>> => {
-    const queryParams = new URLSearchParams();
-    
-    if (filters?.status) queryParams.append('status', filters.status);
-    if (filters?.paymentStatus) queryParams.append('paymentStatus', filters.paymentStatus);
-    if (filters?.dateRange?.startDate) queryParams.append('startDate', filters.dateRange.startDate);
-    if (filters?.dateRange?.endDate) queryParams.append('endDate', filters.dateRange.endDate);
-
-    const url = `${API_ENDPOINTS.BOOKINGS.USER_BOOKINGS}?${queryParams.toString()}`;
-    const response = await apiClient.get<PaginatedResponse<Booking>>(url);
-    return response.data;
+  getUserBookings: async (): Promise<any> => {
+    try {
+      const response = await apiClient.get<any>(API_ENDPOINTS.BOOKINGS.USER_BOOKINGS);
+      // The API returns {myBooking: Array, totalCount: number} for user bookings
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user bookings:', error);
+      throw error;
+    }
   },
 
   // Get booking by ID
@@ -41,15 +35,37 @@ export const bookingService = {
     return response.data;
   },
 
+  // Get booking details (for user bookings)
+  getBookingDetails: async (bookingId: string, role: string, token: string, baseUrl: string): Promise<any> => {
+    try {
+      // Use different endpoints based on user role
+      const endpoint = role === 'admin' 
+        ? `${API_ENDPOINTS.BOOKINGS.BASE}/${bookingId}`
+        : API_ENDPOINTS.BOOKINGS.DETAILS(bookingId);
+      
+      console.log('Fetching booking details with endpoint:', endpoint);
+      
+      const response = await apiClient.get<any>(endpoint);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching booking details:', error);
+      throw error;
+    }
+  },
+
   // Create new booking
   createBooking: async (bookingData: {
-    roomId: string;
+    room: string;
     startDate: string;
     endDate: string;
     totalPrice: number;
-  }): Promise<Booking> => {
-    const response = await apiClient.post<Booking>(API_ENDPOINTS.BOOKINGS.CREATE, bookingData);
-    return response.data;
+  }): Promise<any> => {
+    console.log('Creating booking with endpoint:', API_ENDPOINTS.BOOKINGS.CREATE);
+    console.log('Booking data:', bookingData);
+    const response = await apiClient.post<any>(API_ENDPOINTS.BOOKINGS.CREATE, bookingData);
+    console.log(response);
+    
+    return response;
   },
 
   // Update booking (admin)
