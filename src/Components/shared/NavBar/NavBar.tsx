@@ -62,7 +62,6 @@ export default function NavBar() {
 
   const handleSearch = (query: string) => {
     // Handle search functionality here
-    console.log("Search query:", query);
   };
 
   // Add keyboard navigation support

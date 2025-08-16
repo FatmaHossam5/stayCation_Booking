@@ -566,11 +566,9 @@ export const DashboardPagination = ({
         rowsPerPage={rowsPerPage}
         page={currentPage - 1}
         onPageChange={(_, newPage) => {
-          console.log('DashboardPagination: Page change clicked', { newPage, calculatedPage: newPage + 1 });
           onPageChange(newPage + 1);
         }}
         onRowsPerPageChange={(e) => {
-          console.log('DashboardPagination: Rows per page change', { value: e.target.value });
           onRowsPerPageChange(parseInt(e.target.value, 10));
         }}
         sx={{

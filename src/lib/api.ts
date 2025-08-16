@@ -44,13 +44,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${cleanToken}`;
     }
     
-    // Log the request for debugging
-    console.log('API Request:', {
-      url: config.url,
-      method: config.method,
-      hasToken: !!token,
-      tokenPrefix: token?.substring(0, 10) + '...'
-    });
+    // Add request configuration
     
     return config;
   },

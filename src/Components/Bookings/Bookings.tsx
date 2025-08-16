@@ -15,7 +15,6 @@ import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Modal, Table
 import { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../Context/AuthContext';
-import { API_ENDPOINTS } from '../../constants';
 import { bookingService } from '../../services/bookingService';
 import { roomService } from '../../services/roomService';
 import DashboardLayout, {
@@ -518,7 +517,6 @@ export default function Bookings() {
   };
 
   const fetchRoomDetails = async (roomId: string) => {
-    console.log(roomId);    
     try {
       const roomData = await roomService.getRoomById(roomId);
       return roomData;
@@ -541,12 +539,10 @@ export default function Bookings() {
       } else {
         // User: use /api/v0/portal/booking/my
         response = await bookingService.getUserBookings();
-        console.log('User bookings response:', response);
       }
       
       // Handle the response structure correctly
       if (response) {
-        console.log('Raw response:', response);
         
         // The API response structure varies - handle different cases
         let bookingsData = [];
@@ -574,9 +570,6 @@ export default function Bookings() {
           totalCount = 0;
         }
         
-        console.log('Processed bookings data:', bookingsData);
-        console.log('Total count:', totalCount);
-        
         setBook(bookingsData);
         setPagesArray(totalCount);
       } else {
@@ -587,7 +580,6 @@ export default function Bookings() {
 
       setLoading(false);
     } catch (error: any) {
-      console.error('Error fetching bookings:', error);
       const errorMessage = error?.response?.data?.message || error?.message || "Failed to fetch bookings";
       setError(errorMessage);
       toast.error(errorMessage);

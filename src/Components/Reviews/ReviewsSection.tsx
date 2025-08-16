@@ -59,7 +59,6 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ roomId, roomName }) => 
   };
 
   const handleReviewSubmitted = () => {
-    console.log('Review submitted, refreshing...');
     setRefreshKey(prev => prev + 1);
   };
 

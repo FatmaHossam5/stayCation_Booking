@@ -109,10 +109,7 @@ const Reviews: React.FC<ReviewsProps> = ({ roomId, onReviewAdded }) => {
         reviewsData = [];
       }
       
-      console.log('Fetched reviews:', reviewsData);
-      console.log('Reviews data type:', typeof reviewsData);
-      console.log('Is array:', Array.isArray(reviewsData));
-      console.log('Total count from API:', response.data?.data?.totalCount);
+
       setReviews(reviewsData);
       
              // Calculate average rating

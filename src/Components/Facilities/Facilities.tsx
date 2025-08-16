@@ -260,9 +260,6 @@ export default function Facilities() {
   }
 
   const onSubmit = (data: any) => {
-    console.log('Submitting facility data:', data);
-    console.log('Token:', localStorage.getItem('userToken'));
-    console.log('Base URL:', baseUrl);
     
     // Validate data before submission
     if (!data.name || data.name.trim().length === 0) {
@@ -289,7 +286,7 @@ export default function Facilities() {
           'Content-Type': 'application/json'
         },
       }).then((response) => {
-        console.log('Success response:', response);
+
         toast.success(response?.data?.message || "Facility added successfully")
         handleClose()
         getFacilities(1)

@@ -356,7 +356,7 @@ function User() {
         onChange: handleSearch
       }}
       filterProps={{
-        onClick: () => console.log('Filter clicked'),
+        onClick: () => {},
         label: 'Filters'
       }}
 

@@ -38,7 +38,7 @@ api.interceptors.request.use(
   (config) => {
     // Add auth token if available
     const token = localStorage.getItem('userToken');
-    console.log('Token being sent:', token);
+
     
     if (token && token.trim() !== '' && validateToken(token)) {
       config.headers.Authorization = `${token}`;
@@ -129,7 +129,7 @@ export const reviewsService = {
           'Content-Type': 'application/json'
         }
       });
-console.log(response)
+
       return response;
     } catch (error) {
       throw error;

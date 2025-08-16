@@ -46,7 +46,7 @@ export default function Home() {
         setAdmin(data?.users?.admin || 0);
       })
       .catch((error) => {
-        console.log(error);
+        // Handle error silently
       })
       .finally(() => {
         setLoading(false);

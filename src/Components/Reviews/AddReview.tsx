@@ -106,16 +106,11 @@ const AddReview: React.FC<AddReviewProps> = ({
       setLoading(true);
       setError(null);
       
-      console.log('Submitting review:', { roomId, rating, review: review.trim() });
-      console.log('Room ID type:', typeof roomId);
       const response = await reviewsService.createReview({
         roomId,
         rating,
         review: review.trim(),
       });
-      console.log('Review submission response:', response);
-      console.log('Response status:', response.status);
-      console.log('Response data:', response.data);
 
       toast.success('Review submitted successfully!');
       

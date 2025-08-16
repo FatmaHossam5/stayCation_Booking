@@ -17,12 +17,11 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import pay from '../../assets/image 4.png';
 import pay1 from '../../assets/image 5.png';
-import { AuthContext } from '../../Context/AuthContext';
 import { bookingService } from '../../services/bookingService';
 
 // Styled components for better organization
@@ -63,12 +62,10 @@ const PriceDisplay = styled(Box)(({ theme }) => ({
 export default function BookingInfo() {
   const location = useLocation();
   const { startDate, endDate, totalPrice } = location.state || {};
-  const [roomDetails, setRoomDetails] = useState({});
   const [bookingId, setBookingId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { baseUrl, reqHeaders } = useContext(AuthContext);
   const { roomId } = useParams();
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -105,70 +102,55 @@ export default function BookingInfo() {
       return;
     }
     
-    // Log the data being sent
-    console.log('Creating booking with data:', data);
-    console.log('Room ID from params:', roomId);
-    console.log('Room ID from form data:', data.room);
-    console.log('Request headers:', reqHeaders);
-    console.log('Token exists:', !!token);
+    // Prepare booking data
     
           try {
-        // Transform the data to match the service expectations
         const bookingData = {
-          room: data.room, // API expects 'room' field, not 'roomId'
+          room: data.room, 
           startDate: data.startDate,
           endDate: data.endDate,
           totalPrice: data.totalPrice
         };
         
-        console.log('Transformed booking data:', bookingData);
+
         const response = await bookingService.createBooking(bookingData);
       
       // Check if the response contains an error message
       if (response.data?.message?.message === 'jwt malformed' || 
           response.data?.message?.name === 'JsonWebTokenError') {
-        console.error('Authentication error: JWT malformed');
+        
         setError('Authentication failed. Please log in again.');
         return;
       }
       
       // Check if the response contains any error message
       if (response.data?.message && typeof response.data.message === 'object' && response.data.message.message) {
-        console.error('API Error:', response.data.message);
         setError(`Booking failed: ${response.data.message.message}`);
         return;
       }
       
-      // Log the response to debug the structure
-      console.log('Booking response:', response.data);
       
-      // Try to find the booking ID in the response
       let bookingId = null;
       
       // Method 1: Check if response.data.data.booking._id exists
       if (response?.data?.data?.booking?._id) {
         bookingId = response.data.data.booking._id;
-        console.log('Found bookingId in response.data.data.booking._id:', bookingId);
       }
       // Method 2: Check if response.data.booking._id exists
       else if (response?.data?.booking?._id) {
         bookingId = response.data.booking._id;
-        console.log('Found bookingId in response.data.booking._id:', bookingId);
       }
       // Method 3: Check if response.data.data._id exists
       else if (response?.data?.data?._id) {
         bookingId = response.data.data._id;
-        console.log('Found bookingId in response.data.data._id:', bookingId);
       }
       // Method 4: Check if response.data._id exists
       else if (response?.data?._id) {
         bookingId = response.data._id;
-        console.log('Found bookingId in response.data._id:', bookingId);
       }
       
-      // If still no bookingId, log the entire response for debugging
+      // If still no bookingId, show error
       if (!bookingId) {
-        console.log('No bookingId found. Full response structure:', JSON.stringify(response.data, null, 2));
         setError('Booking created but no booking ID received. Please contact support.');
         return;
       }
@@ -184,21 +166,13 @@ export default function BookingInfo() {
            roomId: response?.data?.data?.booking?.roomId || response?.data?.booking?.roomId
          };
          
-         console.log('Navigation state:', navigationState);
+
          navigate(`/user/pay-booking/${bookingId}`, { state: navigationState });
       } catch (navigationError) {
-        console.error('Navigation failed:', navigationError);
-        // Fallback: try to navigate without state
         navigate(`/user/pay-booking/${bookingId}`);
       }
     } catch (error: any) {
-      console.error('Booking creation failed:', error);
-      console.error('Error details:', {
-        message: error?.message,
-        response: error?.response?.data,
-        status: error?.response?.status,
-        statusText: error?.response?.statusText
-      });
+  
       
       let errorMessage = 'Failed to create booking. Please try again.';
       

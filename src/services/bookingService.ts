@@ -43,7 +43,7 @@ export const bookingService = {
         ? `${API_ENDPOINTS.BOOKINGS.BASE}/${bookingId}`
         : API_ENDPOINTS.BOOKINGS.DETAILS(bookingId);
       
-      console.log('Fetching booking details with endpoint:', endpoint);
+
       
       const response = await apiClient.get<any>(endpoint);
       return response.data;
@@ -60,10 +60,7 @@ export const bookingService = {
     endDate: string;
     totalPrice: number;
   }): Promise<any> => {
-    console.log('Creating booking with endpoint:', API_ENDPOINTS.BOOKINGS.CREATE);
-    console.log('Booking data:', bookingData);
     const response = await apiClient.post<any>(API_ENDPOINTS.BOOKINGS.CREATE, bookingData);
-    console.log(response);
     
     return response;
   },

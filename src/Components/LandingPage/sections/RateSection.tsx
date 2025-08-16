@@ -96,7 +96,7 @@ const RateSection = () => {
       // If no rooms found, use a fallback approach
       if (roomIds.length === 0) {
         // Try to fetch some reviews without specific room IDs or use a different approach
-        console.log('No rooms found, will show fallback content');
+
         setReviewsData({
           reviews: [],
           averageRating: 0,
