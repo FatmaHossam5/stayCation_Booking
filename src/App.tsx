@@ -52,7 +52,6 @@ const routes =createHashRouter([
   {
     path:"/auth",element:<AuthLayout/>,errorElement:<NotFound/>,
     children:[
-      {index:true,element:<LandingPage/>},
       {path:"signin",element:<SignIn/>},
       {path:"signup",element:<SignUp/>},
       {path:"forget-pass",element:<ForgetPassword/>},
@@ -61,9 +60,17 @@ const routes =createHashRouter([
       {path:"change-pass",element:<ChangePassword/>},
     ]
   },
+  
+  // Public available rooms route - accessible without authentication
+  {
+    path:"/available-rooms",
+    element:<AvilableRooms/>,
+    errorElement:<NotFound/>
+  },
+  
   // Admin routes - only accessible by admin users
   {
-    path:"dashboard",
+    path:"/dashboard",
     element:<ProtectedRoute userData={userData} allowedRoles={["admin"]}>
       <MasterLayout/>
     </ProtectedRoute>,
@@ -82,19 +89,21 @@ const routes =createHashRouter([
       {path:"rooms/add-room",element:<AddRoom/>},
     ]
   },
+  
   // User routes - only accessible by regular users
   {
-    path:"user",
+    path:"/user",
     element:<ProtectedRoute userData={userData} allowedRoles={["user"]}>
       <UserLayout/>
     </ProtectedRoute>,
     errorElement:<NotFound/>,
     children:[
+      {index:true,element:<AvilableRooms/>},
       {path:"available-rooms",element:<AvilableRooms/>},
-      {path:"room-details/:roomId/",element:<RoomDetails/>},
-      {path:"create-booking/:roomId/",element:<BookingInfo/>},
-      {path:"pay-booking/:bookingId/",element:<PaymentWrapper/>},
-      {path:"booking-details/:bookingId/",element:<BookingDetails/>},
+      {path:"room-details/:roomId",element:<RoomDetails/>},
+      {path:"create-booking/:roomId",element:<BookingInfo/>},
+      {path:"pay-booking/:bookingId",element:<PaymentWrapper/>},
+      {path:"booking-details/:bookingId",element:<BookingDetails/>},
       {path:"bookings",element:<Bookings/>},
       {path:"fav",element:<FavoriteList/>},
     ]

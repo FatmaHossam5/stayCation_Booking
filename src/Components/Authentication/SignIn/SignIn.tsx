@@ -4,7 +4,7 @@ import {
 import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import signin from "../../../assets/bg-signin.png";
 import { getDefaultRouteByRole } from '../../../config/routes';
 import { AuthContext } from '../../../Context/AuthContext';
@@ -36,6 +36,7 @@ export default function SignIn() {
   
   const { baseUrl, saveUserData } = useContext(AuthContext) as any;
   const navigate = useNavigate();
+  const location = useLocation();
   const toastMessages = useToastMessages();
 
   // State management
@@ -68,12 +69,19 @@ export default function SignIn() {
       // Show success toast
       toastMessages.showLoginSuccess();
 
-      // Redirect to appropriate dashboard based on user role
+      // Redirect to appropriate dashboard based on user role or return URL
       setTimeout(() => {
-        const defaultRoute = getDefaultRouteByRole(userRole);
+        const returnUrl = location.state?.returnUrl;
+        const returnState = location.state?.returnState;
         
-        // Force a page reload to ensure context is updated
-        window.location.href = defaultRoute;
+        if (returnUrl && userRole === 'user') {
+          // Navigate to the return URL with the saved state
+          navigate(returnUrl, { state: returnState });
+        } else {
+          const defaultRoute = getDefaultRouteByRole(userRole);
+          // Force a page reload to ensure context is updated
+          window.location.href = defaultRoute;
+        }
       }, 1500);
 
     } catch (error: any) {

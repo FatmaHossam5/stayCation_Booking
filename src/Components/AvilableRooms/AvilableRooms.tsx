@@ -132,8 +132,17 @@ function AvailableRooms() {
             }
           });
         } else {
-          toast.error("You have to sign In  !")
-          navigate('/auth/signin');
+          // For non-authenticated users, redirect to sign in with return URL
+          navigate('/auth/signin', {
+            state: {
+              returnUrl: `/user/room-details/${roomId}?startDate=${startDate}&endDate=${endDate}`,
+              returnState: {
+                DetailsRoom: response.data,
+                count,
+                ranges: dateRange
+              }
+            }
+          });
         }
       })
       .catch((error) => {
@@ -184,7 +193,7 @@ function AvailableRooms() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => navigate('/user')}
+                onClick={() => navigate('/')}
                 sx={{
                   px: 3,
                   py: 1.5,

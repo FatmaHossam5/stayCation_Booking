@@ -30,7 +30,7 @@ export default function BookingSelector({ selectedDateRange = [null, null] }: Bo
         if (dateRange && dateRange[0] && dateRange[1]) {
             const startDate = dateRange[0]?.format('YYYY-MM-DD');
             const endDate = dateRange[1]?.format('YYYY-MM-DD');
-            navigate(`/user/available-rooms?startDate=${startDate}&endDate=${endDate}`, {
+            navigate(`/available-rooms?startDate=${startDate}&endDate=${endDate}`, {
                 state: {
                     ranges: dateRange,
                     count: bookingGuestCount

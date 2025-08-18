@@ -18,6 +18,7 @@ export const ROUTES = {
     RESET_PASSWORD: '/auth/reset-pass',
     ROOM_DETAILS: '/auth/roomdetails',
     CHANGE_PASSWORD: '/auth/change-pass',
+    AVAILABLE_ROOMS: '/available-rooms',
   },
   
   // Admin routes (admin role required)
