@@ -69,20 +69,24 @@ export default function SignIn() {
       // Show success toast
       toastMessages.showLoginSuccess();
 
-      // Redirect to appropriate dashboard based on user role or return URL
+      // Wait a bit longer for context to update
       setTimeout(() => {
         const returnUrl = location.state?.returnUrl;
         const returnState = location.state?.returnState;
         
+        console.log('Navigation after login:', { returnUrl, returnState, userRole });
+        
         if (returnUrl && userRole === 'user') {
           // Navigate to the return URL with the saved state
+          console.log('Navigating to return URL:', returnUrl);
           navigate(returnUrl, { state: returnState });
         } else {
           const defaultRoute = getDefaultRouteByRole(userRole);
-          // Force a page reload to ensure context is updated
-          window.location.href = defaultRoute;
+          console.log('Navigating to default route:', defaultRoute);
+          // Use navigate for consistent behavior
+          navigate(defaultRoute);
         }
-      }, 1500);
+      }, 2000);
 
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || 'Login failed. Please try again.';

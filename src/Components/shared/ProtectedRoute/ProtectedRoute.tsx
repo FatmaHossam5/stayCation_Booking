@@ -11,11 +11,14 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children, allowedRoles, userData }: ProtectedRouteProps) {
-  const { role } = useContext(AuthContext);
+  const { role, userToken } = useContext(AuthContext);
   const token = localStorage.getItem("userToken");
   
+  console.log('ProtectedRoute check:', { role, userToken, token, allowedRoles });
+  
   // Check if user is authenticated
-  if (!userData && !token) {
+  if (!userToken && !token) {
+    console.log('User not authenticated, redirecting to signin');
     return <Navigate to="/auth/signin" replace />;
   }
   
@@ -23,12 +26,16 @@ export default function ProtectedRoute({ children, allowedRoles, userData }: Pro
   if (allowedRoles && allowedRoles.length > 0) {
     const userRole = role || localStorage.getItem("role");
     
+    console.log('Role check:', { userRole, allowedRoles, hasAccess: hasRouteAccess(userRole, allowedRoles) });
+    
     if (!userRole || !hasRouteAccess(userRole, allowedRoles)) {
       // Redirect to appropriate default route based on user role
       const defaultRoute = getDefaultRouteByRole(userRole || '');
+      console.log('User role not allowed, redirecting to:', defaultRoute);
       return <Navigate to={defaultRoute} replace />;
     }
   }
   
+  console.log('User authenticated and authorized, rendering children');
   return <>{children}</>;
 }

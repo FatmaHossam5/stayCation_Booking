@@ -31,7 +31,7 @@ export default function AuthContextProvider(props:any){
   
   // Make reqHeaders reactive to token changes
   const reqHeaders = {
-    Authorization: `Bearer ${localStorage.getItem("userToken")}`
+    Authorization: `Bearer ${userToken}`
   };
   const baseUrl = "https://upskilling-egypt.com:3000/api/v0";
 

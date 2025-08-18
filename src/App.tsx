@@ -16,8 +16,7 @@ import Ads from './Components/Ads/Ads'
 import Bookings from './Components/Bookings/Bookings'
 import Rooms from './Components/Rooms/Rooms'
 import AddRoom from './Components/AddRoom/AddRoom'
-import { AuthContext } from './Context/AuthContext'
-import { useContext } from 'react'
+
 import RoomDetails from './Components/RoomDetails/RoomDetails'
 
 import Facilities from './Components/Facilities/Facilities'
@@ -39,10 +38,6 @@ import RestPassword from './Components/Authentication/ResetPassword/RestPassword
 
 
 function App() {
- 
-  let {userData}:any=useContext(AuthContext)
-  
-
  
 const routes =createHashRouter([
   {
@@ -71,7 +66,7 @@ const routes =createHashRouter([
   // Admin routes - only accessible by admin users
   {
     path:"/dashboard",
-    element:<ProtectedRoute userData={userData} allowedRoles={["admin"]}>
+    element:<ProtectedRoute allowedRoles={["admin"]}>
       <MasterLayout/>
     </ProtectedRoute>,
     errorElement:<NotFound/>,
@@ -93,7 +88,7 @@ const routes =createHashRouter([
   // User routes - only accessible by regular users
   {
     path:"/user",
-    element:<ProtectedRoute userData={userData} allowedRoles={["user"]}>
+    element:<ProtectedRoute allowedRoles={["user"]}>
       <UserLayout/>
     </ProtectedRoute>,
     errorElement:<NotFound/>,
