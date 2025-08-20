@@ -32,7 +32,9 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
-  const isLoggedIn = userToken && role === 'user';
+  const isLoggedIn = userToken && (role === 'user' || role === 'admin');
+  const isAdmin = role === 'admin';
+  const isUser = role === 'user';
 
   const NavButton = ({ to, children, onClick }: { to?: string; children: React.ReactNode; onClick?: () => void }) => (
     <Button
@@ -113,8 +115,15 @@ export default function Navbar() {
                 
                 {isLoggedIn ? (
                   <>
-                    <NavButton to="/user/fav">Favorites</NavButton>
-                    <NavButton to="/user/bookings">Your Bookings</NavButton>
+                    {isAdmin && (
+                      <NavButton to="/dashboard">Dashboard</NavButton>
+                    )}
+                    {isUser && (
+                      <>
+                        <NavButton to="/user/fav">Favorites</NavButton>
+                        <NavButton to="/user/bookings">Your Bookings</NavButton>
+                      </>
+                    )}
                     <Button
                       onClick={handleSignOut}
                       variant="outlined"
@@ -180,22 +189,36 @@ export default function Navbar() {
                   
                   {isLoggedIn ? (
                     <>
-                      <MenuItem 
-                        component={Link} 
-                        to="/user/fav" 
-                        onClick={handleMenuClose}
-                        sx={{ py: 1.5 }}
-                      >
-                        Favorites
-                      </MenuItem>
-                      <MenuItem 
-                        component={Link} 
-                        to="/user/bookings" 
-                        onClick={handleMenuClose}
-                        sx={{ py: 1.5 }}
-                      >
-                        Your Bookings
-                      </MenuItem>
+                      {isAdmin && (
+                        <MenuItem 
+                          component={Link} 
+                          to="/dashboard" 
+                          onClick={handleMenuClose}
+                          sx={{ py: 1.5 }}
+                        >
+                          Dashboard
+                        </MenuItem>
+                      )}
+                      {isUser && (
+                        <>
+                          <MenuItem 
+                            component={Link} 
+                            to="/user/fav" 
+                            onClick={handleMenuClose}
+                            sx={{ py: 1.5 }}
+                          >
+                            Favorites
+                          </MenuItem>
+                          <MenuItem 
+                            component={Link} 
+                            to="/user/bookings" 
+                            onClick={handleMenuClose}
+                            sx={{ py: 1.5 }}
+                          >
+                            Your Bookings
+                          </MenuItem>
+                        </>
+                      )}
                       <MenuItem 
                         onClick={() => {
                           handleSignOut();

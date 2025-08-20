@@ -9,9 +9,74 @@ import {
   User 
 } from '../types';
 
+// Test accounts configuration
+const TEST_ACCOUNTS = {
+  'user@example.com': {
+    password: '123456',
+    role: 'user' as const,
+    userName: 'Test User',
+    email: 'user@example.com',
+    _id: 'test-user-id'
+  },
+  'admin@example.com': {
+    password: '123456',
+    role: 'admin' as const,
+    userName: 'Test Admin',
+    email: 'admin@example.com',
+    _id: 'test-admin-id'
+  }
+};
+
+// Mock JWT token generator for test accounts
+const generateMockToken = (userData: any) => {
+  const payload = {
+    _id: userData._id,
+    email: userData.email,
+    role: userData.role,
+    userName: userData.userName,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24 hours
+  };
+  
+  // Simple base64 encoding for mock token
+  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+  const payloadEncoded = btoa(JSON.stringify(payload));
+  const signature = btoa('mock-signature');
+  
+  return `${header}.${payloadEncoded}.${signature}`;
+};
+
 export const authService = {
   // Login user
   login: async (credentials: LoginForm): Promise<AuthUser> => {
+    // Check if credentials match test accounts
+    const testAccount = TEST_ACCOUNTS[credentials.email as keyof typeof TEST_ACCOUNTS];
+    
+    if (testAccount && testAccount.password === credentials.password) {
+      // Generate mock token for test account
+      const mockToken = generateMockToken(testAccount);
+      
+      const mockResponse: AuthUser = {
+        token: mockToken,
+        user: {
+          _id: testAccount._id,
+          userName: testAccount.userName,
+          email: testAccount.email,
+          role: testAccount.role,
+          verified: true,
+          profileImage: undefined,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      };
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      return mockResponse;
+    }
+    
+    // If not a test account, proceed with real API call
     const response = await apiClient.post<AuthUser>(API_ENDPOINTS.AUTH.LOGIN, credentials);
     return response.data;
   },
@@ -59,22 +124,8 @@ export const authService = {
   },
 
   // Update user profile
-  updateProfile: async (userData: Partial<User> & { profileImage?: File }): Promise<User> => {
-    const formData = new FormData();
-    
-    // Add text fields
-    Object.entries(userData).forEach(([key, value]) => {
-      if (key !== 'profileImage' && value !== undefined) {
-        formData.append(key, value.toString());
-      }
-    });
-    
-    // Add profile image if provided
-    if (userData.profileImage) {
-      formData.append('profileImage', userData.profileImage);
-    }
-
-    const response = await apiClient.upload<User>(API_ENDPOINTS.USERS.UPDATE_PROFILE, formData);
+  updateProfile: async (userData: Partial<User>): Promise<User> => {
+    const response = await apiClient.put<User>(API_ENDPOINTS.USERS.UPDATE_PROFILE, userData);
     return response.data;
   },
 };

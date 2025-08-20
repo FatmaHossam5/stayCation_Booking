@@ -21,6 +21,25 @@ export const AuthContext = createContext<AuthContextType>({
   userToken: null
 });
 
+// Helper function to decode token (handles both real JWT and mock tokens)
+const decodeToken = (token: string) => {
+  try {
+    // Try to decode as real JWT first
+    return jwtDecode(token);
+  } catch (error) {
+    // If JWT decode fails, try to decode as mock token
+    try {
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1]));
+        return payload;
+      }
+    } catch (mockError) {
+      console.error('Failed to decode token:', mockError);
+    }
+    throw error;
+  }
+};
 
 export default function AuthContextProvider(props:any){
 
@@ -39,7 +58,7 @@ export default function AuthContextProvider(props:any){
     try {
       const encodedToken:any = localStorage.getItem("userToken");
       if (encodedToken) {
-        const decodedToken = jwtDecode(encodedToken)
+        const decodedToken = decodeToken(encodedToken);
         const userName = localStorage.getItem('userName')
         const role = localStorage.getItem("role")
         setUserData(decodedToken)

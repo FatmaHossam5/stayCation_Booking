@@ -1,7 +1,6 @@
 import {
   Box
 } from '@mui/material';
-import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useLocation } from 'react-router';
@@ -9,6 +8,7 @@ import signin from "../../../assets/bg-signin.png";
 import { getDefaultRouteByRole } from '../../../config/routes';
 import { AuthContext } from '../../../Context/AuthContext';
 import { useToastMessages, handleApiError } from '../../../utils/toastUtils';
+import { authService } from '../../../services/authService';
 import {
   AuthLayout,
   EmailField,
@@ -34,7 +34,7 @@ export default function SignIn() {
     }
   });
   
-  const { baseUrl, saveUserData } = useContext(AuthContext) as any;
+  const { saveUserData } = useContext(AuthContext) as any;
   const navigate = useNavigate();
   const location = useLocation();
   const toastMessages = useToastMessages();
@@ -55,12 +55,12 @@ export default function SignIn() {
     setLoginError('');
 
     try {
-      const response: any = await axios.post(`${baseUrl}/admin/users/login`, data);
-      const userRole = response?.data?.data?.user?.role;
+      const response = await authService.login(data);
+      const userRole = response?.user?.role;
 
-      localStorage.setItem("userToken", response?.data?.data?.token);
+      localStorage.setItem("userToken", response?.token);
       localStorage.setItem("role", userRole);
-      localStorage.setItem("userName", response?.data?.data?.user?.userName);
+      localStorage.setItem("userName", response?.user?.userName);
 
       saveUserData();
       setSuccessMessage('Login successful! Redirecting...');
@@ -89,7 +89,7 @@ export default function SignIn() {
       }, 2000);
 
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || 'Login failed. Please try again.';
+      const errorMessage = error?.response?.data?.message || error?.message || 'Login failed. Please try again.';
       setLoginError(errorMessage);
       handleApiError(error, toastMessages);
     } finally {
