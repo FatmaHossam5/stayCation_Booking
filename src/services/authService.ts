@@ -12,14 +12,14 @@ import {
 // Test accounts configuration
 const TEST_ACCOUNTS = {
   'user@example.com': {
-    password: '123456',
+    password: 'User123456',
     role: 'user' as const,
     userName: 'Test User',
     email: 'user@example.com',
     _id: 'test-user-id'
   },
   'admin@example.com': {
-    password: '123456',
+    password: 'Admin123456',
     role: 'admin' as const,
     userName: 'Test Admin',
     email: 'admin@example.com',

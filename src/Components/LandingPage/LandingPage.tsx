@@ -48,7 +48,7 @@ export default function LandingPage() {
                     </Typography>
                     <Typography variant="body2">
                       <strong>Email:</strong> user@example.com<br />
-                      <strong>Password:</strong> 123456<br />
+                      <strong>Password:</strong> User123456<br />
                       <strong>Role:</strong> User - Can browse rooms, make bookings, and manage favorites
                     </Typography>
                   </CardContent>
@@ -62,7 +62,7 @@ export default function LandingPage() {
                     </Typography>
                     <Typography variant="body2">
                       <strong>Email:</strong> admin@example.com<br />
-                      <strong>Password:</strong> 123456<br />
+                      <strong>Password:</strong> Admin123456<br />
                       <strong>Role:</strong> Admin - Can manage rooms, bookings, users, and system settings
                     </Typography>
                   </CardContent>

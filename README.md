@@ -12,13 +12,13 @@ The application includes two test accounts for demonstration purposes:
 
 ### User Account
 - **Email:** user@example.com
-- **Password:** 123456
+- **Password:** User123456
 - **Role:** User
 - **Features:** Browse rooms, make bookings, manage favorites
 
 ### Admin Account
 - **Email:** admin@example.com
-- **Password:** 123456
+- **Password:** Admin123456
 - **Role:** Admin
 - **Features:** Manage rooms, bookings, users, and system settings
 
